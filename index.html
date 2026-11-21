@@ -3598,7 +3598,7 @@ function frontPose(id, t) {
     case 'ceat': { const c2 = t % 1.8, up = c2 < .55 ? E(c2 / .35) : 1 - E((c2 - .55) / .45); P.club = 'none'; P.lh = [-5, 37]; P.rh = [lerp(4, 2.4, up), lerp(39, 56.5, up)]; P.bow = .8 * (1 - up); P.plate = 1; P.mouth = up > .7 ? 1 : 0; P.jump = breathe * .2; break; }
     case 'ccheers': { const a = win(0, .45), clink = win(.9, 1.05) - win(1.15, 1.45); P.club = 'none'; P.rh = [lerp(6.5, 7.5, a) - clink * 2, lerp(39, 46, a) + clink * 4]; P.lh = [-11, 27.6]; P.mouth = a > .5 ? 1 : 0; P.smile = 1; P.hold = 1; P.jump = clink * 1 + breathe * .2; P.lean = clink * .4; break; }
     case 'cwalk': { const p = t * 7.5, sp = Math.sin(p); P.club = 'none'; P.kneeL = Math.max(0, sp) * 6; P.kneeR = Math.max(0, -sp) * 6; P.jump = Math.abs(Math.cos(p)) * 1.2; P.lh = [-12, 28 + sp * 3]; P.rh = [12, 28 - sp * 3]; P.lean = sp * .5; break; }
-    case 'ctalk': { const g2 = Math.sin(t * 2.4); P.club = 'none'; P.rh = [lerp(10.8, 7, Math.max(0, g2)), 27.6 + Math.max(0, g2) * 9]; P.lh = [-11, 27.6]; P.mouth = t < 1.3 && Math.sin(t * 9) > .15 ? 1 : 0; P.smile = 1; P.lean = g2 * .25; /* the mouth moves only while the line is being said */ P.jump = breathe * .2; break; }
+    case 'ctalk': { const sp = Math.min(1, t / 1.9), g0 = t < 1.9 ? Math.sin(sp * Math.PI) : 0, g2 = g0 * g0 * (3 - 2 * g0), sw = Math.sin(t * .5); P.club = 'none'; P.rh = [lerp(11.2, 7.8, g2) + sw * .15, 27.4 + g2 * 6.5 + Math.sin(t * .9 + 1) * .2]; P.lh = [-11.3 + sw * .15, 27.4 + Math.sin(t * .9) * .2]; /* one easy gesture while the line is said, then the hands rest */ P.mouth = t < 1.3 && Math.sin(t * 9) > .15 ? 1 : 0; P.smile = 1; P.lean = sw * .25 + g2 * .3; /* the mouth moves only while the line is being said */ P.jump = breathe * .2; break; }
     case 'cwipe': { const w = Math.sin(t * 9); P.club = 'none'; P.lh = [-6, 42]; P.rh = [2 + w * 3, 40 + w * 1.5]; P.towel = 1; P.bow = 1.5; break; }
     case 'cwatch': { const a = win(0, .4); P.club = 'none'; P.rh = [lerp(10, 2, a), lerp(44, 66, a)]; P.lh = [-10.5, 27.5]; P.lean = 1.2 * a; P.look = 1; P.jump = breathe * .3; break; }
     case 'cgroan': { const a = win(0, .3); P.club = 'none'; P.lh = [lerp(-10.5, -6, a), lerp(27.5, 67, a)]; P.rh = [lerp(10.5, 6, a), lerp(27.5, 67, a)]; P.bow = 2 * a; P.frown = 1; break; }
@@ -3725,7 +3725,7 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
     armParts.push([SP(quadU(sh, e, 5.1, 4.2)), c.s]); armParts.push([SP(quadU(e, hand, 4, 3.2)), c.s]);
     if (HD) armParts.push([SP(ovalU(e[0], e[1], 2.1, 2.1, 16)), c.s]); /* rounded elbow: no notch where the two halves meet */
     armParts.push([SP(halfShade(sh, e, 5.1, 4.2)), shadeHex(c.s, side > 0 ? .8 : .88)]); armParts.push([SP(halfShade(e, hand, 4, 3.2)), shadeHex(c.s, side > 0 ? .8 : .88)]);
-    if (!lk.singlet && lk.sleeve === 'long') { const cuff = lerpP(e, hand, .8); armParts.push([SP(quadU([sh[0] - side * .2, sh[1] + .6], e, 6.2, 5)), c.S]); armParts.push([SP(quadU(e, cuff, 5, 4.2)), c.S]); armParts.push([SP(quadU(lerpP(e, hand, .72), cuff, 4.4, 4.4)), shadeHex(c.S, .8)]); }
+    if (!lk.singlet && lk.sleeve === 'long') { const cf = lk.watch && side < 0 ? .58 : .8, cuff = lerpP(e, hand, cf); armParts.push([SP(quadU([sh[0] - side * .2, sh[1] + .6], e, 6.2, 5)), c.S]); armParts.push([SP(quadU(e, cuff, 5, 4.2)), c.S]); armParts.push([SP(quadU(lerpP(e, hand, cf - .08), cuff, 4.4, 4.4)), shadeHex(c.S, .8)]); }
     else if (!lk.singlet) armParts.push([SP(quadU([sh[0] - side * .2, sh[1] + .6], sl, 6.2, 5.3)), c.S]);
     if (HD && !lk.singlet) armParts.push([SP(ovalU(sh[0] - side * .2, sh[1] - .9, 2.7, 2.2, 16)), c.S]); /* rounded shoulder */
     if (HD && !lk.singlet && lk.sleeve === 'long') armParts.push([SP(ovalU(e[0], e[1], 2.55, 2.55, 16)), c.S]);
@@ -3749,6 +3749,23 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
     const nc = lk.stripe || opt.bag, n0 = S([-1.6 + ln * .5, 45]), n1 = S([1.6 + ln * .5, 39]); pRect(n0[0], n0[1], Math.max(1, (n1[0] - n0[0])), Math.max(1, .9 * k), nc); pRect(n1[0] - .9 * k, n0[1], Math.max(1, .9 * k), Math.max(1, n1[1] - n0[1]), nc);
   }
   if (lk.singlet) { pPoly(SP([[-2.6 + ln, shY - 2.4], [2.6 + ln, shY - 2.4], [2.9 + ln, shY - 1.6], [-2.9 + ln, shY - 1.6]]), shadeHex(c.S, .88)); if (lk.stripe) { pPoly(SP([[-5.4 * bw + ln, shY + 1.4], [-3.8 * bw + ln, shY + 1.6], [-3.9 * bw + ln, shY + .6], [-5.5 * bw + ln, shY + .5]]), lk.stripe); pPoly(SP([[5.4 * bw + ln, shY + 1.4], [3.8 * bw + ln, shY + 1.6], [3.9 * bw + ln, shY + .6], [5.5 * bw + ln, shY + .5]]), lk.stripe); } }
+  else if (lk.qzip) { /* quarter-zip pullover over a white crew-neck tee: stand collar, short zip, ribbed hem, small chest logo */
+    const tee = lk.shirt || '#f6f5f0', rib = shadeHex(c.S, .8), zc = shadeHex(c.S, 1.4);
+    pPoly(SP([[-4.2 + ln, shY + 2.4], [4.2 + ln, shY + 2.4], [3.2 + ln, shY - 2.6], [1.1 + ln, shY - 5.6], [-1.1 + ln, shY - 5.6], [-3.2 + ln, shY - 2.6]]), tee); /* white tee showing in the open zip */
+    pPoly(SP([[1.6 + ln, shY - 1], [3.2 + ln, shY - 2.6], [1.1 + ln, shY - 5.6], [.9 + ln, shY - 2.4]]), shadeHex(tee, .92)); /* a little shade on the tee */
+    pPoly(SP([[-3.3 + ln, shY + 2.2], [3.3 + ln, shY + 2.2], [3.0 + ln, shY + 4.4], [-3.0 + ln, shY + 4.4]]), rib); /* back of the stand collar */
+    pPoly(SP([[-1.9 + ln, shY + 1.1], [1.9 + ln, shY + 1.1], [1.75 + ln * 1.1, shY + 6.5], [-1.75 + ln * 1.1, shY + 6.5]]), shadeHex(c.s, .9)); /* neck, tucked into the collar */
+    pPoly(SP([[-2.4 + ln, shY + 1.25], [2.4 + ln, shY + 1.25], [2 + ln, shY + .45], [-2 + ln, shY + .45]]), shadeHex(tee, .86)); /* crew-neck rib */
+    for (const sd of [-1, 1]) { /* stand collar folded open either side of the zip */
+      pPoly(SP([[sd * 4.4 + ln, shY + 3.0], [sd * 3.4 + ln, shY + 4.0], [sd * 1.0 + ln, shY - 5.4], [sd * 1.8 + ln, shY - 5.5], [sd * 5.3 + ln, shY + .4]]), sd < 0 ? lt(c.S) : c.S);
+      pPoly(SP([[sd * 3.4 + ln, shY + 4.0], [sd * 2.9 + ln, shY + 3.6], [sd * .85 + ln, shY - 5.2], [sd * 1.0 + ln, shY - 5.4]]), rib); }
+    pPoly(SP([[-1.1 + ln, shY - 5.3], [1.1 + ln, shY - 5.3], [1.0 + ln, shY - 6.1], [-1.0 + ln, shY - 6.1]]), c.S); /* the zip's base */
+    pPoly(SP([[-.12 + ln, shY - 5.3], [.12 + ln, shY - 5.3], [.12 + ln * .7, 45.5], [-.12 + ln * .7, 45.5]]), zc); /* zip below the opening */
+    pPoly(SP([[-.24 + ln, shY - 5.4], [.24 + ln, shY - 5.4], [.2 + ln, shY - 6.3], [-.2 + ln, shY - 6.3]]), '#9aa3aa'); /* zip pull */
+    pPoly(SP([[-6.3 * bw + ln * .3, 34], [6.3 * bw + ln * .3, 34], [6.5 * bw + ln * .3, 36.4], [-6.5 * bw + ln * .3, 36.4]]), rib); /* ribbed hem over the waist */
+    if (lk.logo) { const a = S([1.2 * bw + ln * .7, 46.4]), t = Math.max(.5, .55 * k); /* wearer's left chest: small triangle and the name */
+      DC.fillStyle = '#ffffff'; DC.beginPath(); DC.moveTo(a[0], a[1] + t * .5); DC.lineTo(a[0] + t, a[1] + t * .5); DC.lineTo(a[0] + t * .5, a[1] - t * .5); DC.closePath(); DC.fill();
+      if (.95 * k * PXR >= 3) { DC.save(); DC.font = `700 ${.95 * k}px "Barlow Condensed", sans-serif`; DC.textAlign = 'left'; DC.textBaseline = 'middle'; DC.fillText(lk.logo.toUpperCase(), a[0] + t * 1.35, a[1] + t * .05); DC.restore(); } } }
   else if (lk.suit) { const sh2 = lk.shirt || '#f4f4f0';
     pPoly(SP([[-3.6 + ln, shY + 1.6], [3.6 + ln, shY + 1.6], [.4 + ln, 40.5], [-.4 + ln, 40.5]]), sh2); pPoly(SP([[-1.5 + ln, shY + 1.6], [1.5 + ln, shY + 1.6], [0 + ln, shY - 2.2]]), c.s);
     for (const sd of [-1, 1]) { pPoly(SP([[sd * 3.8 + ln, shY + 1.8], [sd * 1.2 + ln, 40], [sd * .2 + ln, 39], [sd * 2.6 + ln, shY - .5], [sd * 5.2 + ln, shY - 1.2], [sd * 5.6 + ln, shY + 1.5]]), shadeHex(c.S, .78)); pLine(...S([sd * 3.8 + ln, shY + 1.8]), ...S([sd * 1.2 + ln, 40]), Math.max(.35 / PXR, k * .18), shadeHex(c.S, 1.35)); }
@@ -3758,7 +3775,7 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
   else {
   pPoly(SP([[-3.4 + ln, shY + 2.4], [-.1 + ln, shY - .6], [-.6 + ln, shY + 3.6]]), lt(c.S)); pPoly(SP([[3.4 + ln, shY + 2.4], [.1 + ln, shY - .6], [.6 + ln, shY + 3.6]]), lt(c.S));
   pPoly(SP([[-.45 + ln, shY - .4], [.45 + ln, shY - .4], [.45 + ln, shY - 4.5], [-.45 + ln, shY - 4.5]]), dk(c.S)); }
-  if (!lk.suit) { pPoly(SP([[-6.3 * bw + ln * .3, 35.6], [6.3 * bw + ln * .3, 35.6], [6.3 * bw + ln * .3, 37.4], [-6.3 * bw + ln * .3, 37.4]]), '#26211c');
+  if (!lk.suit && !lk.qzip) { pPoly(SP([[-6.3 * bw + ln * .3, 35.6], [6.3 * bw + ln * .3, 35.6], [6.3 * bw + ln * .3, 37.4], [-6.3 * bw + ln * .3, 37.4]]), '#26211c');
   pPoly(SP([[-1 + ln * .3, 35.5], [1 + ln * .3, 35.5], [1 + ln * .3, 37.5], [-1 + ln * .3, 37.5]]), '#cfd8dc'); }
   if (HD) { /* fabric folds at the waist and chest, belt loops, shoe laces */
     const ln2 = (p, q, w, col) => { const A = S(p), B = S(q); pLine(A[0], A[1], B[0], B[1], Math.max(.5 / PXR, w * k), col); }, fold = shadeHex(c.S, .82);
@@ -3784,7 +3801,8 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
   if (P.towel) { const a = S(P.rh); pPoly([[a[0] - 2.5 * k, a[1] - 1 * k], [a[0] + 2.5 * k, a[1] - 1 * k], [a[0] + 2 * k, a[1] + 7 * k], [a[0] - 2 * k, a[1] + 6 * k]], '#f4f4ee'); }
   for (const [poly, col] of armParts) pPoly(poly, col);
   for (const [poly, col] of armParts) if (col === c.S) { const q = poly; pPoly([q[1], q[2], [q[2][0] + (q[3][0] - q[2][0]) * .25, q[2][1] + (q[3][1] - q[2][1]) * .25], [q[1][0] + (q[0][0] - q[1][0]) * .25, q[1][1] + (q[0][1] - q[1][1]) * .25]], dk(c.S)); }
-  for (const [hand, glove, sd, sh] of [[P.lh, !opt.bag, -1, shL], [P.rh, false, 1, shR]]) {
+  if (lk.watch && ELB[0]) drawWatchFront(S(ELB[0]), S(P.lh), k);
+  for (const [hand, glove, sd, sh] of [[P.lh, !opt.bag && !lk.noGlove, -1, shL], [P.rh, false, 1, shR]]) {
     const eb = ELB[sd > 0 ? 1 : 0] || sh, fl = Math.hypot(hand[0] - eb[0], hand[1] - eb[1]), ref = fl > 4 ? eb : sh, [hx, hy] = S(hand), [sx, sy] = S(ref), ang = Math.atan2(hy - sy, hx - sx), hc = glove ? '#f4f4f0' : c.s, ca = Math.cos(ang), sa = Math.sin(ang), q = (u, v) => [hx + ca * u * k - sa * v * k, hy + sa * u * k + ca * v * k];
     pPoly([q(-1.6, -2), q(1.4, -2.2), q(2.4, -1), q(2.5, 1), q(1.4, 2.1), q(-1.6, 2)], shadeHex(hc, .8));
     pPoly([q(-1.4, -1.7), q(1.3, -1.9), q(2.1, -.8), q(2.2, .9), q(1.3, 1.8), q(-1.4, 1.7)], hc);
@@ -3794,6 +3812,93 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
   drawHeadFront(g, ...S(head), 6.1 * k, k, P, lk);
   XF = null;
   if (P.ball) { const bx = X + P.ball[0] * k, by = Y - P.ball[1] * k; pDisc(bx, by, 2.4 * k, '#17110c'); pDisc(bx, by, 1.9 * k, '#ffffff'); }
+}
+/* a luxury watch on the left wrist, seen from the front: two-tone bracelet wrapping across the wrist, fluted gold
+   bezel, green sunburst dial. A sits at the elbow and B at the hand, both on screen */
+function drawWatchFront(A, B, k) {
+  const ang = Math.atan2(B[1] - A[1], B[0] - A[0]), L = Math.hypot(B[0] - A[0], B[1] - A[1]); if (L < 2 * k) return;
+  const d = Math.min(L * .3, 3.3 * k), cx = B[0] - Math.cos(ang) * d, cy = B[1] - Math.sin(ang) * d, x = DC, u = k;
+  const gold = '#d9b25a', goldD = '#a9822f', steel = '#d9dde0', steelD = '#8e959a';
+  x.save(); x.translate(cx, cy); x.rotate(ang - Math.PI / 2); /* local frame: x across the wrist, y along the forearm */
+  const hw = 2.25 * u, bh = .66 * u; /* as wide as the wrist (with its outline), so it wraps right round */
+  const bg = x.createLinearGradient(-hw, 0, hw, 0); bg.addColorStop(0, steelD); bg.addColorStop(.22, steel); bg.addColorStop(.5, '#f2f4f5'); bg.addColorStop(.78, steel); bg.addColorStop(1, steelD); /* rounded: darker where it wraps away */
+  x.fillStyle = bg; x.fillRect(-hw, -bh, hw * 2, bh * 2);
+  const gg = x.createLinearGradient(-hw, 0, hw, 0); gg.addColorStop(0, goldD); gg.addColorStop(.5, '#f0d48a'); gg.addColorStop(1, goldD); x.fillStyle = gg; x.fillRect(-hw, -bh * .32, hw * 2, bh * .64); /* gold centre links */
+  x.fillStyle = 'rgba(60,60,60,.35)'; for (let i = -4; i <= 4; i++) x.fillRect(i * hw / 4.5 - .04 * u, -bh, .08 * u, bh * 2); /* link joins */
+  x.fillStyle = 'rgba(0,0,0,.28)'; x.beginPath(); x.arc(.12 * u, .16 * u, 1.36 * u, 0, 6.29); x.fill();
+  x.fillStyle = goldD; x.fillRect(1.28 * u, -.22 * u, .34 * u, .44 * u); /* crown */
+  const g = x.createLinearGradient(-1.3 * u, -1.3 * u, 1.3 * u, 1.3 * u); g.addColorStop(0, '#f6e3a6'); g.addColorStop(.5, gold); g.addColorStop(1, goldD); x.fillStyle = g; x.beginPath(); x.arc(0, 0, 1.32 * u, 0, 6.29); x.fill(); /* bezel */
+  x.strokeStyle = 'rgba(120,85,25,.55)'; x.lineWidth = .08 * u; for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283; x.beginPath(); x.moveTo(Math.cos(a) * 1.04 * u, Math.sin(a) * 1.04 * u); x.lineTo(Math.cos(a) * 1.3 * u, Math.sin(a) * 1.3 * u); x.stroke(); }
+  const dg = x.createRadialGradient(-.3 * u, -.35 * u, .05 * u, 0, 0, u); dg.addColorStop(0, '#2f8a64'); dg.addColorStop(1, '#0d4a33'); x.fillStyle = dg; x.beginPath(); x.arc(0, 0, .95 * u, 0, 6.29); x.fill(); /* dial */
+  x.rotate(-(ang - Math.PI / 2)); /* the dial reads upright */
+  x.fillStyle = '#f4e2a8'; for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283; x.beginPath(); x.arc(Math.cos(a) * .76 * u, Math.sin(a) * .76 * u, (i % 3 ? .06 : .1) * u, 0, 6.29); x.fill(); }
+  x.strokeStyle = '#f7f1df'; x.lineCap = 'round'; x.lineWidth = .13 * u; x.beginPath(); x.moveTo(0, 0); x.lineTo(-.33 * u, -.37 * u); x.stroke(); x.lineWidth = .09 * u; x.beginPath(); x.moveTo(0, 0); x.lineTo(.56 * u, -.3 * u); x.stroke(); x.lineCap = 'butt';
+  x.fillStyle = 'rgba(255,255,255,.22)'; x.beginPath(); x.ellipse(-.32 * u, -.38 * u, .5 * u, .22 * u, -.6, 0, 6.29); x.fill(); /* crystal glint */
+  x.restore();
+}
+/* Catmull-Rom smoothing: a few control points become a soft curve (closed unless open is set) */
+function smoothPts(P0, n, open) { const out = [], L = P0.length, at = i => open ? P0[Math.max(0, Math.min(L - 1, i))] : P0[(i + L) % L];
+  for (let i = 0; i < (open ? L - 1 : L); i++) { const p0 = at(i - 1), p1 = at(i), p2 = at(i + 1), p3 = at(i + 2);
+    for (let j = 0; j < n; j++) { const t = j / n, t2 = t * t, t3 = t2 * t; out.push([0, 1].map(d => .5 * (2 * p1[d] + (-p0[d] + p2[d]) * t + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 + (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3))); } }
+  if (open) out.push(P0[L - 1]); return out; }
+/* a more lifelike face (flat shapes, no outlines): shaped brows, almond eyes with lids, lashes and a clipped iris,
+   a modelled nose and real lips. Used for characters with look.realFace when seen up close */
+function drawRealFace(x, y, r, k, P, lk, sk, hair) {
+  const sh0 = SH3; SH3 = 0;
+  const dk = f => shadeHex(sk, f), blink = ((G.t + x * .013) % 3.7) < .12, sq = (P && P.squint) || blink, lx = (P && P.look || 0) * .05 * r;
+  const ey = y + r * .1, talk = P && P.mouth, frown = P && P.frown, lift = talk ? r * .025 : 0;
+  const path = pts => { DC.beginPath(); pts.forEach((p, i) => { const q = tf(p[0], p[1]); if (i) DC.lineTo(q[0], q[1]); else DC.moveTo(q[0], q[1]); }); DC.closePath(); };
+  const line = (pts, w, col) => { for (let i = 1; i < pts.length; i++) pLine(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], w, col); };
+  const S2 = (pts, n, open) => smoothPts(pts, n || 4, open);
+  /* soft modelling: eye sockets, cheek warmth, the shadow side of the face */
+  for (const sd of [-1, 1]) pPoly(ovalU(x + sd * r * .34, ey - r * .03, r * .25, r * .13, 18), dk(.96));
+  /* nose: bridge shadow on the shade side, rounded tip, wings, nostrils, the shadow under it */
+  pPoly(S2([[x + r * .05, y + r * .2], [x + r * .1, y + r * .34], [x + r * .14, y + r * .46], [x + r * .04, y + r * .44], [x + r * .03, y + r * .3]], 3, true), dk(.93));
+  pPoly(ovalU(x, y + r * .56, r * .17, r * .05, 14), dk(.84));
+  for (const sd of [-1, 1]) pPoly(ovalU(x + sd * r * .12, y + r * .5, r * .075, r * .062, 12), dk(sd > 0 ? .88 : .93));
+  pPoly(ovalU(x + r * .005, y + r * .47, r * .1, r * .08, 14), dk(1.02)); pPoly(ovalU(x - r * .03, y + r * .45, r * .04, r * .03, 10), dk(1.08));
+  for (const sd of [-1, 1]) pPoly(ovalU(x + sd * r * .06, y + r * .545, r * .034, r * .018, 10), dk(.6));
+  /* jaw and chin: a firmer lower face */
+  pPoly(S2([[x + r * .38, y + r * .7], [x + r * .62, y + r * .62], [x + r * .5, y + r * .92], [x + r * .2, y + r * 1.06]], 3), dk(.93));
+  pPoly(ovalU(x, y + r * .98, r * .14, r * .05, 12), dk(.92));
+  /* mouth: wide, flat and relaxed, thin lips */
+  const lipU = mixHex(sk, '#8a4a40', .3), lipL = mixHex(sk, '#a05a50', .3), my = y + r * .74;
+  pPoly(ovalU(x, my - r * .11, r * .045, r * .07, 8), dk(.95)); /* philtrum */
+  if (talk) { const mw = r * .26, mt = my - r * .03, mb = my + r * .08;
+    pPoly(S2([[x - mw, my], [x, mt - r * .02], [x + mw, my], [x, mb + r * .03]], 3), lipL);
+    pPoly(S2([[x - mw * .85, my], [x - mw * .4, mt + r * .015], [x + mw * .4, mt + r * .015], [x + mw * .85, my], [x + mw * .4, mb - r * .015], [x - mw * .4, mb - r * .015]], 3), '#341614');
+    pPoly([[x - mw * .5, mt + r * .02], [x + mw * .5, mt + r * .02], [x + mw * .46, mt + r * .05], [x - mw * .46, mt + r * .05]], '#ece6dc');
+    pPoly(S2([[x - mw, my], [x - mw * .4, mt - r * .025], [x, mt - r * .015], [x + mw * .4, mt - r * .025], [x + mw, my], [x + mw * .4, mt + r * .012], [x - mw * .4, mt + r * .012]], 2), lipU); }
+  else { const mw = r * .3;
+    pPoly(S2([[x - mw * .8, my + r * .01], [x, my + r * .02], [x + mw * .8, my + r * .01], [x + mw * .4, my + r * .085], [x, my + r * .095], [x - mw * .4, my + r * .085]], 3), lipL); /* lower lip */
+    pPoly(ovalU(x, my + r * .14, r * .12, r * .028, 10), dk(.9)); /* shadow under the lip */
+    pPoly(S2([[x - mw, my], [x - mw * .45, my - r * .03], [x - r * .04, my - r * .035], [x, my - r * .025], [x + r * .04, my - r * .035], [x + mw * .45, my - r * .03], [x + mw, my], [x + mw * .45, my + r * .008], [x - mw * .45, my + r * .008]], 2), lipU); /* thin upper lip */
+    line([[x - mw * 1.02, my + r * .004], [x - mw * .4, my + r * .012], [x + mw * .4, my + r * .012], [x + mw * 1.02, my + r * .004]], Math.max(.3 / PXR, r * .024), mixHex(lipU, '#24120e', .5)); /* straight mouth line, corners level */ }
+  /* eyes: long and narrow, flat upper lid, light lashes */
+  for (const sd of [-1, 1]) {
+    const ex = x + sd * r * .35, ew = r * .18, eh = r * .06, X = u => ex + sd * u * ew; /* u: -1 inner corner, +1 outer */
+    const top = S2([[X(-1), ey + eh * .15], [X(-.5), ey - eh * .85], [X(.3), ey - eh * .95], [X(1), ey - eh * .1]], 4, true);
+    const bot = S2([[X(1), ey - eh * .1], [X(.35), ey + eh * .6], [X(-.4), ey + eh * .62], [X(-1), ey + eh * .15]], 4, true);
+    line(S2([[X(-.6), ey - eh * 1.45], [X(.2), ey - eh * 1.75], [X(.95), ey - eh * 1.1]], 3, true), Math.max(.3 / PXR, r * .022), dk(.8)); /* lid crease, close to the eye */
+    if (sq) { line([[X(-1), ey + eh * .15], [X(1), ey]], Math.max(.4 / PXR, r * .04), '#22170f'); continue; }
+    const almond = top.concat(bot);
+    pPoly(almond, '#ede7de');
+    DC.save(); path(almond); DC.clip();
+    const ic = lk.eyeCol || '#4a2e1c', ix = ex + lx, iy = ey + eh * .1, ir = eh * 1.25;
+    pDisc(ix, iy, ir, shadeHex(ic, .7)); pDisc(ix, iy, ir * .85, ic); pDisc(ix, iy, ir * .42, '#0c0806');
+    DC.globalAlpha = .3; pPoly(top.concat([[X(1), ey - eh * .1 + eh * .5], [X(-1), ey + eh * .55]]).map(([a, b]) => [a, b + eh * .1]), '#3a2418'); DC.globalAlpha = 1; /* upper lid shadow */
+    DC.restore();
+    pDisc(ix - ir * .35, iy - ir * .3, ir * .16, '#ffffff');
+    line(top, Math.max(.35 / PXR, r * .03), '#241710'); /* even lash line, no flick */
+    line(bot.slice(0, -2), Math.max(.3 / PXR, r * .014), dk(.8));
+  }
+  /* brows: straight, long, full, sitting low over the eyes, blunt at both ends */
+  for (const sd of [-1, 1]) {
+    const bx = u => x + sd * (r * .09 + u * r * .5), by0 = ey - r * .2 - lift, inr = frown ? r * .04 : 0;
+    const shape = S2([[bx(0), by0 - r * .07 + inr], [bx(.45), by0 - r * .088], [bx(1), by0 - r * .06], [bx(1.03), by0 - r * .03], [bx(.95), by0 - r * .008], [bx(.45), by0 + r * .008], [bx(-.02), by0 + r * .012 + inr]], 3);
+    pPoly(shape, shadeHex(hair, .92));
+  }
+  SH3 = sh0;
 }
 function drawHeadFront(g, x, y, r, k, P, lk) {
   const c = g.c, sk = c.s, hair = c.H, px = Math.max(1, k * .9);
@@ -3809,14 +3914,46 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
     if (HD) for (const sd of [-1, 1]) for (const [a, b2, f] of [[.95, 1.25, .85], [1.05, 1.0, 1.15], [1.25, 1.35, .9]]) pLine(x + sd * r * a, y - r * .2, x + sd * r * b2, y + r * 2.0, Math.max(.35 / PXR, k * .22), shadeHex(hair, f));
   }
   /* neck + head */
-  pRect(x - r * .4, y + r * .65, r * .8, r * .85, shadeHex(sk, .86)); pRect(x - r * .4, y + r * .9, r * .8, Math.max(1, r * .18), shadeHex(sk, .72));
-  pDisc(x, y, r, sk); pDisc(x + r * .25, y + r * .1, r * .85, shadeHex(sk, .94)); pDisc(x - r * .12, y - r * .05, r * .8, sk);
+  if (!lk.qzip) pRect(x - r * .4, y + r * .65, r * .8, r * .85, shadeHex(sk, .86)); if (!lk.qzip) pRect(x - r * .4, y + r * .9, r * .8, Math.max(1, r * .18), shadeHex(sk, .72));
+  const fw = lk.slim ? (typeof lk.slim === 'number' ? lk.slim : .88) : 1, fq = fw / .88; /* a narrower, longer face for some characters */
+  if (lk.realFace && HD) { /* one smooth face shape, lit softly from the upper left: no hard half-face shadow */
+    const sh0 = SH3; SH3 = 0; const fq2 = fw / .88, face = smoothPts([[x - r * fw, y - r * .2], [x - r * fw * .92, y - r * .7], [x - r * .55, y - r * .98], [x, y - r * 1.04], [x + r * .55, y - r * .98], [x + r * fw * .92, y - r * .7], [x + r * fw, y - r * .2], [x + r * fw * .97, y + r * .3], [x + r * .64 * fq2, y + r * .8], [x + r * .36 * fq2, y + r * 1.04], [x, y + r * 1.12], [x - r * .36 * fq2, y + r * 1.04], [x - r * .64 * fq2, y + r * .8], [x - r * fw * .97, y + r * .3]], 5);
+    pPoly(face, sk); DC.save(); DC.beginPath(); face.forEach((p0, i) => { const q = tf(p0[0], p0[1]); if (i) DC.lineTo(q[0], q[1]); else DC.moveTo(q[0], q[1]); }); DC.closePath(); DC.clip();
+    const g0 = tf(x - r * .35, y - r * .35), gr = DC.createRadialGradient(g0[0], g0[1], r * .2, g0[0], g0[1], r * 1.6); gr.addColorStop(0, 'rgba(255,240,225,.10)'); gr.addColorStop(.55, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(60,30,15,.16)'); DC.fillStyle = gr; DC.fillRect(g0[0] - r * 3, g0[1] - r * 3, r * 6, r * 6);
+    DC.restore(); SH3 = sh0; }
+  else if (lk.slim) { pPoly(ovalU(x, y, r * fw, r, 28), sk); pPoly(ovalU(x + r * .2, y + r * .1, r * .74, r * .86, 24), shadeHex(sk, .94)); pPoly(ovalU(x - r * .1, y - r * .05, r * .72, r * .82, 24), sk);
+    pPoly([[x - r * .8 * fq, y + r * .12], [x + r * .8 * fq, y + r * .12], [x + r * .64 * fq, y + r * .78], [x + r * .4 * fq, y + r * 1.03], [x + r * .16 * fq, y + r * 1.11], [x - r * .16 * fq, y + r * 1.11], [x - r * .4 * fq, y + r * 1.03], [x - r * .64 * fq, y + r * .78]], sk);
+    pPoly([[x + r * .32, y + r * .1], [x + r * .8 * fq, y + r * .12], [x + r * .64 * fq, y + r * .78], [x + r * .4 * fq, y + r * 1.03], [x + r * .16, y + r * 1.1]], shadeHex(sk, .93)); }
+  else { pDisc(x, y, r, sk); pDisc(x + r * .25, y + r * .1, r * .85, shadeHex(sk, .94)); pDisc(x - r * .12, y - r * .05, r * .8, sk);
   pPoly([[x - r * .86, y + r * .15], [x + r * .86, y + r * .15], [x + r * .5, y + r * 1.05], [x - r * .5, y + r * 1.05]], sk);
-  pPoly([[x + r * .35, y + r * .1], [x + r * .86, y + r * .15], [x + r * .5, y + r * 1.02], [x + r * .2, y + r * 1.04]], shadeHex(sk, .9));
+  pPoly([[x + r * .35, y + r * .1], [x + r * .86, y + r * .15], [x + r * .5, y + r * 1.02], [x + r * .2, y + r * 1.04]], shadeHex(sk, .9)); }
+  if (lk.jaw) { /* fuller, rounded-square jaw */
+    pPoly([[x - r * .92, y + r * .12], [x + r * .92, y + r * .12], [x + r * .84, y + r * .72], [x + r * .56, y + r * 1.06], [x - r * .56, y + r * 1.06], [x - r * .84, y + r * .72]], sk);
+    pPoly([[x + r * .4, y + r * .12], [x + r * .92, y + r * .12], [x + r * .84, y + r * .72], [x + r * .56, y + r * 1.06], [x + r * .28, y + r * 1.06]], shadeHex(sk, .92)); }
   /* ears */
-  for (const sd of [-1, 1]) { pDisc(x + sd * r * 1.0, y + r * .15, r * .22, shadeHex(sk, .9)); pDisc(x + sd * r * 1.02, y + r * .15, r * .1, shadeHex(sk, .78)); }
+  for (const sd of [-1, 1]) { pDisc(x + sd * r * fw, y + r * .15, r * .22 * fw, shadeHex(sk, .9)); pDisc(x + sd * r * (fw + .02), y + r * .15, r * .1, shadeHex(sk, .78)); }
   /* hair: top and sides */
-  if (lk.hair !== 'none') {
+  if (lk.hair === 'quiff') { /* short styled quiff: smooth outline, lifted front, tight faded sides, forehead clear */
+    const sx = fw * 1.03, Q = pts => smoothPts(pts.map(([u, v]) => [x + u * r * sx, y + v * r]), 5);
+    for (const sd of [-1, 1]) { DC.globalAlpha = .85; pPoly(Q([[sd * .97, -.7], [sd * .86, -.66], [sd * .84, -.4], [sd * .9, -.24], [sd * .99, -.3]]), hair); DC.globalAlpha = .35; pPoly(Q([[sd * .99, -.3], [sd * .9, -.24], [sd * .9, .02], [sd * 1.0, .06]]), hair); DC.globalAlpha = 1; }
+    if (lk.realFace) pPoly(Q([[-.97, -.42], [-.99, -.86], [-.84, -1.14], [-.62, -1.34], [-.4, -1.44], [-.24, -1.56], [-.06, -1.5], [.1, -1.62], [.28, -1.54], [.46, -1.58], [.62, -1.44], [.86, -1.17], [.99, -.82], [.97, -.42], [.86, -.46], [.8, -.62], [.62, -.68], [.32, -.72], [0, -.74], [-.32, -.72], [-.62, -.68], [-.8, -.62], [-.86, -.46]]), hair);
+    else pPoly(Q([[-.97, -.5], [-.98, -.86], [-.84, -1.14], [-.62, -1.34], [-.4, -1.44], [-.24, -1.58], [-.06, -1.52], [.1, -1.66], [.28, -1.56], [.46, -1.6], [.62, -1.44], [.86, -1.17], [.98, -.82], [.97, -.5], [.8, -.64], [.5, -.77], [.12, -.82], [-.24, -.8], [-.56, -.73], [-.82, -.6]]), hair);
+    pPoly(Q([[-.5, -1.08], [-.36, -1.34], [-.06, -1.52], [.3, -1.53], [.58, -1.4], [.36, -1.34], [.06, -1.3], [-.2, -1.16]]), shadeHex(hair, 1.1)); /* the lifted front catches the light */
+    if (!lk.realFace) pPoly(Q([[-.82, -.6], [-.56, -.73], [-.24, -.8], [.12, -.82], [.5, -.77], [.8, -.64], [.6, -.8], [.14, -.9], [-.3, -.88], [-.62, -.8]].map(([u, v]) => lk.realFace ? [u * .9, v - .02] : [u, v])), shadeHex(hair, lk.realFace ? 1.06 : .86)); /* soft edge at the hairline */
+    if (HD) { const sw = Math.max(.3 / PXR, k * .16);
+      for (const [a, b2, c2, f] of [[[-.7, -.78], [-.62, -1.0], [-.42, -1.22], 1.2], [[-.32, -.86], [-.24, -1.12], [-.02, -1.36], 1.26], [[.08, -.88], [.16, -1.14], [.36, -1.36], 1.24], [[.46, -.84], [.56, -1.06], [.72, -1.2], 1.18], [[-.9, -.72], [-.86, -.92], [-.72, -1.1], 1.12]]) {
+        const L2 = smoothPts([a, b2, c2].map(([u, v]) => [x + u * r * sx, y + v * r]), 4, true); for (let i = 1; i < L2.length; i++) pLine(L2[i - 1][0], L2[i - 1][1], L2[i][0], L2[i][1], sw, shadeHex(hair, f)); } }
+  }
+  else if (lk.hair === 'fadeup') { /* short textured top brushed up, closely faded sides, forehead clear */
+    for (const sd of [-1, 1]) { DC.globalAlpha = .9; pPoly([[x + sd * r * 1.0, y - r * .62], [x + sd * r * .86, y - r * .62], [x + sd * r * .88, y - r * .25], [x + sd * r * 1.02, y - r * .2]], hair);
+      DC.globalAlpha = .42; pPoly([[x + sd * r * 1.02, y - r * .22], [x + sd * r * .88, y - r * .25], [x + sd * r * .9, y + r * .08], [x + sd * r * 1.03, y + r * .1]], hair); DC.globalAlpha = 1; }
+    const top = [[x - r * .98, y - r * .5], [x - r * .93, y - r * .98], [x - r * .62, y - r * 1.3], [x - r * .32, y - r * 1.38], [x - r * .12, y - r * 1.46], [x + r * .06, y - r * 1.42], [x + r * .26, y - r * 1.49], [x + r * .46, y - r * 1.42], [x + r * .66, y - r * 1.33], [x + r * .92, y - r * 1.08], [x + r * 1.0, y - r * .52], [x + r * .84, y - r * .66], [x + r * .5, y - r * .76], [x, y - r * .8], [x - r * .5, y - r * .76], [x - r * .84, y - r * .66]];
+    pPoly(top, hair);
+    pPoly([[x - r * .84, y - r * .66], [x - r * .5, y - r * .76], [x, y - r * .8], [x + r * .5, y - r * .76], [x + r * .84, y - r * .66], [x + r * .5, y - r * .88], [x, y - r * .92], [x - r * .5, y - r * .88]], shadeHex(hair, .7)); /* soft hairline shade */
+    const hl = shadeHex(hair, 1.3), sw = Math.max(.35 / PXR, k * .2);
+    for (const [u0, v0, u1, v1] of [[-.55, -.98, -.42, -1.22], [-.22, -1.02, -.14, -1.34], [.12, -1.04, .2, -1.36], [.45, -1.0, .54, -1.3], [-.76, -.86, -.7, -1.06]]) pLine(x + u0 * r, y + v0 * r, x + u1 * r, y + v1 * r, sw, hl);
+  }
+  else if (lk.hair !== 'none') {
     pPoly([[x - r * 1.02, y + r * .05], [x - r * .95, y - r * .7], [x - r * .4, y - r * 1.06], [x + r * .4, y - r * 1.06], [x + r * .95, y - r * .7], [x + r * 1.02, y + r * .05], [x + r * .8, y - r * .35], [x - r * .8, y - r * .35]], hair);
     pRect(x - r * 1.0, y - r * .35, r * .22, r * .55, hair); pRect(x + r * .78, y - r * .35, r * .22, r * .55, hair);
     if (HD && lk.hair !== 'curly') { const sw = Math.max(.35 / PXR, k * .2); for (const [u0, u1] of [[-.75, -.55], [-.35, -.2], [.1, .25], [.5, .7]]) pLine(x + u0 * r, y - r * .98, x + u1 * r * 1.1, y - r * .45, sw, shadeHex(hair, u0 < 0 ? 1.18 : .82)); }
@@ -3827,17 +3964,24 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
     if (lk.hair === 'curly') { /* soft curls: overlapping rounds with a darker underside, no highlight dots */ for (const [u, v] of [[-.8, -.55], [-.35, -.9], [.15, -.95], [.6, -.75], [.95, -.3], [-1, -.1]]) pDisc(x + u * r, y + v * r + r * .06, r * .33, shadeHex(hair, .82)); for (const [u, v] of [[-.8, -.55], [-.35, -.9], [.15, -.95], [.6, -.75], [.95, -.3], [-1, -.1]]) pDisc(x + u * r, y + v * r, r * .3, hair); }
   }
   /* face */
-  const ey = y + r * .2, blink = ((G.t + x * .013) % 3.7) < .12, sq = P && P.squint || blink, big = r >= 7, lx = (P && P.look || 0) * px * .6;
+  if (lk.realFace && HD && r >= 6 && !hat) { drawRealFace(x, y, r, k, P, lk, sk, hair); return; }
+  const ey = y + r * (lk.eyesUp ? .12 : .2), blink = ((G.t + x * .013) % 3.7) < .12, sq = P && P.squint || blink, big = r >= 7, lx = (P && P.look || 0) * px * .6;
   const det = HD && r >= 6;
   if (det) for (const sd of [-1, 1]) { /* detailed face: almond eyes with iris, pupil and catchlight, lids, shaped brows */
-    const ex = x + sd * r * .36, ew = r * .165, eh = r * .085, lid = shadeHex(hair === '#ffffff' ? '#5a4632' : hair, .55), lw = Math.max(.4 / PXR, k * .34);
-    if (!sq) { pPoly(ovalU(ex, ey, ew, eh, 14), '#f3eee6'); const ic = lk.eyeCol || '#5a3d2b'; pDisc(ex + lx * .8, ey + eh * .05, eh * 1.05, ic); pDisc(ex + lx * .8, ey + eh * .05, eh * .55, '#0d0907'); pDisc(ex + lx * .8 - eh * .35, ey - eh * .32, eh * .28, '#ffffff');
+    const se = lk.slimEye, ex = x + sd * r * (se ? .33 : .36), ew = r * (se ? .155 : .165), eh = r * (se ? .074 : .085), lid = shadeHex(hair === '#ffffff' ? '#5a4632' : hair, .55), lw = Math.max(.4 / PXR, k * (se ? .26 : .34));
+    const sh0 = SH3; if (se) SH3 = 0; /* no outline stroke on fine features, it would fatten them */
+    if (!sq && se) { pPoly(ovalU(ex, ey, ew, eh, 16), '#f3eee6'); const ic = lk.eyeCol || '#5a3d2b'; pPoly(ovalU(ex + lx * .8, ey + eh * .05, eh * 1.1, eh * .95, 14), ic); pPoly(ovalU(ex + lx * .8, ey + eh * .05, eh * .55, eh * .5, 10), '#0d0907'); pDisc(ex + lx * .8 - eh * .4, ey - eh * .3, eh * .24, '#ffffff');
+      pLine(ex - ew * 1.08, ey + eh * .1, ex - ew * .3, ey - eh * 1.15, lw, lid); pLine(ex - ew * .3, ey - eh * 1.15, ex + ew * .5, ey - eh * 1.1, lw, lid); pLine(ex + ew * .5, ey - eh * 1.1, ex + ew * 1.08, ey - eh * .05, lw, lid);
+      pLine(ex - ew * .65, ey + eh * 1.15, ex + ew * .65, ey + eh * 1.15, Math.max(.3 / PXR, k * .14), shadeHex(sk, .84)); }
+    else if (!sq) { pPoly(ovalU(ex, ey, ew, eh, 14), '#f3eee6'); const ic = lk.eyeCol || '#5a3d2b'; pDisc(ex + lx * .8, ey + eh * .05, eh * 1.05, ic); pDisc(ex + lx * .8, ey + eh * .05, eh * .55, '#0d0907'); pDisc(ex + lx * .8 - eh * .35, ey - eh * .32, eh * .28, '#ffffff');
       pLine(ex - ew * 1.08, ey + eh * .05, ex - ew * .3, ey - eh * 1.12, lw, lid); pLine(ex - ew * .3, ey - eh * 1.12, ex + ew * .5, ey - eh * 1.08, lw, lid); pLine(ex + ew * .5, ey - eh * 1.08, ex + ew * 1.08, ey - eh * .1, lw, lid);
       pLine(ex - ew * .7, ey + eh * 1.05, ex + ew * .7, ey + eh * 1.05, Math.max(.3 / PXR, k * .16), shadeHex(sk, .82));
       if (lk.lashes) pLine(ex + sd * ew * 1.0, ey - eh * .4, ex + sd * ew * 1.35, ey - eh * .9, lw, '#2a1d14'); }
     else { pLine(ex - ew, ey + eh * .1, ex, ey - eh * .35, lw, lid); pLine(ex, ey - eh * .35, ex + ew, ey + eh * .1, lw, lid); }
-    const lift2 = (P && P.mouth ? eh * .9 : 0) - (P && P.frown ? eh * .6 : 0), byO = ey - eh * 3.1 - lift2, byI = byO + (P && P.frown ? eh * 1.1 : 0), ix = ex - sd * ew * 1.05, ox = ex + sd * ew * 1.2, bc = shadeHex(hair === '#ffffff' ? '#8a7a6a' : hair, .78);
-    pPoly([[ix, byI + eh * .35], [ix, byI - eh * .3], [ex, byO - eh * .65], [ox, byO + eh * .05], [ex, byO - eh * .05]], bc); }
+    const lift2 = (P && P.mouth ? eh * .9 : 0) - (P && P.frown ? eh * .6 : 0), byO = ey - (se ? r * .27 : eh * 3.1) - lift2, byI = byO + (P && P.frown ? eh * 1.1 : 0), ix = ex - sd * ew * 1.05, ox = ex + sd * ew * 1.2, bc = shadeHex(hair === '#ffffff' ? '#8a7a6a' : hair, .78);
+    if (lk.browFlat) { const bt = r * .062; pPoly([[ix, byI + bt * .9], [ix, byI - bt], [ex, byO - bt * 1.35], [ox, byO - bt * .55], [ox, byO + bt * .2], [ex, byO + bt * .35]], shadeHex(hair, .9)); }
+    else pPoly([[ix, byI + eh * .35], [ix, byI - eh * .3], [ex, byO - eh * .65], [ox, byO + eh * .05], [ex, byO - eh * .05]], bc);
+    SH3 = sh0; }
   else for (const sd of [-1, 1]) {
     const ex = x + sd * r * .38;
     if (big && !sq) { pRect(ex - px * 1.05, ey - px * .55, px * 2.1, px * 1.35, '#ece6dc'); pRect(ex - px * .5 + lx, ey - px * .55, px * 1, px * 1.35, lk.eyeCol || '#3b2a1e'); if (lk.eyeCol) pRect(ex - px * .5 + lx, ey + px * .35, px, Math.max(1 / PXR, px * .45), shadeHex(lk.eyeCol, 1.25)); pRect(ex - px * .22 + lx, ey - px * .3, Math.max(1, px * .5), px * .9, '#120c08'); pRect(ex - px * .45 + lx, ey - px * .5, Math.max(1, px * .35), Math.max(1, px * .35), '#f4f4f4'); pRect(ex - px * 1.1, ey - px * .75, px * 2.2, Math.max(1, px * .4), shadeHex(sk, .68)); pRect(ex - px * 1.0, ey + px * .8, px * 2, Math.max(1, px * .25), shadeHex(sk, .86)); if (lk.lashes) { pRect(ex - px * 1.15, ey - px * .8, px * 2.3, Math.max(1 / PXR, px * .35), '#2a1d14'); pRect(ex + sd * px * 1.1 - px * .3, ey - px * 1.1, Math.max(1 / PXR, px * .6), Math.max(1 / PXR, px * .5), '#2a1d14'); } }
@@ -3865,7 +4009,7 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
     pPoly([[x - mw * .85, mt], [x + mw * .85, mt], [x + mw * .7, mt + (mb - mt) * .32], [x - mw * .7, mt + (mb - mt) * .32]], '#f7f4ee');
     pPoly([[x - mw * .45, mb - (mb - mt) * .28], [x + mw * .45, mb - (mb - mt) * .28], [x, mb]], '#c9585a');
     pRect(x - mw - k * .3, mt - k * .3, Math.max(1, k * .5), Math.max(1, k * .5), shadeHex(sk, .7)); pRect(x + mw - k * .2, mt - k * .3, Math.max(1, k * .5), Math.max(1, k * .5), shadeHex(sk, .7)); }
-  else if (det && P && P.smile) { const lc = shadeHex(sk, .52), w2 = Math.max(.45 / PXR, k * .42); pLine(x - r * .3, y + r * .66, x - r * .12, y + r * .77, w2, lc); pLine(x - r * .12, y + r * .77, x + r * .12, y + r * .77, w2, lc); pLine(x + r * .12, y + r * .77, x + r * .3, y + r * .66, w2, lc); pLine(x - r * .1, y + r * .86, x + r * .1, y + r * .86, Math.max(.3 / PXR, k * .3), shadeHex(sk, .82)); }
+  else if (det && ((P && P.smile) || (lk.smile && !(P && P.frown)))) { const lc = shadeHex(sk, .52), w2 = Math.max(.45 / PXR, k * .42); pLine(x - r * .3, y + r * .66, x - r * .12, y + r * .77, w2, lc); pLine(x - r * .12, y + r * .77, x + r * .12, y + r * .77, w2, lc); pLine(x + r * .12, y + r * .77, x + r * .3, y + r * .66, w2, lc); pLine(x - r * .1, y + r * .86, x + r * .1, y + r * .86, Math.max(.3 / PXR, k * .3), shadeHex(sk, .82)); }
   else if (P && P.smile) { pRect(x - r * .26, y + r * .74, r * .52, Math.max(1, k * .6), '#8a3a32'); pRect(x - r * .34, y + r * .66, Math.max(1, k * .6), Math.max(1, k * .6), '#8a3a32'); pRect(x + r * .28, y + r * .66, Math.max(1, k * .6), Math.max(1, k * .6), '#8a3a32'); }
   else if (P && P.frown) { pRect(x - r * .22, y + r * .72, r * .44, Math.max(1, k * .6), shadeHex(sk, .5)); pRect(x - r * .3, y + r * .8, Math.max(1, k * .5), Math.max(1, k * .5), shadeHex(sk, .55)); pRect(x + r * .26, y + r * .8, Math.max(1, k * .5), Math.max(1, k * .5), shadeHex(sk, .55)); }
   else if (lk.lips) { /* a soft closed smile: thin upper lip, fuller lower lip with a highlight */
@@ -4743,7 +4887,7 @@ function computeInfo() {
 
 /* ---------- shot flow ---------- */
 function beginShot() {
-  if (G.mode === 'round' && G.r && G.r.guest === 'hemi') { G.hemiAlt = (G.hemiAlt || 0) + 1; G.hemiLine = !save.caddie || G.hemiAlt % 2 === 0 ? 'Hemi: "' + pickLine(HEMI_TALK.onYou) + '"' : null; }
+  if (G.mode === 'round' && G.r && G.r.guest) { G.hemiAlt = (G.hemiAlt || 0) + 1; G.hemiLine = !save.caddie || G.hemiAlt % 2 === 0 ? guestDef().first + ': "' + pickLine(guestTalk('onYou')) + '"' : null; }
   const h = G.h, b = G.b;
   G.phase = 'aim'; G.twirlOK = false; G.twSnd = false; b.st = 'rest'; b.vx = b.vy = b.vz = 0; b.z = groundZ(h, b.x, b.y);
   G.lie = terrainAt(h, b.x, b.y);
@@ -5024,10 +5168,10 @@ function resolveShot() {
   if (G.mode === 'practice') return resolvePractice();
   if (G.mode !== 'round') return resolveChallenge();
   const st = G.r.st;
-  if (b.st === 'holed') { if (G.r && G.r.guest === 'hemi' && G.hemi && G.hemi.i < G.hemi.shots.length) {
+  if (b.st === 'holed') { if (G.r && G.r.guest && G.hemi && G.hemi.i < G.hemi.shots.length) {
     /* your partner still has to finish: first the hole-out is acknowledged (your score, a word from him), then he plays, then you celebrate */
-    G.phase = 'settle'; const d = G.strokes - h.par; banner(scoreName(G.strokes, h.par), `In for ${G.strokes} · Hemi to finish`, d < 0 ? '#ffd54f' : d === 0 ? '#9be36b' : '#ffffff', 2.6);
-    G.ackSay = 'Hemi: "' + pickLine(d < 0 ? HEMI_TALK.ackGood : d === 0 ? HEMI_TALK.ackPar : HEMI_TALK.ackBad) + '"'; G.cheerT = d <= 0 ? 2.6 : 0; SFX.play(d < 0 ? 'clap' : 'chat'); updateHUD();
+    G.phase = 'settle'; const d = G.strokes - h.par; banner(scoreName(G.strokes, h.par), `In for ${G.strokes} · ${guestDef().first} to finish`, d < 0 ? '#ffd54f' : d === 0 ? '#9be36b' : '#ffffff', 2.6);
+    G.ackSay = guestDef().first + ': "' + pickLine(guestTalk(d < 0 ? 'ackGood' : d === 0 ? 'ackPar' : 'ackBad')) + '"'; G.cheerT = d <= 0 ? 2.6 : 0; SFX.play(d < 0 ? 'clap' : 'chat'); updateHUD();
     const fin = () => { G.ackSay = null; if (G.hemi.i < G.hemi.shots.length) hemiNext(fin); else holeComplete(false); }; G.wait = { t: 3, fn: fin }; return; } holeComplete(false); return; }
   let msg = null, sub = '', col = '#fff';
   if (b.st === 'water') {
@@ -5066,7 +5210,7 @@ function resolveShot() {
   G.mullOK = save.items.mull > 0;
   persist();
   if (G.strokes >= h.par + 5) G.wait = { t: 1.6, fn: () => holeComplete(true) };
-  else if (G.r.guest === 'hemi' && G.hemi && G.hemi.i < G.hemi.shots.length) G.wait = { t: 1.5, fn: () => startGuest(snap) };
+  else if (G.r.guest && G.hemi && G.hemi.i < G.hemi.shots.length) G.wait = { t: 1.5, fn: () => startGuest(snap) };
   else G.wait = { t: 1.5, fn: () => startTravel(snap) };
 }
 /* ---------- playing partner (Hemi at Augusta): he tees off after you on every hole and chats as you go ---------- */
@@ -5075,19 +5219,59 @@ const HEMI_TALK = { fair: ['That will do.', 'Right where I was looking.', 'Middl
   onYou: ['Your shot, mate. Take your time.', 'These greens are quicker than they look.', 'Bobby Jones walked this same grass.', 'Trust your number here.', 'Wind is swirling over Rae\'s Creek.'], youGood: ['Shot! The patrons would have loved that.', 'Mean swing. Augusta suits your eye.', 'You are dialled in today.'], youBad: ['Shake it off, plenty of golf left.', 'Happens to all of us here.', 'Big breath. Next one.'],
   ackGood: ['Get in! Great birdie.', 'Shot! That is how you play this hole.', 'Beauty. Under par here is gold.'], ackPar: ['Good par. Take that every day here.', 'Solid. Par is a good score at Augusta.', 'Nice putt to finish.'], ackBad: ['Got it in. On to the next.', 'Tough hole. Shake it off.', 'Plenty of holes to get it back.'] };
 const pickLine = a => a[Math.floor(Math.random() * a.length)];
+/* club partners: a local at each NZ course you can bring along on a casual round. Same routine as Hemi, their own
+   look, lines and level. They play off a real handicap, so they drop shots. All invented people. */
+const CLUB_TALK = { fair: ['That will do.', 'Short grass. Happy with that.', 'Found the fairway, for once.'], rough: ['Bit of a pull. I can get it out.', 'In the cabbage. Should be fine.', 'Not my best. Still in play.'],
+  green: ['On the green. I will take it.', 'Pin high, nice.', 'That will give me a look.'], approach: ['Left myself a wedge.', 'Not bad, not great.', 'I can get up and down from there.'], putt: ['Tap-in coming.', 'Just missed the edge.', 'Good pace, wrong line.'], holed: ['In the hole!', 'Down she goes.', 'Got there in the end.'],
+  onYou: ['Your honour.', 'Take your time, no rush.', 'Watch the wind on this one.', 'Trust your number.'], youGood: ['Shot! Too good.', 'Sweet as. Lovely hole.', 'Keep that up and you will be buying.'], youBad: ['Shake it off. Next hole.', 'Happens to everyone.', 'Plenty of golf left.'],
+  ackGood: ['Get in! Great birdie.', 'Shot! That is how you play it.', 'Beauty.'], ackPar: ['Good par.', 'Solid. Take it.', 'Nice putt to finish.'], ackBad: ['Got it in. On to the next.', 'Tough hole.', 'You will get it back.'] };
+const CLUB_PARTNERS = {
+  jacob: { course: 'ngahinapouri', from: 'jacob', name: 'Jacob Beach', role: 'Club champion', extra: [.22, .03], drive: 262, fairP: .68,
+    talk: { onYou: ['Watch the drain on the left.', 'Your honour. Do not be shy.', 'These greens run quicker than they look.'], youGood: ['Shot! You might give me a game.', 'Too good. I am watching you now.'], ackPar: ['Good par. That hole bites.', 'Solid. I will take that off you any day.'] } },
+  bruce: { course: 'ngahinapouri', from: 'bruce', name: 'Bruce Mills', role: 'Club stalwart', extra: [.48, .1], drive: 218, fairP: .8,
+    talk: { onYou: ['Fairways and greens, young fella.', 'Nothing fancy. Middle of the green.', 'I have played this hole for forty years.'], youGood: ['Shot, mate. Lovely.'], holed: ['In the hole! Still got it.', 'Down she goes.'] } },
+  matt: { course: 'hamilton', name: 'Matt Hollis', role: 'Club captain', extra: [.38, .07], drive: 248, fairP: .64,
+    look: { hat: 'visor', hair: 'short', build: 1.05, sleeve: 'short', eyeCol: '#3a2a1e' }, c: { h: '#1f3b5c', H: '#6b4a2e', s: '#efc29a', S: '#2f6f4f', p: '#d8d2c0', k: '#f5f5f5', b: '#2f6f4f' },
+    talk: { onYou: ['Trees all the way down here. Stay patient.', 'Straight beats long round here.', 'Take one more club, it plays long.'] } },
+  sione: { course: 'tieke', name: 'Sione Lavea', role: 'Long-hitting member', extra: [.5, .12], drive: 284, fairP: .48,
+    look: { hat: 'cap', hair: 'short', build: 1.14, sleeve: 'short', eyeCol: '#2a1a10' }, c: { h: '#111111', H: '#14100c', s: '#9c6a46', S: '#c0392b', p: '#2b2f36', k: '#1b1b1b', b: '#c0392b' },
+    talk: { onYou: ['Just hit it. I will find it for you.', 'Tieke is all about the second shot.', 'Driver. Always driver.'], fair: ['Found it! Big one.', 'Out there. Long way out there.'], rough: ['Too much juice. Classic.', 'Hit it miles. Not straight.'] } },
+  tom: { course: 'cape', name: 'Tom Barrett', role: "Hawke's Bay farmer", extra: [.34, .06], drive: 240, fairP: .74,
+    look: { hat: 'bucket', hair: 'short', build: 1.08, stubble: true, eyeCol: '#3e5a72' }, c: { h: '#5c6b4a', H: '#8a6a44', s: '#e8b48c', S: '#d9cfb8', p: '#4a4e44', k: '#5a3b24', b: '#5c6b4a' },
+    talk: { onYou: ['Mind the cliffs, eh.', 'The wind off the sea moves it a lot.', 'Aim at the gannets. Kidding.'] } },
+  ella: { course: 'jacks', name: 'Ella McKay', role: 'Ski instructor, 4 handicap', extra: [.3, .05], drive: 232, fairP: .76,
+    look: { hat: 'visor', hair: 'pony', build: .9, fem: true, lashes: true, eyeCol: '#4a6a3a' }, c: { h: '#ffffff', H: '#a8743c', s: '#f1c8a4', S: '#3d5a80', p: '#ececec', k: '#ffffff', b: '#3d5a80' },
+    talk: { onYou: ['The ball flies up here. Club down.', 'Look at that view. Then hit it.', 'The Remarkables are watching.'] } }
+};
+/* the partner at a course (none abroad); the club champion steps aside if you are playing as him */
+/* partners are an occasional invite: about one day in four at each course, and once you have played together that day they are done */
+function partnerInvite(cid) { const id = clubPartnerFor(cid); if (!id) return null; if ((save.pDay || {})[cid] === save.day) return null; return (hashStr('inv' + cid + ':' + save.day) % 100) < 26 ? id : null; }
+function clubPartnerFor(cid) { const L = Object.keys(CLUB_PARTNERS).filter(k => CLUB_PARTNERS[k].course === cid && k !== save.golfer); return L[0] || null; }
+const GUEST_CACHE = {};
+function guestDef(id) {
+  id = id || (G.r && G.r.guest); if (!id) return null;
+  if (id === 'hemi') return GUEST_CACHE.hemi || (GUEST_CACHE.hemi = { id, g: HEMI, name: HEMI.name, first: 'Hemi', role: 'NZ tour pro', talk: HEMI_TALK, extra: [0, 0], drive: 278, fairP: .72 });
+  const P0 = CLUB_PARTNERS[id]; if (!P0) return null;
+  if (!GUEST_CACHE[id]) { const src = P0.from ? golferBase(P0.from) : null; GUEST_CACHE[id] = Object.assign({ id, first: P0.name.split(' ')[0] }, P0, { g: src ? Object.assign({}, src, { c: Object.assign({ b: src.c.S }, src.c) }) : { id, name: P0.name, look: P0.look, c: P0.c } }); }
+  return GUEST_CACHE[id];
+}
+const guestTalk = k => { const D = guestDef(); return (D && D.talk && D.talk[k]) || (D && D.id === 'hemi' ? HEMI_TALK[k] : CLUB_TALK[k]); };
 function genHemiHole(h) {
   const R = mulberry32(hashStr('hemi' + h.idx + (G.r ? G.r.date : 0))), par = h.par, u = R();
   const sc = par === 5 ? (u < .06 ? 3 : u < .48 ? 4 : u < .92 ? 5 : 6) : par === 3 ? (u < .2 ? 2 : u < .82 ? 3 : u < .98 ? 4 : 5) : (u < .2 ? 3 : u < .8 ? 4 : u < .98 ? 5 : 6);
-  const fair = R() < .72, dist = par === 3 ? h.len - 2 + (R() - .5) * 8 : 278 + R() * 28;
-  const H0 = { score: sc, fair, dist: Math.min(dist, h.len - 15 + (par === 3 ? 13 : 0)), lat: par === 3 ? (R() - .5) * 8 : fair ? (R() - .5) * h.fwHalf : (R() < .5 ? -1 : 1) * (h.fwHalf + 2 + R() * 5), shots: [], i: 0 };
+  const GD = guestDef() || { extra: [0, 0], drive: 278, fairP: .72 }; let sc2 = sc; if (R() < GD.extra[0]) sc2++; if (R() < GD.extra[1]) sc2++; /* club golfers drop shots */
+  const fair = R() < GD.fairP, dist = par === 3 ? h.len - 2 + (R() - .5) * 8 : GD.drive + R() * 28;
+  const H0 = { score: sc2, fair, dist: Math.min(dist, h.len - 15 + (par === 3 ? 13 : 0)), lat: par === 3 ? (R() - .5) * 8 : fair ? (R() - .5) * h.fwHalf : (R() < .5 ? -1 : 1) * (h.fwHalf + 2 + R() * 5), shots: [], i: 0 };
   /* the whole hole, shot by shot: tee shot, any approaches, then one or two putts (or a holed chip) */
-  const pin = h.pin, putts = sc <= par - 2 ? (R() < .5 ? 0 : 1) : sc - (par - 2) >= 2 ? 2 : 1, full = sc - putts;
+  const pin = h.pin, putts = sc2 <= par - 2 ? (R() < .5 ? 0 : 1) : sc2 - (par - 2) >= 2 ? 2 : 1, full = sc2 - putts;
+  if (par === 3 && full > 1) H0.dist = h.len - 28 - R() * 14; /* missed the green on a par 3: short of it */
+  let dd = 0;
   const tee = { x: h.tee.x - Math.sin(Math.atan2(pin.y - h.tee.y, pin.x - h.tee.x)) * 3.2, y: h.tee.y + Math.cos(Math.atan2(pin.y - h.tee.y, pin.x - h.tee.x)) * 3.2 };
   let pos = tee;
   for (let k = 0; k < full; k++) { let to;
-    if (k === full - 1) { const r0 = putts === 0 ? 0 : putts === 1 ? 1.2 + R() * 3.5 : 6 + R() * 8, a0 = R() * 6.28; to = { x: pin.x + Math.cos(a0) * r0, y: pin.y + Math.sin(a0) * r0 }; }
-    else if (k === 0) { const p0 = pathAt(h, Math.min(h.len - 20, H0.dist)), an = Math.atan2(p0.ty || 0, p0.tx || 1); to = { x: p0.x - Math.sin(an) * H0.lat, y: p0.y + Math.cos(an) * H0.lat }; }
-    else { const p0 = pathAt(h, h.len - 70 - R() * 40); to = { x: p0.x + (R() - .5) * 8, y: p0.y + (R() - .5) * 8 }; }
+    if (k === full - 1) { const pd = Math.hypot(pos.x - pin.x, pos.y - pin.y), r0 = Math.min(putts === 0 ? 0 : putts === 1 ? 1.2 + R() * 3.5 : 6 + R() * 8, pd * .6), a0 = R() * 6.28; /* never further away than the shot before */ to = { x: pin.x + Math.cos(a0) * r0, y: pin.y + Math.sin(a0) * r0 }; }
+    else if (k === 0) { dd = Math.min(h.len - 20, H0.dist); const p0 = pathAt(h, dd), an = Math.atan2(p0.ty || 0, p0.tx || 1); to = { x: p0.x - Math.sin(an) * H0.lat, y: p0.y + Math.cos(an) * H0.lat }; }
+    else { /* always moving forward: a lay-up first, then any chips from beside the green */ dd = Math.min(h.len - 6, Math.max(dd + 12, k === 1 && h.len - dd > 120 ? h.len - 70 - R() * 40 : h.len - 10 - R() * 12)); const p0 = pathAt(h, dd); to = { x: p0.x + (R() - .5) * 8, y: p0.y + (R() - .5) * 8 }; }
     H0.shots.push({ from: pos, to, kind: k === 0 ? 'tee' : 'full', holed: to.x === pin.x && to.y === pin.y && putts === 0 }); pos = to; }
   if (putts === 2) { const a0 = Math.atan2(pos.y - pin.y, pos.x - pin.x), to = { x: pin.x + Math.cos(a0 + .4) * (.4 + R() * .5), y: pin.y + Math.sin(a0 + .4) * (.4 + R() * .5) }; H0.shots.push({ from: pos, to, kind: 'putt' }); pos = to; }
   if (putts >= 1) H0.shots.push({ from: pos, to: { x: pin.x, y: pin.y }, kind: 'putt', holed: true });
@@ -5112,8 +5296,8 @@ function updateGuest(dt) {
   if (!g.hit && g.t > tImp) { g.hit = true; if (g.put) SFX.play('putt'); else SFX.play(g.shot.kind === 'tee' && G.h.par > 3 ? 'drive' : 'pure'); }
   if (!g.said && g.t > tEnd + .15) { g.said = true; const s = g.shot, H0 = G.hemi, lie = s.holed ? 'holed' : s.kind === 'putt' ? 'putt' : terrainAt(G.h, s.to.x, s.to.y) === T.GREEN ? 'green' : s.kind === 'tee' ? (H0.fair ? 'fair' : 'rough') : 'approach';
     if (s.holed) SFX.play('rattle');
-    const line = pickLine(HEMI_TALK[lie]); G.hemiSay = { txt: 'Hemi: "' + line + '"', t: 0 };
-    banner(s.holed ? `HEMI · ${scoreName(H0.score, G.h.par)}` : s.kind === 'putt' ? 'HEMI · ' + dFt(Math.hypot(s.to.x - G.h.pin.x, s.to.y - G.h.pin.y)) + ' ' + uFT() : terrainAt(G.h, s.to.x, s.to.y) === T.GREEN ? 'HEMI · ON THE GREEN' : `HEMI · ${dY(g.L)} ${uYDS()}`, '', '#cfe8ff', 1.6); SFX.play('chat'); updateHUD(); }
+    const GD = guestDef(), NM = GD.first.toUpperCase(), line = pickLine(guestTalk(lie)); G.hemiSay = { txt: GD.first + ': "' + line + '"', t: 0 };
+    banner(s.holed ? `${NM} · ${scoreName(H0.score, G.h.par)}` : s.kind === 'putt' ? NM + ' · ' + dFt(Math.hypot(s.to.x - G.h.pin.x, s.to.y - G.h.pin.y)) + ' ' + uFT() : terrainAt(G.h, s.to.x, s.to.y) === T.GREEN ? NM + ' · ON THE GREEN' : `${NM} · ${dY(g.L)} ${uYDS()}`, '', '#cfe8ff', 1.6); SFX.play('chat'); updateHUD(); }
   if (g.t > tEnd + 1.6) { const f = g.then; G.guest = null; f(); }
 }
 /* lose a premium ball in water/OB. Range balls are unlimited; the retriever saves water balls */
@@ -5256,7 +5440,7 @@ function holeComplete(picked) {
   G.phase = 'holed'; G.holeCoins = coins;
   G.cele = { stage: picked ? 'card' : 'drop', t: 0, id: null, score, d, picked };
   if (G.r && G.r.guest && G.hemi) { r.hemi = r.hemi || []; r.hemi[r.cur] = G.hemi.score; const hd = G.hemi.score - h.par;
-    G.cele.say = `Hemi (${G.hemi.score}, ${hd === 0 ? 'par' : hd < 0 ? (hd === -1 ? 'birdie' : 'eagle') : hd === 1 ? 'bogey' : 'double'}): "` + pickLine(d <= 0 ? HEMI_TALK.youGood : HEMI_TALK.youBad) + '"'; } else
+    G.cele.say = `${guestDef().first} (${G.hemi.score}, ${hd === 0 ? 'par' : hd < 0 ? (hd === -1 ? 'birdie' : 'eagle') : hd === 1 ? 'bogey' : 'double'}): "` + pickLine(guestTalk(d <= 0 ? 'youGood' : 'youBad')) + '"'; } else
   if (save.caddie && CAD_CHEER[save.caddie] && !picked && d <= 1) { const L = CAD_CHEER[save.caddie][score === 1 || d <= -2 ? 'eagle' : d === -1 ? 'birdie' : d === 0 ? 'par' : 'bogey']; G.cele.say = caddieDef().name.split(' ')[0] + ': "' + L[Math.floor(Math.random() * L.length)] + '"'; setTimeout(() => SFX.play('chat'), 700); }
   if (!picked) {
     SFX.play('rattle');
@@ -5621,7 +5805,7 @@ function finishChallenge() {
 /* ---------- hole setup ---------- */
 function loadHole() { const r = G.r, c = courseById(r.courseId), h = genHole(c, r.start + r.cur, r.tee); if (G.mode === 'round' && !save.caddie) { G.club = null; G.noClub = true; } /* no caddie: put the club back in the bag at every new tee */ renderHole(h); setupHole(h); }
 function setupHole(h) {
-  h.posts = []; G.hemiTee = false; G.guest = null; G.hemi = G.mode === 'round' && G.r && G.r.guest === 'hemi' ? genHemiHole(h) : null;
+  h.posts = []; G.hemiTee = false; G.guest = null; G.hemi = G.mode === 'round' && G.r && G.r.guest && guestDef() ? genHemiHole(h) : null;
   if (h.par >= 4) for (const [d, col] of [[100, '#d84a3a'], [150, '#f4f4f4'], [200, '#3a6fd8']]) {
     let best = null; for (let s0 = 0; s0 <= h.len; s0 += 2) { const pp = pathAt(h, s0); if (Math.abs(Math.hypot(pp.x - h.gc.x, pp.y - h.gc.y) - d) < 1.5) { best = pp; } }
     if (!best) continue; const nx = -(best.ty || 0), ny = best.tx || 0;
@@ -6173,14 +6357,14 @@ function addPeople(items) {
       else { const u = t - tI; if (g.put) st.follow = Math.min(peak * 1.1, u / .35 * peak * 1.1); else { st.follow = Math.min(1, u / .75); if (g.good) st.twirl = clamp((u - .95) / .95, 0, 1); } }
       st.ballU = sp.off * 36.7 + off;
       items.push({ d: p.d + .05, f: () => ell(p.x + p.s * .05, p.y, Math.max(2, p.s * .36), Math.max(1, p.s * .36 * clamp(CAM.z / p.d, .2, .5)), '#060b05', .32) });
-      items.push({ d: p.d, f: () => charFx(p.x, p.y, k, () => drawGolferSide(HEMI, p.x, p.y, k, sidePose(st), club)) }); }
+      items.push({ d: p.d, f: () => charFx(p.x, p.y, k, () => drawGolferSide(guestDef().g, p.x, p.y, k, sidePose(st), club)) }); }
     const tImp = g.tImp, u = g.t < tImp ? 0 : Math.min(1, (g.t - tImp) / g.fly), ue = g.put ? 1 - (1 - u) * (1 - u) : u, apex = g.put ? 0 : clamp(g.L * .14, 4, 38);
     const bx = lerp(g.ball.x, g.land.x, ue), by = lerp(g.ball.y, g.land.y, ue), bz = apex * 4 * ue * (1 - ue), q = proj(CAM, bx, by, bz + .05);
     if (q && !(u >= 1 && g.shot.holed)) items.push({ d: q.d - .1, ov: 1, f: () => { if (u > 0 && !g.put) for (let i = 1; i < 12; i++) { const u2 = Math.max(0, ue - i * .012), q2 = proj(CAM, lerp(g.ball.x, g.land.x, u2), lerp(g.ball.y, g.land.y, u2), apex * 4 * u2 * (1 - u2)); if (q2) { DC.globalAlpha = .5 * (1 - i / 12); pDisc(q2.x, q2.y, Math.max(.6, q.s * .05), '#ffffff'); } } DC.globalAlpha = 1; pDisc(q.x, q.y, Math.max(.8, q.s * .07), '#ffffff'); } });
   }
   if (G.r && G.r.guest && ph !== 'guest' && !(ph === 'holed' && G.cele && G.cele.stage !== 'drop')) {
     const q = proj(CAM, E0.x + rx * 4.2 - fx * 1.5, E0.y + ry * 4.2 - fy * 1.5, 0);
-    if (q) { items.push({ d: q.d + .05, f: () => ell(q.x + q.s * .12, q.y, Math.max(2, q.s * .5), Math.max(1, q.s * .5 * clamp(CAM.z / q.d, .2, .5)), '#060b05', .3) }); items.push({ d: q.d, f: () => charFx(q.x, q.y, q.s * 1.8 / 66, () => drawGolferFront(HEMI, q.x, q.y, q.s * 1.8 / 66, frontPose(G.cheerT > 0 ? 'cclap' : G.phase === 'flight' ? 'cwatch' : 'idle', G.t + 2.3))) }); }
+    if (q) { items.push({ d: q.d + .05, f: () => ell(q.x + q.s * .12, q.y, Math.max(2, q.s * .5), Math.max(1, q.s * .5 * clamp(CAM.z / q.d, .2, .5)), '#060b05', .3) }); items.push({ d: q.d, f: () => charFx(q.x, q.y, q.s * 1.8 / 66, () => drawGolferFront(guestDef().g, q.x, q.y, q.s * 1.8 / 66, frontPose(G.cheerT > 0 ? 'cclap' : G.phase === 'flight' ? 'cwatch' : 'idle', G.t + 2.3))) }); }
   }
   /* spectators: only at the big-money events, lining the sides and back of the green */
   const EV = G.r && G.r.event ? EVENTS.find(e => e.id === G.r.event) : null;
@@ -6961,6 +7145,7 @@ function startRound(cfg) {
   save.round = { v4: true, courseId: cfg.courseId, n: cfg.n, start: cfg.start, tee: cfg.tee, diff: dif, event: cfg.event || null, season: cfg.season === 'club' ? 'club' : !!cfg.season, guest: cfg.guest || null, golfer: save.golfer, rt, ch, alloc: strokeAlloc(courseById(cfg.courseId), cfg.start, cfg.n, ch || 0),
     wx: weatherOn(cfg.courseId, save.day), scores: [], cur: 0, coins: 0, energy: 100, fuel: save.fuel || 0, st: { fir: 0, firP: 0, gir: 0, putts: 0, longest: 0, water: 0 }, date: Date.now() };
   save.fuel = 0;
+  if (cfg.guest && cfg.guest !== 'hemi') { save.pDay = save.pDay || {}; save.pDay[cfg.courseId] = save.day; SEL.partner = false; } /* one round together per invite */
   if (cfg.event) { const E = EVENTS.find(e => e.id === cfg.event), T = save.tourn && save.tourn.id === E.id ? save.tourn : null, k = E.n / 18;
     if (T) { const R = mulberry32(T.seed + T.rd * 7919), live = T.field.filter(b => !b.out), tb = T.rd ? tournTable(T) : null;
       save.round.field = fieldHoles(beachRival(live.map(b => { const g = botRound(b.idx, rt, k, R); return { name: b.name, idx: b.idx, gross: g, net: g - b.ch }; }), E.fmt, R), courseById(cfg.courseId), 0, E.n, T.seed + T.rd);
@@ -7182,7 +7367,7 @@ SCR.setup = () => {
         <div class="sgrp"><div class="u1 dimtxt">DIFFICULTY · x${D.mult} COINS</div><div class="row">${Object.keys(DIFFS).map(k => opt('diff', k, DIFFS[k].name.toUpperCase())).join('')}</div>
         <div class="u1 teed">${D.desc}</div></div>
         <div class="grow"></div><div class="u1 chline">${ch !== null ? `COURSE HANDICAP <b class="gold">${ch}</b> for these holes` : `No handicap yet. ${s.n === 9 || s.n === 18 ? 'This round counts toward one.' : 'Play 9 or 18 holes to build one.'}`}</div>
-        ${c.invite && !augustaOpen() ? `<div class="u1"><b>INVITATION ONLY.</b> ${save.augusta === 'gone' ? 'You left your one round with Hemi. The invitation has gone.' : save.augusta === 'accepted' || save.augusta === 'invited' || save.augusta === 'passed' ? 'You have an invitation waiting in the Golf NZ app.' : 'Win a national event or bigger (like the Waikato Amateur Open) and someone might notice.'}</div><button class="btn ${save.augusta ? 'y' : 'g'}" data-a="openInbox" ${save.augusta ? '' : 'disabled'}>OPEN GOLF NZ APP</button>` : false ? '' : `<div class="row"><button class="btn b" data-a="visitClub" data-v="${c.id}" ${canVisitClub(c.id) ? '' : 'disabled title="Members and players only"'}>CLUBHOUSE</button><button class="btn y grow" data-a="start" ${wxT.rain === 3 ? 'disabled' : ''}>${wxT.rain === 3 ? 'CLOSED TODAY' : c.abroad ? `${hasJet() ? 'JET &amp; ' : 'FLY &amp; '}TEE OFF ${priceHTML((mem ? 0 : Math.round(fee * (hasJet() ? .75 : 1) / 5) * 5) + flightCost(c))}` : mem ? 'TEE OFF &gt;' : `PAY ${priceHTML(fee)} &amp; TEE OFF`}</button></div>`}
+        ${c.invite && !augustaOpen() ? `<div class="u1"><b>INVITATION ONLY.</b> ${save.augusta === 'gone' ? 'You left your one round with Hemi. The invitation has gone.' : save.augusta === 'accepted' || save.augusta === 'invited' || save.augusta === 'passed' ? 'You have an invitation waiting in the Golf NZ app.' : 'Win a national event or bigger (like the Waikato Amateur Open) and someone might notice.'}</div><button class="btn ${save.augusta ? 'y' : 'g'}" data-a="openInbox" ${save.augusta ? '' : 'disabled'}>OPEN GOLF NZ APP</button>` : false ? '' : `<div class="row"><button class="btn b" data-a="visitClub" data-v="${c.id}" ${canVisitClub(c.id) ? '' : 'disabled title="Members and players only"'}>CLUBHOUSE</button>${(() => { const pid = partnerInvite(c.id); if (!pid) { s.partner = false; return ''; } const P0 = guestDef(pid); return `<button class="btn ${s.partner ? 'y on' : 'g'}" data-a="sel_partner" data-v="${s.partner ? 0 : 1}" title="${esc(P0.name)}, ${esc(P0.role.toLowerCase())}. Free to play today.">${s.partner ? '✓ WITH ' + P0.first.toUpperCase() : '✉ ' + P0.first.toUpperCase() + ' INVITED YOU'}</button>`; })()}<button class="btn y grow" data-a="start" ${wxT.rain === 3 ? 'disabled' : ''}>${wxT.rain === 3 ? 'CLOSED TODAY' : c.abroad ? `${hasJet() ? 'JET &amp; ' : 'FLY &amp; '}TEE OFF ${priceHTML((mem ? 0 : Math.round(fee * (hasJet() ? .75 : 1) / 5) * 5) + flightCost(c))}` : mem ? 'TEE OFF &gt;' : `PAY ${priceHTML(fee)} &amp; TEE OFF`}</button></div>`}
       </div>
     </div></div>`;
 };
@@ -7313,7 +7498,7 @@ SCR.board = () => {
       return `<table class="lb"><tr><th>#</th><th>GOLFER</th><th>SCORE</th><th>NET</th><th>SETUP</th><th>DATE</th></tr>${b.map((e, i) => `<tr><td>${i + 1}</td><td>${gName(golferById(e.golfer)).split(' ').pop()}</td><td><b class="${parCls(e.toPar)}">${fmtPar(e.toPar)}</b> (${e.strokes})</td><td>${e.net !== null && e.net !== undefined ? e.net : '—'}</td><td>${TEES[e.tee] ? TEES[e.tee].name.split(' ')[0] : ''}${e.diff && DIFFS[e.diff] ? ' · ' + DIFFS[e.diff].name : ''}</td><td>${dateStr(e.date)}</td></tr>`).join('')}</table>`;
     };
     const hbRow = (o) => `<tr><td class="dimtxt">${o ? 'IN' : 'OUT'}</td>${c.holes.slice(o, o + 9).map((h, i) => { const v = hb(save, c.id, o + i); return `<td class="${v ? svCls(v, h.p) : ''}">${v || '·'}</td>`; }).join('')}</tr><tr><td class="dimtxt">PAR</td>${c.holes.slice(o, o + 9).map(h => `<td class="dimtxt">${h.p}</td>`).join('')}</tr>`;
-    body = `<div class="row" style="flex-wrap:wrap;margin-bottom:calc(var(--u)*3)">${ctabs}</div><div class="panel" style="margin-bottom:calc(var(--u)*4)"><div class="u2" style="margin-bottom:calc(var(--u)*3)">BEST ON EACH HOLE</div><table class="lb hb">${hbRow(0)}${c.holes.length > 9 ? hbRow(9) : ''}</table></div><div class="row" style="align-items:flex-start;gap:calc(var(--u)*5)"><div class="panel grow"><div class="u2" style="margin-bottom:calc(var(--u)*3)">18 HOLES</div>${tbl(18)}</div><div class="panel grow"><div class="u2" style="margin-bottom:calc(var(--u)*3)">9 HOLES</div>${tbl(9)}</div></div>`;
+    body = `<div class="row" style="flex-wrap:wrap;margin-bottom:calc(var(--u)*3)">${ctabs}</div><div class="panel" style="margin-bottom:calc(var(--u)*4)"><div class="u2" style="margin-bottom:calc(var(--u)*3)">BEST ON EACH HOLE</div><table class="lb hb">${hbRow(0)}${c.holes.length > 9 ? hbRow(9) : ''}</table></div>${(() => { const NH = nHoles(c), n = NH > 9 && SEL.boardN === 9 ? 9 : NH; return `<div class="panel"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:calc(var(--u)*3)"><div class="u2">${n === NH ? `BEST ROUNDS · ALL ${NH} HOLES` : 'BEST 9-HOLE ROUNDS'}</div>${NH > 9 ? `<button class="btn sm g" data-a="bnine">${n === 9 ? 'SHOW 18 HOLES' : 'SHOW 9-HOLE ROUNDS'}</button>` : ''}</div>${tbl(n)}</div>`; })()}`;
   }
   return `<div class="scr solid">${hdr('PLAYER CARD · ' + esc(save.name))}<div class="tabs">${tabs}</div><div class="grow scroll">${body}</div></div>`;
 };
@@ -7430,7 +7615,7 @@ SCR.summary = () => {
   return `<div class="scr solid"><div class="hdr"><h2>${ev ? (ev.mid ? 'ROUND ' + ev.rd + ' COMPLETE' : 'TOURNAMENT OVER') : 'ROUND COMPLETE'}</h2>${coinsHTML()}</div>
     <div class="grow scroll">
     <div class="row" style="margin-bottom:calc(var(--u)*4);flex-wrap:wrap">${S.rank === 0 ? '<span class="tag" style="color:#ffd54f">NEW COURSE RECORD!</span>' : ''}<span>${S.c.name.toUpperCase()} · ${TEES[r.tee].name.toUpperCase()} TEES · ${DIFFS[r.diff || 'amateur'].name.toUpperCase()} · ${gName(golferById(r.golfer))}</span></div>
-    ${seasonHTML}${evHTML}${r.hemi && r.hemi.length ? (() => { const ht = r.hemi.reduce((a, b) => a + (b || 0), 0), hp = r.hemi.reduce((a, _, i) => a + S.c.pars[r.start + i], 0); return `<div class="panel u1" style="margin-bottom:calc(var(--u)*3)">PLAYING PARTNER · <b>Hemi Walker</b> shot <b class="gold">${ht} (${fmtPar(ht - hp)})</b> · you ${S.total} (${fmtPar(S.toPar)})${S.total < ht ? ' · <b class="red">you beat a tour pro!</b>' : ''}</div>`; })() : ''}
+    ${seasonHTML}${evHTML}${r.hemi && r.hemi.length ? (() => { const ht = r.hemi.reduce((a, b) => a + (b || 0), 0), hp = r.hemi.reduce((a, _, i) => a + S.c.pars[r.start + i], 0); return `<div class="panel u1" style="margin-bottom:calc(var(--u)*3)">PLAYING PARTNER · <b>${esc((guestDef(r.guest) || { name: 'Hemi Walker' }).name)}</b> shot <b class="gold">${ht} (${fmtPar(ht - hp)})</b> · you ${S.total} (${fmtPar(S.toPar)})${S.total < ht ? (r.guest === 'hemi' ? ' · <b class="red">you beat a tour pro!</b>' : ` · <b class="red">you beat ${esc(guestDef(r.guest).first)}!</b>`) : ''}</div>`; })() : ''}
     <div class="panel" style="margin-bottom:calc(var(--u)*4)">${scorecardHTML(r, false)}</div>
     <div class="row" style="align-items:stretch">${cell('GROSS', S.total + ' (' + fmtPar(S.toPar) + ')', S.toPar < 0 ? 'red' : 'gold')}${S.net !== null ? cell('NET', S.net + ' (' + fmtPar(S.net - S.par) + ')', S.net < S.par ? 'red' : 'gold') : ''}${cell('FAIRWAYS', st.fir + '/' + st.firP)}${cell('GIR', st.gir + '/' + r.n)}${cell('PUTTS', st.putts)}${cell('COINS', '+' + fmt(r.coins))}</div>
     <div class="u1" style="margin-top:calc(var(--u)*3);line-height:1.7">${hc ? `HANDICAP: this round's differential <b>${hc.diff.toFixed(1)}</b> · index ${fmtIdx(hc.before)} → <b class="gold">${fmtIdx(hc.after)}</b>${hc.after === null ? ` (${save.hcp.rounds.length}/3 rounds)` : ''}` : 'Rounds of 1, 3 or 6 holes do not count for handicap.'}</div>
@@ -7503,6 +7688,7 @@ const ACT = {
   resume: () => resumeRound(),
   selCourse: v => { SEL.course = v; rerender(); },
   join: v => { const c = courseById(v); if (((save.holesAt || {})[c.id] || 0) < 6) { SFX.play('err'); toast(`Play at least <b>6 holes</b> at ${c.name} before you can join`); return; } confirmBox(`Join <b>${c.name}</b>?<br><br>One-time fee <b>${priceHTML(c.member)}</b>. No more green fees here, ever.`, () => spend(c.member, () => { save.members.push(c.id); toast(`Welcome to <b>${c.name}</b>!`); })); },
+  sel_partner: v => { SEL.partner = v === '1'; rerender(); },
   sel_n: v => { const NH = nHoles(courseById(SEL.course)); SEL.n = +v; if (SEL.n === 9 && SEL.start !== 0 && SEL.start !== 9) SEL.start = SEL.start < 9 ? 0 : 9; if (SEL.n >= NH) SEL.start = 0; rerender(); },
   startHole: v => { const NH = nHoles(courseById(SEL.course)), step = SEL.n === 9 ? 9 : 1; SEL.start = clamp(SEL.start + (+v) * step, 0, Math.max(0, NH - SEL.n)); rerender(); },
   sel_tee: v => { SEL.tee = v; rerender(); },
@@ -7511,7 +7697,7 @@ const ACT = {
   start: () => {
     const c = courseById(SEL.course), wxT = weatherOn(c.id, save.day); if (wxT.rain === 3) return; const fee = isMember(c.id) ? 0 : Math.round(feeFor(c, SEL.n) * wxFeeMult(wxT) / 5) * 5;
     const gf = c.abroad && hasJet() ? Math.round(fee * .75 / 5) * 5 : fee, fl = flightCost(c);
-    teeOff({ courseId: c.id, n: SEL.n, start: SEL.start, tee: SEL.tee, diff: SEL.diff, fly: c.abroad }, gf + fl, `${fl ? `Flights to ${c.name}: ${priceHTML(fl)}${isMember(c.id) ? ' (member rate)' : ''}<br>` : c.abroad && hasJet() ? 'Flying on your jet card.<br>' : ''}Green fee for ${SEL.n} hole${SEL.n > 1 ? 's' : ''}: ${gf ? priceHTML(gf) : 'free'}`);
+    teeOff({ courseId: c.id, n: SEL.n, start: SEL.start, tee: SEL.tee, diff: SEL.diff, fly: c.abroad, guest: (SEL.partner && partnerInvite(c.id)) || null }, gf + fl, `${fl ? `Flights to ${c.name}: ${priceHTML(fl)}${isMember(c.id) ? ' (member rate)' : ''}<br>` : c.abroad && hasJet() ? 'Flying on your jet card.<br>' : ''}Green fee for ${SEL.n} hole${SEL.n > 1 ? 's' : ''}: ${gf ? priceHTML(gf) : 'free'}`);
   },
   enterEvent: v => { const E = EVENTS.find(e => e.id === v), idx = save.hcp.index, ec = courseById(E.course);
     if (ec.invite && !augustaOpen()) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">INVITATION ONLY</div><div>Members and guests only. Win a national event or bigger (like the Waikato Amateur Open) and watch your Golf NZ app inbox.</div><button class="btn g" data-m="close">CLOSE</button></div>`); return; }
@@ -7548,7 +7734,8 @@ const ACT = {
   shopTab: v => { SEL.shopTab = v; showScreen('shop'); },
   shopSel: v => { SEL.shopSel[SEL.shopTab] = v; rerender(); },
   btab: v => { SEL.boardTab = v; rerender(); },
-  bcourse: v => { SEL.boardCourse = v; rerender(); },
+  bcourse: v => { SEL.boardCourse = v; SEL.boardN = null; rerender(); },
+  bnine: () => { SEL.boardN = SEL.boardN === 9 ? null : 9; rerender(); },
   ttab: v => { SEL.trophyTab = v; rerender(); },
   howTab: v => { SEL.howTab = +v; rerender(); },
   upClub: v => { const c = clubById(v), L = save.clubs[v] || 0; if (L >= CLUB_MAX) return; spend(upCost(c, L), () => { save.clubs[v] = L + 1; save.ups++; toast(`${fullName(c)}: <b>${CLUB_TIERS[L + 1].name}</b>`); }); },
@@ -8546,7 +8733,7 @@ Object.assign(ACT, {
    The AirNZ Koru card (15,000) is the cheap option: half price on flights, nothing else.
    The jet club, its lounge and its founder are private-game fiction.
    ===================================================================== */
-const JET = { name: 'Amalfi Jet Club', founder: 'Marco Vale', price: 100000 };
+const JET = { name: 'Amalfi Jet Club', founder: 'Kolin Jones', price: 100000 };
 const KORU = { name: 'AirNZ Koru Card', price: 15000 };
 const hasJet = () => !!save.jet;
 const hasKoru = () => !!save.koru;
@@ -8606,8 +8793,8 @@ function drawKoruCard(x, W, H) {
 /* ---------- the lounge ---------- */
 function openJetOffice() {
   G.of = { t: 0, step: hasJet() ? 'member' : 'arrive', shake: 0, cardT: -1, msg: null, back: G.scr === 'office' ? 'shop' : (G.scr || 'shop') };
-  /* Marco: tailored charcoal-navy suit, open white collar, gold pocket square, swept dark hair, light stubble, brown eyes */
-  G.of.founder = { id: 'mv', look: { hat: 'none', hair: 'swept', build: 1.04, suit: true, shirt: '#f6f5f0', square: '#c9a24a', sleeve: 'long', watch: true, stubble: true, eyeCol: '#4a3222' }, c: { h: '#111', H: '#2b231d', s: '#e2b38f', S: '#232a38', p: '#232a38', k: '#2a1c12' } };
+  /* Kolin: navy-black quarter-zip over a white tee, Amalfi Jets chest logo, short textured hair with faded sides, warm light-olive skin, friendly smile, bare hands */
+  G.of.founder = { id: 'kj', look: { hat: 'none', hair: 'quiff', build: 1.0, qzip: true, logo: 'Amalfi Jets', shirt: '#f8f8f5', sleeve: 'long', watch: true, noGlove: true, slim: .94, realFace: true, eyeCol: '#4a2e1c' }, c: { h: '#111', H: '#17120f', s: '#e6bd98', S: '#1a1f2b', p: '#1a1f2b', k: '#22201e' } };
   G.of.msg = hasJet() ? `<b>${JET.founder}:</b> "Welcome back. Your aircraft is always ready."` : `Welcome to the <b>${JET.name}</b> lounge. ${JET.founder}, the founder, is by the window.`;
   showScreen('office');
 }
@@ -8670,11 +8857,10 @@ function drawOffice() {
   /* stand a natural distance apart; for the handshake each takes a step in so the hands meet in the middle */
   const sh = O.step === 'shaking' ? O.t - O.shake : -1, stepIn = sh >= 0 ? clamp(sh / .4, 0, 1) - clamp((sh - 1.6) / .4, 0, 1) : 0, si = stepIn * stepIn * (3 - 2 * stepIn) * 13;
   const fx = W * .5 + 44 - si, me = W * .5 - 48 + si;
-  if (O.msg !== O.lastMsg) { O.lastMsg = O.msg; O.msgAt = O.t; } /* Marco's mouth moves when a new line appears, then stops */
+  if (O.msg !== O.lastMsg) { O.lastMsg = O.msg; O.msgAt = O.t; } /* Kolin's mouth moves when a new line appears, then stops */
   const fP = sh >= 0 && sh < 2 ? chPose('shake_c', sh) : O.sip !== undefined && O.t - O.sip < 3 ? chPose('ccheers', O.t - O.sip) : chPose(O.step === 'met' || O.step === 'member' ? 'ctalk' : 'idle', O.t - (O.msgAt || 0));
   const mP = sh >= 0 && sh < 2 ? chPose('shake_g', sh) : O.sip !== undefined && O.t - O.sip < 3 ? chPose('ccheers', O.t - O.sip) : O.cardT >= 0 && O.t - O.cardT < 4 ? chPose('creach', Math.min(.35, O.t - O.cardT)) : chPose('idle', O.t + 1);
   drawGolferFront(O.founder, fx, 252, 1.62, fP);
-  { const hp = fP.lh, wx = fx + hp[0] * 1.62, wy = 252 - (hp[1] + (fP.jump || 0) - (fP.crouch || 0)) * 1.62; x.fillStyle = '#d0d3d6'; x.beginPath(); x.roundRect ? x.roundRect(wx - 2.2, wy - 4.2, 4.4, 3.4, 1) : x.rect(wx - 2.2, wy - 4.2, 4.4, 3.4); x.fill(); x.fillStyle = '#1a1a1a'; x.fillRect(wx - 1.5, wy - 3.6, 3, 2.2); x.strokeStyle = '#c0392b'; x.lineWidth = .4; x.beginPath(); x.arc(wx, wy - 2.5, .8, 0, 6.29); x.stroke(); }
   drawGolferFront(golferById(save.golfer), me, 252, 1.55, mP);
   if (O.sip !== undefined && O.t - O.sip < 3) for (const [px, P0, k0] of [[fx, fP, 1.62], [me, mP, 1.55]]) { const hx = px + P0.rh[0] * k0, hy = 252 - (P0.rh[1] + (P0.jump || 0)) * k0; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(hx - 1.6, hy - 9); x.lineTo(hx + 1.6, hy - 9); x.lineTo(hx + 1, hy - 2); x.lineTo(hx - 1, hy - 2); x.fill(); x.fillStyle = '#f2dc8a'; x.fillRect(hx - 1.3, hy - 7, 2.6, 4.5); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(hx - .3, hy - 2, .6, 3); }
   /* the card being handed over */
@@ -8813,11 +8999,11 @@ function sponsorAfterRound(r, ev, toPar, st) {
   C.goal = { k: g.k, need: g.need, have: 0 }; C.left = SP_TERM; C.season = save.season ? save.season.no : 1; return { kind: 'warn', txt: `${sp.name} is not happy: goal missed. Final warning. Same goal next season.` };
 }
 /* ---------- offers that come after international wins: Grant Ashworth (a made-up billionaire and Augusta member),
-   Marco Vale (the made-up founder of the Amalfi Jet Club) and Red Bull ----------
+   Kolin Jones (the made-up founder of the Amalfi Jet Club) and Red Bull ----------
    1 win: Ashworth may offer to pay three-quarters of your Augusta membership plus a bonus per win (you thank him at prize givings), if you thank him at your prize givings.
    2 wins and no Amalfi card: he gives you the card.  3 wins: Red Bull want you (alongside one golf brand). */
-const VALE = { name: 'Marco Vale', role: 'Founder, Amalfi Jet Club' }, ASHWORTH = { name: 'Grant Ashworth', role: 'Billionaire investor, Augusta member' };
-const OFFER_NAME = { augusta: 'GRANT ASHWORTH', amalfi: 'MARCO VALE', redbull: 'RED BULL' };
+const JONES = { name: 'Kolin Jones', role: 'Founder, Amalfi Jet Club' }, ASHWORTH = { name: 'Grant Ashworth', role: 'Billionaire investor, Augusta member' };
+const OFFER_NAME = { augusta: 'GRANT ASHWORTH', amalfi: 'KOLIN JONES', redbull: 'RED BULL' };
 function pickOffer() {
   const n = save.stats.intlWins || 0, P = save.patron || (save.patron = {});
   if (n >= 3 && !save.redbull && !P.rb) return 'redbull';
@@ -8829,13 +9015,13 @@ const patronOn = () => !!(save.patron && save.patron.thanks);
 function offerBody(k) {
   const aug = courseById('augusta'), half = Math.round(aug.member / 4);
   if (k === 'augusta') return { who: ASHWORTH, txt: `"Congratulations. I'd like to see you at Augusta. I'll cover three-quarters of your membership, have a word with the committee, and pay you a bonus every time you win. All I ask: thank me at your prize givings."`, deal: `You pay just <b>${priceHTML(half)}</b> (normally ${priceHTML(aug.member)}). Every event you win: a bonus from him (3,000 at club level up to 25,000 for a major). You thank Grant Ashworth at every prize giving.`, yes: `JOIN FOR ${priceHTML(half)}` };
-  if (k === 'amalfi') return { who: VALE, txt: `"Two big wins. A player like you should not queue at airports. The card is yours, on me."`, deal: `A free <b>${JET.name}</b> card: free flights, 25% off green fees abroad, the lounge.`, yes: 'ACCEPT THE CARD' };
+  if (k === 'amalfi') return { who: JONES, txt: `"Two big wins. A player like you should not queue at airports. The card is yours, on me."`, deal: `A free <b>${JET.name}</b> card: free flights, 25% off green fees abroad, the lounge.`, yes: 'ACCEPT THE CARD' };
   const sp = mySponsor();
   return { who: RB.rep, brand: RB.name, txt: `"Three international wins. We want you. A Red Bull cart and all the drinks you can handle. You wear our cap now and then."`, deal: `<b>Red Bull Cart</b> (same as the Maybach), free sports drinks on the course, and the Red Bull cap at casual rounds.${sp ? ` You'll need ${sp.name} to agree too.` : ''}`, yes: sp ? 'TALK TO BOTH' : 'SIGN WITH RED BULL' };
 }
 function offerHTML(k) {
   const B = offerBody(k);
-  return `<div class="col" style="max-width:calc(var(--u)*250);gap:calc(var(--u)*2.5)"><div class="u2">${OFFER_NAME[k]}</div><div class="u1 dimtxt">${esc(B.who.name)} · ${esc(B.who.role)}</div>
+  return `<div class="col" style="max-width:calc(var(--u)*250);gap:calc(var(--u)*2.5)"><div class="u2">${OFFER_NAME[k]}</div><div class="u1 dimtxt">${B.who.name.toUpperCase() === OFFER_NAME[k] ? '' : esc(B.who.name) + ' · '}${esc(B.who.role)}</div>
     <div class="bubble in" style="margin:0">${B.txt}</div><div class="u1">${B.deal}</div>
     <div class="row" style="justify-content:flex-end"><button class="btn g sm" data-a="offerNo" data-v="${k}">NO THANKS</button><button class="btn y sm" data-a="offerYes" data-v="${k}">${B.yes}</button></div></div>`;
 }
@@ -8859,7 +9045,7 @@ Object.assign(ACT, {
   offerYes: v => {
     const P = save.patron = save.patron || {}, fin = () => { save.offerPending = null; persist(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); };
     if (v === 'augusta') { const half = Math.round(courseById('augusta').member / 4); closeModal(); spend(half, () => { if (!save.members.includes('augusta')) save.members.push('augusta'); P.aug = 'yes'; P.thanks = true; SFX.play('trophy'); toast('Welcome to <b>Augusta National</b>. Grant Ashworth covered the rest.'); fin(); }); return; }
-    if (v === 'amalfi') { save.jet = { since: Date.now(), gift: VALE.name }; P.amalfi = 'yes'; closeModal(); SFX.play('trophy'); toast(`The <b>${JET.name}</b> card is yours. A gift from Marco Vale.`); fin(); return; }
+    if (v === 'amalfi') { save.jet = { since: Date.now(), gift: JONES.name }; P.amalfi = 'yes'; closeModal(); SFX.play('trophy'); toast(`The <b>${JET.name}</b> card is yours. A gift from Kolin Jones.`); fin(); return; }
     if (mySponsor()) { showModal(rbMeetHTML()); return; }
     rbSign('casual'); fin();
   },
@@ -9690,9 +9876,9 @@ SCR.online = () => {
     <div class="panel"><table class="lb onlb"><tr><th>#</th><th>PLAYER</th><th>TO PAR</th><th>SCORE</th><th>AS</th><th>TEES</th><th>DATE</th></tr>${rows || `<tr><td colspan="7" class="dimtxt">${ON.busy ? 'Loading…' : ON.rows ? 'No rounds posted here yet. Finish a round to post one.' : ''}</td></tr>`}</table></div></div></div></div>`;
 };
 Object.assign(ACT, {
-  openOnline: () => { showScreen('online'); onFlush(); onLoadBoard(); },
+  openOnline: () => { ON.view.holes = nHoles(courseById(ON.view.course)); showScreen('online'); onFlush(); onLoadBoard(); },
   onPostToggle: () => { ON.post = !ON.post; onSaveLocal(); rerender(); },
-  onView: v => { const [k, val] = v.split('|'); ON.view[k] = k === 'holes' ? +val : val; onSaveLocal(); onLoadBoard(); },
+  onView: v => { const [k, val] = v.split('|'); ON.view[k] = k === 'holes' ? +val : val; if (k === 'course') ON.view.holes = nHoles(courseById(val)); /* each course opens on its full round */ onSaveLocal(); onLoadBoard(); },
   onRefresh: () => { onFlush(); onLoadBoard(); } });
 /* anything left from an offline round goes up shortly after the game opens */
 setTimeout(() => { if (onReady()) onFlush(); }, 4000);
