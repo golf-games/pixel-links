@@ -1250,7 +1250,12 @@ const gName = g => g.id === 'you' ? save.name : g.name;
 /* your own edits to a player's outfit (and, for You, hair and skin) sit on top of the default look */
 const LOOK_CACHE = {};
 const golferBase = id => GOLFERS.find(g => g.id === id) || GOLFERS[0];
-const golferById = id => { const b = golferBase(id), o0 = typeof save !== 'undefined' && save.looks && save.looks[b.id], sp = typeof save !== 'undefined' && save.sponsor && save.sponsor.kit !== false ? sponsorDef(save.sponsor.id) : null, o = sp ? { look: Object.assign({}, o0 && o0.look, { stripe: null, brand: sp.name, brandShirt: sp.kitText || sp.wall, brandCap: sp.capText || '#ffffff', brandAcc: sp.acc, hat: ((o0 && o0.look && o0.look.hat) || (b.look && b.look.hat)) === 'none' ? 'none' : 'cap', sleeve: (o0 && o0.look && o0.look.sleeve) || (b.look && b.look.sleeve) }), c: Object.assign({}, o0 && o0.c, sp.kit) } : o0; if (!o) return b; const key = b.id + JSON.stringify(o); return LOOK_CACHE[key] || (LOOK_CACHE[key] = Object.assign({}, b, { look: Object.assign({}, b.look, o.look || {}), c: Object.assign({}, b.c, o.c || {}) })); };
+const golferById0 = id => { const b = golferBase(id), o0 = typeof save !== 'undefined' && save.looks && save.looks[b.id], sp = typeof save !== 'undefined' && save.sponsor && save.sponsor.kit !== false ? sponsorDef(save.sponsor.id) : null, o = sp ? { look: Object.assign({}, o0 && o0.look, { stripe: null, brand: sp.name, brandShirt: sp.kitText || sp.wall, brandCap: sp.capText || '#ffffff', brandAcc: sp.acc, hat: ((o0 && o0.look && o0.look.hat) || (b.look && b.look.hat)) === 'none' ? 'none' : 'cap', sleeve: (o0 && o0.look && o0.look.sleeve) || (b.look && b.look.sleeve) }), c: Object.assign({}, o0 && o0.c, sp.kit) } : o0; if (!o) return b; const key = b.id + JSON.stringify(o); return LOOK_CACHE[key] || (LOOK_CACHE[key] = Object.assign({}, b, { look: Object.assign({}, b.look, o.look || {}), c: Object.assign({}, b.c, o.c || {}) })); };
+/* the Red Bull deal: their cap on your head at casual rounds (your golf sponsor keeps competitions) */
+const rbCapNow = () => typeof save !== 'undefined' && !!save.redbull && save.redbull.cap !== 'none' && (save.redbull.cap === 'always' || !(typeof G !== 'undefined' && G.r && G.r.event));
+const RB = { name: 'Red Bull', rep: { name: 'Nico Brandt', role: 'Athlete manager' }, cap: '#13224f', text: '#e2231a' };
+const golferById = id => { const g = golferById0(id); if (!rbCapNow() || !g || !g.look) return g; const key = g.id + '|rb|' + JSON.stringify(g.look) + JSON.stringify(g.c);
+  return LOOK_CACHE[key] || (LOOK_CACHE[key] = Object.assign({}, g, { look: Object.assign({}, g.look, { hat: 'cap', capBrand: RB.name, brandCap: RB.text }), c: Object.assign({}, g.c, { h: RB.cap }) })); };
 const OLD_V4_GOLFERS = { mia: 2500, tane: 5000, hiro: 8000, buck: 12000, sofia: 20000, javi: 30000, declan: 60000 };
 
 /* ---------- caddies: earned, never bought ---------- */
@@ -1276,7 +1281,9 @@ const CARTS = [
   { id: 'lifted', name: 'Club Car Onward Lifted', model: 'Off-road, 4-inch lift', price: 3000, mph: 19, drain: 1.3, coin: 1.03, style: 'lifted', col: '#2b2f33', roof: '#1b1d1f', desc: 'All-terrain tyres and a light bar. Faster to your ball, +3% coins.' },
   { id: 'sport', name: 'Yamaha Drive2 Sport', model: 'Lithium sport cart', price: 6500, mph: 26, drain: .9, coin: 1.05, style: 'sport', col: '#c62828', roof: '#1b1b1b', desc: 'Low, light and quick. Racing seats. +5% coins.' },
   { id: 'limo', name: 'E-Z-GO Express L6', model: '6-seat luxury', price: 14000, mph: 20, drain: .4, coin: 1.08, style: 'limo', col: '#efe4c8', roof: '#3e2f1c', desc: 'Leather seats and a fridge: you get energy back between shots. +8% coins.' },
-  { id: 'maybach', name: 'Maybach Edition', model: 'Two-tone executive cart', price: 32000, mph: 30, drain: 0, coin: 1.12, style: 'maybach', col: '#c7cbd1', col2: '#16181c', roof: '#16181c', acc: '#d9dde2', desc: 'Two-tone silver and obsidian, chrome grille, quilted leather, champagne cooler. Never lose energy, +12% coins.' }];
+  { id: 'maybach', name: 'Maybach Edition', model: 'Two-tone executive cart', price: 32000, mph: 30, drain: 0, coin: 1.12, style: 'maybach', col: '#c7cbd1', col2: '#16181c', roof: '#16181c', acc: '#d9dde2', desc: 'Two-tone silver and obsidian, chrome grille, quilted leather, champagne cooler. Never lose energy, +12% coins.' },
+  /* never in the shop: it comes with the Red Bull deal */
+  { id: 'redbull', name: 'Red Bull Cart', model: 'Athlete edition', price: 0, hidden: true, mph: 30, drain: 0, coin: 1.12, style: 'maybach', col: '#1c2d63', col2: '#0b1430', roof: '#0b1430', acc: '#d9dde2', text: 'Red Bull', textCol: '#e2231a', desc: 'Navy and silver, the same engine as the Maybach. Never lose energy, +12% coins.' }];
 
 /* ---------- golf balls: sold by the dozen, lost in water and OB (range balls are unlimited) ---------- */
 const BALLS = [
@@ -1304,7 +1311,7 @@ const CELEBS = [
 /* the tour pro who invites you to Augusta when you reach scratch (a fictional player) */
 const HEMI = { id: 'hemi', name: 'Hemi Walker', look: { hat: 'cap', hair: 'short', build: 1.02 }, c: { h: '#101820', H: '#2a1d14', s: '#a9744c', S: '#1d3b6e', p: '#e8e2d0', k: '#f5f5f5', b: '#101820' },
   lines: ['Mean swing. Augusta suits your eye.', 'Watch the slope on this one, it all falls toward Rae\'s Creek.', 'Shot! The patrons would have loved that.', 'Take a moment. Look where we are.'] };
-const augustaOpen = () => save.augusta === 'played';
+const augustaOpen = () => save.augusta === 'played' || save.members.includes('augusta');
 /* caddie relationship moments: after 2, 5, 10 and 15 rounds together. Each comes with a small gift that helps on the course */
 const GIFTS = { marker: 'Lucky ball marker: gimmes +0.5 ft', towel: 'Tour towel: +3% strike zone', book: 'Annotated yardage book: green target band 10% wider', snack: 'Snack bag: +2 energy every hole' };
 const MOMENTS = {
@@ -1665,7 +1672,7 @@ function defaultSave() {
     name: 'PLAYER', coins: 500,
     clubs: { dr: 0, '3w': 0, '5i': 0, '6i': 0, '7i': 0, '8i': 0, '9i': 0, pw: 0, sw: 0, pt: 0 },
     golfers: ['you'], golfer: 'you', members: ['ngahinapouri'], carts: ['walk'], cart: 'walk',
-    balls: ['std'], ballStock: { std: 999 }, ball: 'std', sponsor: null, sponsorOffer: null, everSponsored: false, career: {}, perfHint: false, gear: {}, celebs: ['pump', 'cap', 'arms', 'point', 'bow', 'uppercut'], celebEq: ['pump', 'cap', 'arms', 'point'], looks: {}, holeBest: {}, caddies: [], caddie: null,
+    balls: ['std'], ballStock: { std: 999 }, ball: 'std', sponsor: null, sponsorOffer: null, everSponsored: false, career: {}, perfHint: false, ceremony: null, gear: {}, celebs: ['pump', 'cap', 'arms', 'point', 'bow', 'uppercut'], celebEq: ['pump', 'cap', 'arms', 'point'], looks: {}, holeBest: {}, caddies: [], caddie: null,
     items: { mull: 2, bar: 1, gimme: 1, gum: 1, drink: 1 }, wins: {},
     ach: {}, ups: 0, played: {}, board: {}, rec: { ctp: 999, ld: 0 }, hcp: { rounds: [], index: null, low: null, hist: [] }, shout: null, drinks: 0,
     stats: { rounds: 0, rounds18: 0, holes: 0, strokes: 0, aces: 0, albatross: 0, eagles: 0, birdies: 0, pars: 0, bogeys: 0, worse: 0, longest: 0, water: 0, trees: 0, chipins: 0, sandOuts: 0, longPutt: 0, underRounds: 0, parRounds: 0, bogeyFree: 0, coinsEarned: 0, fir: 0, firP: 0, gir: 0, putts: 0, tourRounds: 0, pure: 0, best18: 99, eventsPlayed: 0, eventWins: 0, eventCash: 0, feesPaid: 0, plusWins: 0 },
@@ -2926,10 +2933,17 @@ function drawGround(h, c) {
   /* when the camera is still (lining up a shot, menus paused) the ground only changes through water sparkle and grass sway,
      so redraw it at 20 fps and reuse the last image in between: the raycast is the most expensive part of a frame */
   const L = drawGround.last, still = L && L.h === h && L.gr === GR && L.vw === VW && L.cv === gCv && Math.abs(L.x - c.x) < 2e-3 && Math.abs(L.y - c.y) < 2e-3 && Math.abs(L.z - c.z) < 2e-3 && Math.abs(L.yaw - c.yaw) < 2e-4 && Math.abs(L.pitch - c.pitch) < 2e-4;
-  if (still && G.t - L.t < (G.t - (L.still0 || G.t) > 1 ? 1 / 10 : 1 / 20) && G.t >= L.t) { ctx.imageSmoothingEnabled = GR !== RES; ctx.drawImage(gCv, 0, 0, VW, VH); ctx.imageSmoothingEnabled = false; return; }
-  drawGround.last = { h, gr: GR, vw: VW, cv: gCv, x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch, t: G.t, still0: still ? (L.still0 || G.t) : 0 };
+  const reuse = () => { ctx.imageSmoothingEnabled = GR !== RES; ctx.drawImage(gCv, 0, 0, VW, VH); ctx.imageSmoothingEnabled = false; };
+  if (still && G.t - L.t < 1 / 12 && G.t >= L.t) { reuse(); return; }
+  /* a moving camera in play: the ground is raycast every other frame (about 30 times a second) and the last image is
+     reused in between; everything else still draws every frame */
+  if (!still && L && G.scr === 'game' && L.h === h && L.gr === GR && L.vw === VW && L.cv === gCv && !L.skip && save.settings.groundFull !== true) { L.skip = true; reuse(); return; }
+  /* with the camera still, each refresh redoes only one row in three (the rest are already right), so there is
+     never a big hitch while you line up a shot; a moving camera redraws every row */
+  const part = still && G.t >= L.t && L.full ? ((L.part || 0) + 1) % 3 : -1;
+  drawGround.last = { h, gr: GR, vw: VW, cv: gCv, x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch, t: G.t, still0: still ? (L.still0 || G.t) : 0, part: part < 0 ? 0 : part, full: true };
   const W = h.W, H = h.H, grid = h.grid, buf = gBuf, t = G.t, GW = VW * GR, GH = VH * GR, M = groundMips(h);
-  buf.fill(0);
+  if (part < 0) buf.fill(0);
   const F0 = c.F[0], F1 = c.F[1], F2 = c.F[2], U0 = c.U[0], U1 = c.U[1], U2 = c.U[2], R0 = c.R[0], R1 = c.R[1];
   const ss = h.seaSide, sb = h.seaBack, outC = h.outCol, watC = h.waterCol, spk = h.sparkCol, hz = h.haze || [190, 205, 200], ocean = h.course.ocean;
   const OTX = h.outTex, outside = (xi, yi, l) => { if (ocean || (ss < 0 && yi < 0) || (ss > 0 && yi >= H) || (sb && xi >= W)) return watC; if (!OTX) return outC; l = Math.min(l || 0, OTX.length - 1); const n = 64 >> l; return OTX[l][((yi >> l) & (n - 1)) * n + ((xi >> l) & (n - 1))]; };
@@ -2943,6 +2957,7 @@ function drawGround(h, c) {
      filtered a little more so the rough doesn't shimmer as the camera glides */
   const playG = G.scr === 'game', lodB = playG ? .38 : .8;
   for (let y = 0; y < GH; y++) {
+    if (part >= 0 && y % 3 !== part) continue;
     const ry = CY - (y + .5) / GR, dz = F2 * FOC + U2 * ry;
     if (dz > -1e-4) continue;
     const tt = -c.z / dz, depth = tt * FOC;
@@ -3457,7 +3472,7 @@ function drawHeadSideHD(g, x, y, r, k) {
     pPoly(ell(x - r * .04, y - r * .32, r * 1.0, r * .82, Math.PI, Math.PI * 2, 16).concat([[x + r * .98, y - r * .28], [x - r * 1.04, y - r * .28]]), hc);
     pPoly([[x + fw * r * .55, y - r * .42], [x + fw * r * 1.95, y - r * .34], [x + fw * r * 1.9, y - r * .16], [x + fw * r * .55, y - r * .22]], shadeHex(hc, .76));
     pLine(x - r * .05, y - r * 1.13, x + r * .55, y - r * .32, lw(.2), shadeHex(hc, .72)); pDisc(x - r * .05, y - r * 1.13, r * .08, shadeHex(hc, .7));
-    if (lk.hat === 'cap') { if (lk.brand) brandText(lk.brand, x + r * .25, y - r * .62, r * .3, lk.brandCap); else pPoly([[x + r * .55, y - r * .8], [x + r * .86, y - r * .72], [x + r * .84, y - r * .52], [x + r * .53, y - r * .58]], hc === '#ffffff' ? '#1d2a44' : shadeHex(hc, 1.6)); } }
+    if (lk.hat === 'cap') { if (lk.capBrand || lk.brand) brandText(lk.capBrand || lk.brand, x + r * .25, y - r * .62, r * .3, lk.brandCap); else pPoly([[x + r * .55, y - r * .8], [x + r * .86, y - r * .72], [x + r * .84, y - r * .52], [x + r * .53, y - r * .58]], hc === '#ffffff' ? '#1d2a44' : shadeHex(hc, 1.6)); } }
   else if (lk.hat === 'visor') { pPoly(P([[-.95, -.82], [.6, -.86], [.62, -.56], [-.95, -.52]]), hc); pPoly([[x + r * .45, y - r * .7], [x + r * 1.9, y - r * .55], [x + r * 1.85, y - r * .36], [x + r * .45, y - r * .46]], shadeHex(hc, .8)); }
   else if (lk.hat === 'bucket') { pPoly(ell(x, y - r * .42, r * .95, r * .9, Math.PI, Math.PI * 2, 14), hc); pPoly([[x - r * 1.5, y - r * .38], [x + r * 1.5, y - r * .38], [x + r * 1.3, y - r * .08], [x - r * 1.3, y - r * .08]], shadeHex(hc, .8)); pLine(x - r * .95, y - r * .52, x + r * .95, y - r * .52, lw(.4), shadeHex(hc, .65)); }
 }
@@ -3575,6 +3590,10 @@ function frontPose(id, t) {
     case 'cpour': { const a = win(0, .3); P.club = 'none'; P.lh = [lerp(-15, -17, a), lerp(46, 55, a)]; P.rh = [-4, 37]; P.bow = 2.2 * a; P.lean = -.5 * a; P.bottle = 1; P.pour = a; break; }
     case 'coffer': { const a = win(0, .35); P.club = 'none'; P.rh = [lerp(-4, -22, a), lerp(40, 41, a)]; P.lh = [-8, 34]; P.lean = -1.2 * a; P.smile = 1; P.hold = a; break; }
     case 'creach': { const a = win(0, .35); P.club = 'none'; P.rh = [lerp(10.8, 17, a), lerp(27.6, 38, a)]; P.lh = [-11, 27.6]; P.lean = .6 * a; P.smile = 1; break; }
+    /* holding a trophy in both hands at the chest, and lifting it high over the head */
+    case 'chold': { const b = Math.sin(t * 1.6) * .3; P.club = 'none'; P.lh = [-3.4, 39.5 + b]; P.rh = [3.4, 39.5 + b]; P.smile = 1; P.jump = breathe * .2; break; }
+    case 'craise': { const a = win(0, .35), j = Math.max(0, Math.sin(t * 5)) * a; P.club = 'none'; P.lh = [lerp(-3.4, -4.4, a), lerp(39.5, 74, a) + j * 1.5]; P.rh = [lerp(3.4, 4.4, a), lerp(39.5, 74, a) + j * 1.5]; P.mouth = 1; P.smile = 1; P.jump = j * 1.4; break; }
+    case 'cspray': { const sh = Math.sin(t * 14) * .8; P.club = 'none'; P.lh = [1 + sh, 40]; P.rh = [7 + sh, 43]; P.mouth = 1; P.smile = 1; P.lean = sh * .3; break; }
     case 'cdrink': { const c2 = t % 3, up = win(0, .4) * (c2 < 1.7 ? E(c2 / .45) : 1 - E((c2 - 1.7) / .5)); P.club = 'none'; P.rh = [lerp(6.5, 2.6, up), lerp(39, 57.5, up)]; P.lh = [-11, 27.6]; P.bow = -1.2 * up; P.tilt = up; P.hold = 1; P.jump = breathe * .2; P.lean = -.3 * up; break; }
     case 'ceat': { const c2 = t % 1.8, up = c2 < .55 ? E(c2 / .35) : 1 - E((c2 - .55) / .45); P.club = 'none'; P.lh = [-5, 37]; P.rh = [lerp(4, 2.4, up), lerp(39, 56.5, up)]; P.bow = .8 * (1 - up); P.plate = 1; P.mouth = up > .7 ? 1 : 0; P.jump = breathe * .2; break; }
     case 'ccheers': { const a = win(0, .45), clink = win(.9, 1.05) - win(1.15, 1.45); P.club = 'none'; P.rh = [lerp(6.5, 7.5, a) - clink * 2, lerp(39, 46, a) + clink * 4]; P.lh = [-11, 27.6]; P.mouth = a > .5 ? 1 : 0; P.smile = 1; P.hold = 1; P.jump = clink * 1 + breathe * .2; P.lean = clink * .4; break; }
@@ -3862,8 +3881,8 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
     const crown = [[x - r * 1.06, y - r * .28 - lift], [x - r * .9, y - r * 1.0 - lift], [x - r * .3, y - r * 1.3 - lift], [x + r * .3, y - r * 1.3 - lift], [x + r * .9, y - r * 1.0 - lift], [x + r * 1.06, y - r * .28 - lift]];
     pPoly(crown, hc);
     pPoly([[x - r * .55, y - r * .32 - lift], [x - r * .5, y - r * 1.1 - lift], [x + r * .5, y - r * 1.1 - lift], [x + r * .55, y - r * .32 - lift]], shadeHex(hc, 1.12));
-    if (lk.brand && r * PXR * .34 >= 4) brandText(lk.brand, x, y - r * .72 - lift, r * .34, lk.brandCap);
-    else pRect(x - r * .14, y - r * .82 - lift, r * .28, r * .2, lk.brand ? lk.brandCap : lk.stripe || shadeHex(hc, hc === '#ffffff' ? .55 : 1.6));
+    if ((lk.capBrand || lk.brand) && r * PXR * .34 >= 4) brandText(lk.capBrand || lk.brand, x, y - r * .72 - lift, r * .34, lk.brandCap);
+    else pRect(x - r * .14, y - r * .82 - lift, r * .28, r * .2, (lk.capBrand || lk.brand) ? lk.brandCap : lk.stripe || shadeHex(hc, hc === '#ffffff' ? .55 : 1.6));
     if (lk.hat === 'cap') { const br = [[x - r * 1.1, y - r * .34 - lift], [x + r * 1.1, y - r * .34 - lift], [x + r * .92, y - r * .06 - lift], [x - r * .92, y - r * .06 - lift]]; pPoly(br, shadeHex(hc, .78)); }
     pRect(x - k * .6, y - r * 1.35 - lift, Math.max(1, k * 1.2), Math.max(1, k), shadeHex(hc, .7));
   } else if (lk.hat === 'visor') {
@@ -3991,6 +4010,7 @@ function drawMaybachHD(cart, X, Y, k, flip, opt) {
   for (const u of [-24 * L, -4]) { x.fillStyle = 'rgba(0,0,0,.45)'; path([[u, b0 + 2], [u + .5, b0 + 2], [u + .5, b2 - 1], [u, b2 - 1]]); x.fill(); }
   x.fillStyle = '#e9edf1'; path([[-14, b1 + 2.4], [-10, b1 + 2.4], [-10, b1 + 3.1], [-14, b1 + 3.1]]); x.fill();
   for (const wx of [xr, xf]) { x.fillStyle = '#050607'; path([[wx - wr - 1.6, 0], [wx - wr - 1.6, wr, [wx - wr - 1.6, wr + 3]], [wx, wr + 3.2, [wx - wr, wr + 3.6]], [wx + wr + 1.6, wr, [wx + wr, wr + 3.6]], [wx + wr + 1.6, 0]]); x.fill(); }
+  if (cart.text) { const [ta, tb] = S(-2 * L, (b1 + b2) / 2 + .6); brandText(cart.text, ta, tb, 7 * k, cart.textCol || '#ffffff'); }
   /* grille, headlamp with glow, hood ornament, tail lamp */
   x.fillStyle = vg(b2 - 2, b0 + 3, [[0, '#ffffff'], [1, '#8f99a1']]); path([[nose - 1.6, b0 + 3], [nose + .9, b0 + 3], [nose + .9, b2 - 2], [nose - 1.6, b2 - 2]]); x.fill();
   for (let v = b0 + 3.6; v < b2 - 2.2; v += 1.2) { x.fillStyle = 'rgba(40,46,52,.55)'; path([[nose - 1.3, v], [nose + .6, v], [nose + .6, v + .35], [nose - 1.3, v + .35]]); x.fill(); }
@@ -4466,6 +4486,8 @@ function rangeHit(b, h, rz, fx) {
   b.x = F.T0.x + nf * F.fx + nr * F.rx; b.y = F.T0.y + nf * F.fy + nr * F.ry; b.vx = nvf * F.fx + nvr * F.rx; b.vy = nvf * F.fy + nvr * F.ry; b.spin *= .3; b.side *= .2;
   if (fx) fx('net', b);
 }
+/* closest point to (px, py) on the segment from (x0, y0) to (x1, y1) */
+function segPt(x0, y0, x1, y1, px, py) { const vx = x1 - x0, vy = y1 - y0, L = vx * vx + vy * vy; if (L < 1e-12) return { x: x1, y: y1 }; const u = Math.max(0, Math.min(1, ((px - x0) * vx + (py - y0) * vy) / L)); return { x: x0 + vx * u, y: y0 + vy * u }; }
 function stepBall(b, h, dt, wind, fx) {
   const c = h.course;
   if (b.st === 'air') {
@@ -4480,9 +4502,13 @@ function stepBall(b, h, dt, wind, fx) {
     b.vy += (-KD * sp * ry - KL * CL * sp * rz * hy + KL * cs * sp * sp * hx) * dt;
     b.vz += (-GRAV - KD * sp * rz + KL * CL * sp * hs) * dt;
     b.spin *= Math.exp(-dt / 8);
-    b.x += b.vx * dt; b.y += b.vy * dt; b.z += b.vz * dt;
+    const ax0 = b.x, ay0 = b.y; b.x += b.vx * dt; b.y += b.vy * dt; b.z += b.vz * dt;
     const rz2 = b.z - gz;
-    if (!b.pinHit && rz2 < PIN_H && rz2 > 0) { const dx = b.x - h.pin.x, dy = b.y - h.pin.y; if (dx * dx + dy * dy < .012) { b.pinHit = true; b.vx *= -.12; b.vy *= -.12; b.vz = Math.min(b.vz, 0) * .3; if (fx) fx('pin', b); } }
+    /* the flagstick: checked along the whole step, so a fast ball can't pass straight through it */
+    if (!b.pinHit && rz2 < PIN_H && rz2 > -.3) { const q = segPt(ax0, ay0, b.x, b.y, h.pin.x, h.pin.y), dx = q.x - h.pin.x, dy = q.y - h.pin.y; if (dx * dx + dy * dy < .012) { b.x = q.x; b.y = q.y; b.pinHit = true; if (fx) fx('pin', b);
+      /* low on the stick it drops straight in; higher up it falls almost dead beside it (and usually into the cup) */
+      if (rz2 < .6 && Math.hypot(b.vx, b.vy) < 45) { b.st = 'holed'; b.dunk = true; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = b.vz = 0; return; }
+      b.vx *= -.05; b.vy *= -.05; b.vz = Math.min(b.vz, 0) * .3; } }
     if (rz2 < 30) treeHit(b, h, fx, dt, rz2);
     if (h.range) rangeHit(b, h, rz2, fx);
     if (rz2 <= 0) { b.z = gz; landBall(b, h, fx); }
@@ -4496,9 +4522,15 @@ function stepBall(b, h, dt, wind, fx) {
   if (t === T.GREEN) { const s = slopeAt(h, b.x, b.y); b.vx += s.x * dt; b.vy += s.y * dt; }
   let sp = Math.hypot(b.vx, b.vy);
   if (sp > 0) { const ns = Math.max(0, sp - (sp < 1.1 ? f * (1.7 - sp * .6) : f) * dt); b.vx *= ns / sp; b.vy *= ns / sp; sp = ns; }
-  b.x += b.vx * dt; b.y += b.vy * dt;
+  const rx0 = b.x, ry0 = b.y; b.x += b.vx * dt; b.y += b.vy * dt;
   if (b.steer && fx) { const S = b.steer; S.tr += Math.hypot(b.vx, b.vy) * dt; const u = Math.min(1, S.tr / S.L), f = u * u * (3 - 2 * u), k = f - S.done; S.done = f; b.x += S.ex * k; b.y += S.ey * k; }
   if (h.elev) b.z = groundZ(h, b.x, b.y);
+  /* the closest the ball came to the hole during this step (not just where it ended), so it can't skip over the cup */
+  const qc = segPt(rx0, ry0, b.x, b.y, h.pin.x, h.pin.y), dq = Math.hypot(qc.x - h.pin.x, qc.y - h.pin.y);
+  if (dq < CUP_R && Math.hypot(b.x - h.pin.x, b.y - h.pin.y) > dq + 1e-4) { b.x = qc.x; b.y = qc.y; }
+  /* chips and long shots roll in with the flagstick in: hitting it at a sensible pace drops the ball, a rocket bounces off */
+  if (!b.putt && !b.pinRoll && dq < .11) { if (sp < 6.5) { if (fx) G.sink = { x: b.x, y: b.y, vx: b.vx, vy: b.vy, t0: G.t }; b.st = 'holed'; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = 0; if (fx) fx('pin', b); return; }
+    b.pinRoll = true; b.x = qc.x; b.y = qc.y; b.vx *= -.25; b.vy *= -.25; if (fx) fx('pin', b); }
   const d = Math.hypot(b.x - h.pin.x, b.y - h.pin.y);
   if (d < b.minPin) b.minPin = d;
   /* putts drop in far more kindly: a putt that reaches the lip almost always goes in, and only firm ones lip out */
@@ -4865,7 +4897,7 @@ function swingDown() {
   if (G.phase === 'flight') { G.ff = true; return; }
   if (G.phase === 'travel' && G.travel) { G.travel.t = G.travel.dur; return; }
   if (G.phase === 'drop') { takeDrop(false); return; }
-  if (G.phase === 'guest' && G.guest) { const g = G.guest; g.t = Math.max(g.t, g.t0 + (g.put ? .35 : .45) + g.fly + .1); return; }
+  if (G.phase === 'guest' && G.guest) { const g = G.guest; g.t = Math.max(g.t, g.tImp + g.fly + .1); return; }
   if (G.phase === 'holed') { celeAdvance(); return; }
   if (G.phase === 'strike') { strikeNow(); return; }
   if (G.phase !== 'aim') return;
@@ -4992,7 +5024,11 @@ function resolveShot() {
   if (G.mode === 'practice') return resolvePractice();
   if (G.mode !== 'round') return resolveChallenge();
   const st = G.r.st;
-  if (b.st === 'holed') { if (G.r && G.r.guest === 'hemi' && G.hemi && G.hemi.i < G.hemi.shots.length) { G.phase = 'settle'; const fin = () => { if (G.hemi.i < G.hemi.shots.length) hemiNext(fin); else holeComplete(false); }; G.wait = { t: 1.4, fn: fin }; return; } holeComplete(false); return; }
+  if (b.st === 'holed') { if (G.r && G.r.guest === 'hemi' && G.hemi && G.hemi.i < G.hemi.shots.length) {
+    /* your partner still has to finish: first the hole-out is acknowledged (your score, a word from him), then he plays, then you celebrate */
+    G.phase = 'settle'; const d = G.strokes - h.par; banner(scoreName(G.strokes, h.par), `In for ${G.strokes} · Hemi to finish`, d < 0 ? '#ffd54f' : d === 0 ? '#9be36b' : '#ffffff', 2.6);
+    G.ackSay = 'Hemi: "' + pickLine(d < 0 ? HEMI_TALK.ackGood : d === 0 ? HEMI_TALK.ackPar : HEMI_TALK.ackBad) + '"'; G.cheerT = d <= 0 ? 2.6 : 0; SFX.play(d < 0 ? 'clap' : 'chat'); updateHUD();
+    const fin = () => { G.ackSay = null; if (G.hemi.i < G.hemi.shots.length) hemiNext(fin); else holeComplete(false); }; G.wait = { t: 3, fn: fin }; return; } holeComplete(false); return; }
   let msg = null, sub = '', col = '#fff';
   if (b.st === 'water') {
     G.strokes++; save.stats.water++; st.water++;
@@ -5036,7 +5072,8 @@ function resolveShot() {
 /* ---------- playing partner (Hemi at Augusta): he tees off after you on every hole and chats as you go ---------- */
 const HEMI_TALK = { fair: ['That will do.', 'Right where I was looking.', 'Middle of the short grass. Happy days.'], rough: ['Pulled it a touch. Still got a shot.', 'Bit of a flier lie in there, I reckon.'],
   green: ['Pin high. Happy with that.', 'On the dance floor.', 'That will give me a look at it.'], approach: ['Laid up to my number.', 'Nice little position.', 'Fine. Just short of where I wanted.'], putt: ['Close enough. I will tidy that up.', 'Dead weight, just missed the line.', 'Left it on the lip. Unlucky.'], holed: ['In the jar!', 'Lovely. That one never left the hole.', 'Got there in the end.', 'Down she goes.'],
-  onYou: ['Your shot, mate. Take your time.', 'These greens are quicker than they look.', 'Bobby Jones walked this same grass.', 'Trust your number here.', 'Wind is swirling over Rae\'s Creek.'], youGood: ['Shot! The patrons would have loved that.', 'Mean swing. Augusta suits your eye.', 'You are dialled in today.'], youBad: ['Shake it off, plenty of golf left.', 'Happens to all of us here.', 'Big breath. Next one.'] };
+  onYou: ['Your shot, mate. Take your time.', 'These greens are quicker than they look.', 'Bobby Jones walked this same grass.', 'Trust your number here.', 'Wind is swirling over Rae\'s Creek.'], youGood: ['Shot! The patrons would have loved that.', 'Mean swing. Augusta suits your eye.', 'You are dialled in today.'], youBad: ['Shake it off, plenty of golf left.', 'Happens to all of us here.', 'Big breath. Next one.'],
+  ackGood: ['Get in! Great birdie.', 'Shot! That is how you play this hole.', 'Beauty. Under par here is gold.'], ackPar: ['Good par. Take that every day here.', 'Solid. Par is a good score at Augusta.', 'Nice putt to finish.'], ackBad: ['Got it in. On to the next.', 'Tough hole. Shake it off.', 'Plenty of holes to get it back.'] };
 const pickLine = a => a[Math.floor(Math.random() * a.length)];
 function genHemiHole(h) {
   const R = mulberry32(hashStr('hemi' + h.idx + (G.r ? G.r.date : 0))), par = h.par, u = R();
@@ -5061,14 +5098,18 @@ function genHemiHole(h) {
 function hemiNext(then) {
   const H0 = G.hemi; if (!H0 || H0.i >= H0.shots.length) { then(); return; }
   const s = H0.shots[H0.i++], h = G.h, put = s.kind === 'putt', aim = Math.atan2(s.to.y - s.from.y, s.to.x - s.from.x), L = Math.hypot(s.to.x - s.from.x, s.to.y - s.from.y);
-  G.hemiTee = true; G.guest = { t: 0, ball: s.from, aim, land: s.to, said: false, hit: false, put, shot: s, L, then, prac: !put, t0: put ? .9 : 2.3, fly: put ? clamp(L / 6, .8, 2.6) : clamp(1.2 + L / 160, 1.3, 2.6) };
+  /* a proper routine: practice swing beside the ball, step in, two looks at the target, then the swing (about 3:1 back to down) */
+  const tm = put ? { PR: 1.1, ST: .35, LK: .65, BK: .45, DN: .3 } : { PR: 1.25, ST: .45, LK: .8, BK: .9, DN: .26 }, t0 = tm.PR + tm.ST + tm.LK + tm.BK;
+  const good = !put && (s.kind === 'tee' ? H0.fair : terrainAt(h, s.to.x, s.to.y) === T.GREEN);
+  G.hemiTee = true; G.ackSay = null; G.guest = { t: 0, cut: true, ball: s.from, aim, land: s.to, said: false, hit: false, put, shot: s, L, then, prac: !put, tm, t0, tImp: t0 + tm.DN, good, fly: put ? clamp(L / 6, .8, 2.6) : clamp(1.2 + L / 160, 1.3, 2.6) };
   G.phase = 'guest'; hideBanner(); updateHUD();
 }
 function startGuest(snap) { hemiNext(() => startTravel(snap)); }
 function updateGuest(dt) {
   const g = G.guest; if (!g) return; g.t += dt * (G.ff ? 3 : 1);
-  const tImp = g.t0 + (g.put ? .35 : .45), tEnd = tImp + g.fly;
-  if (!g.hit && g.t > tImp) { g.hit = true; if (g.put) SFX.play('putt'); else { SFX.play('swoosh'); SFX.play(g.shot.kind === 'tee' && G.h.par > 3 ? 'drive' : 'pure'); } }
+  const tImp = g.tImp, tEnd = tImp + g.fly;
+  if (!g.put && !g.sw && g.t > g.t0 + g.tm.DN * .4) { g.sw = true; SFX.play('swoosh'); }
+  if (!g.hit && g.t > tImp) { g.hit = true; if (g.put) SFX.play('putt'); else SFX.play(g.shot.kind === 'tee' && G.h.par > 3 ? 'drive' : 'pure'); }
   if (!g.said && g.t > tEnd + .15) { g.said = true; const s = g.shot, H0 = G.hemi, lie = s.holed ? 'holed' : s.kind === 'putt' ? 'putt' : terrainAt(G.h, s.to.x, s.to.y) === T.GREEN ? 'green' : s.kind === 'tee' ? (H0.fair ? 'fair' : 'rough') : 'approach';
     if (s.holed) SFX.play('rattle');
     const line = pickLine(HEMI_TALK[lie]); G.hemiSay = { txt: 'Hemi: "' + line + '"', t: 0 };
@@ -5097,7 +5138,7 @@ const HEMI_CART = { id: 'anglc', name: 'Augusta three-seater', style: 'trio', co
 /* cart ride to the ball: faster carts get there quicker */
 function startTravel(snap) {
   const b = G.b, cart = cartDef(), d = snap ? Math.hypot(b.x - snap.x, b.y - snap.y) : 0;
-  const walk = cart.style === 'walk' && !(G.r && G.r.guest === 'hemi'); if (G.mode !== 'round' || d < (walk ? 45 : 30) || terrainAt(G.h, b.x, b.y) === T.GREEN) { beginShot(); return; }
+  const walk = cart.style === 'walk' && !(G.r && G.r.guest === 'hemi'); if (walk || G.mode !== 'round' || d < 30 || terrainAt(G.h, b.x, b.y) === T.GREEN) { beginShot(); return; } /* no walking scene: you are simply at your ball */
   const from = G.gpos || snap, a = Math.atan2(b.y - from.y, b.x - from.x), rx = -Math.sin(a), ry = Math.cos(a);
   const side = 7, tx = b.x - rx * side - Math.cos(a) * 4, ty = b.y - ry * side - Math.sin(a) * 4;
   /* walking: just the last few steps up to the ball, at a calm strolling pace (about 2 yards a second) */
@@ -5117,6 +5158,7 @@ function updateTravel(dt) {
   if (u >= 1) { G.travel = null; beginShot(); }
 }
 function useGimme() {
+  if (G.r && G.r.event) { toast('No gimmes in competitions'); SFX.play('err'); return; }
   if (G.phase !== 'aim' || G.mode !== 'round' || G.lie !== T.GREEN || dist2pin() * 3 > 6 || save.items.gimme <= 0) return;
   save.items.gimme--;
   const b = G.b;
@@ -5131,13 +5173,14 @@ function useGum() {
   save.items.gum--; G.gum = true; G.mods = shotMods(G.club, G.lie); SFX.play('pop'); banner('FOCUS', 'bigger strike zone on this swing', '#9be36b', 1); persist(); updateHUD();
 }
 function useDrink() {
-  if (!G.r || save.items.drink <= 0 || G.r.energy >= 100) return;
-  save.items.drink--; G.r.energy = Math.min(100, G.r.energy + 20); SFX.play('gulp');
+  if (!G.r || (save.items.drink <= 0 && !save.redbull) || G.r.energy >= 100) return;
+  if (!save.redbull) save.items.drink--; /* Red Bull keep you stocked */ G.r.energy = Math.min(100, G.r.energy + 20); SFX.play('gulp');
   banner('ENERGY +20', '', '#7cd957', 1); persist(); if (G.phase === 'aim') { G.mods = shotMods(G.club, G.lie); refreshAim(); } updateHUD();
 }
 /* a mulligan works from the moment the ball stops until the next swing (also while walking up to it) */
 function mullPhase() { return G.phase === 'aim' || G.phase === 'travel' || (G.b && G.b.st === 'rest' && !!G.wait && G.phase !== 'holed'); }
 function useMull() {
+  if (G.r && G.r.event) { toast('No mulligans in competitions'); SFX.play('err'); return; }
   if (!mullPhase() || !G.snap || !G.mullOK || save.items.mull <= 0 || G.mode !== 'round') return;
   save.items.mull--; G.mullOK = false; G.wait = null; G.travel = null; G.guest = null;
   if (G.snap.putt) G.r.st.putts--;
@@ -5260,6 +5303,10 @@ function nextStep() {
   r.cur++; persist(); hideBanner(); G.cele = null;
   if (r.cur >= r.n) finishRound(); else loadHole();
 }
+/* how big the prize giving is: the clubhouse for club and regional days, a marquee by the 18th for nationals,
+   a stadium show for internationals, and Augusta's own for the majors */
+function cerTier(E) { return E.tier === 'MAJOR' ? 'major' : E.tier === 'INTERNATIONAL' ? 'intl' : E.tier === 'NATIONAL' ? 'national' : 'club'; }
+function thinBest(b0) { let best = b0 ? Object.assign({}, b0) : null; if (best && best.path && best.path.length > 6000) { const P = best.path, out = []; const st = Math.ceil(P.length / 4 / 1500); for (let i = 0; i < P.length / 4; i += st) out.push(P[i * 4], P[i * 4 + 1], P[i * 4 + 2], P[i * 4 + 3]); best.path = out; } return best; }
 function finishRound() {
   const r = G.r, c = courseById(r.courseId), s = save.stats;
   const total = r.scores.reduce((a, b) => a + b, 0);
@@ -5323,7 +5370,9 @@ function finishRound() {
           T.cut = { line, made: !T.me.out }; }
         T.rd++; const tb2 = tournTable(T);
         ev = { E, mid: true, rd: T.me.r.length, of: NR, pos: tb2.pos, tie: tb2.tie, n: tb2.rows.length, key, cut: T.cut, top: tb2.rows.slice(0, 10), me: tb2.rows.find(x => x.me) };
-        if (T.me.out) { s.eventsPlayed++; save.tourn = null; ev.missed = true; }
+        if (T.me.out) { s.eventsPlayed++; save.tourn = null; ev.missed = true;
+          /* missed the cut: you still stay for the prize giving at the end of the week */
+          const L0 = tb2.rows.find(x => !x.me && !x.out) || tb2.rows[0]; save.ceremony = { cid: E.course, eid: E.id, tier: cerTier(E), name: E.name, won: false, missedCut: true, score: null, winScore: L0[key], winner: L0.name, pos: null, posTxt: 'missed the cut', prize: 0, best: thinBest(r.best), field: tb2.rows.filter(x => !x.me).slice(0, 5).map(x => x.name), offer: null }; }
       } else { all = tb.rows.filter(x => !x.out).map(x => ({ name: x.name, gross: x.gross + tb.par * NR, net: x.net + tb.par * NR, me: x.me, toPar: x[key] })); save.tourn = null; }
     } else {
       field = r.field ? r.field.map(f => ({ name: f.name, gross: f.gross, net: f.net, idx: f.idx })) : simField(E, r.rt, r.diff);
@@ -5337,7 +5386,12 @@ function finishRound() {
       s.eventsPlayed++; if (pos === 1 && E.id === 'clubchamp') { save.champs = save.champs || {}; save.champs[c.id] = 2025 + (save.season ? save.season.no : 1); }
       if (pos === 1) { s.eventWins++; save.wins[E.id] = (save.wins[E.id] || 0) + 1; if (idx0 !== null && idx0 < 0) s.plusWins = (s.plusWins || 0) + 1; if (['NATIONAL', 'INTERNATIONAL', 'MAJOR'].includes(E.tier) && E.id !== 'invitational') { s.bigWins = (s.bigWins || 0) + 1; s.bigWinName = E.name; } }
       if (prize > 0) { s.eventCash += prize; save.coins += prize; s.coinsEarned += prize; r.coins += prize; r.coinLog.prize = prize; }
+      if (pos === 1 && save.patron && save.patron.thanks) { const pb = E.tier === 'MAJOR' ? 25000 : E.tier === 'INTERNATIONAL' ? 15000 : E.tier === 'NATIONAL' ? 8000 : 3000; save.coins += pb; s.coinsEarned += pb; r.coins += pb; r.coinLog.patron = pb; } /* Grant Ashworth pays for every win you thank him at */
       ev = { E, pos, ties, prize, n: all.length, key, top: all.slice(0, 10), me, rounds: E.rounds || 1 };
+      { /* the prize giving at the clubhouse is now part of every competition */
+        const champ = (E.id === 'clubchamp' || E.id === 'cs_final') && pos === 1, yr = champ ? (save.champs && save.champs[E.course]) : null;
+        const w = all[0]; save.ceremony = { cid: E.course, eid: E.id, tier: cerTier(E), name: E.name, won: pos === 1, champ, board: yr ? String(yr) : null, score: me.toPar !== undefined ? me.toPar : me[key] - par, winScore: w.toPar !== undefined ? w.toPar : w[key] - par, winner: w.me ? save.name : w.name, pos, posTxt: (ties > 1 ? 'tied ' : '') + pos + ordinal(pos) + ' of ' + all.length, prize, best: thinBest(r.best), field: all.filter(x => !x.me).slice(0, 5).map(x => x.name), offer: null };
+        if (pos === 1 && E.tier === 'INTERNATIONAL') { s.intlWins = (s.intlWins || 0) + 1; if (typeof pickOffer === 'function') save.ceremony.offer = pickOffer(); } }
       if (r.season === 'club' && save.cseason) {
         const S = save.cseason, fin = E.id === 'cs_final'; let mine = 0;
         all.forEach(x => { const p2 = all.filter(y => y[key] < x[key]).length, pts = fin ? 0 : (CSEASON_PTS[p2] || 3), k = x.me ? '__me' : x.name; S.pts[k] = (S.pts[k] || 0) + pts; if (x.me) mine = pts; });
@@ -5637,7 +5691,7 @@ function addressTarget(b, aim, club) {
 }
 function updateCam(dt) {
   const ph = G.phase, b = G.b;
-  if (ph === 'guest' && G.guest) { const g = G.guest; setCam(addressTarget(g.ball, g.aim, g.put ? CLUBS.find(c => c.putter) : clubById(g.shot.kind === 'tee' && G.h.par > 3 ? 'dr' : '7i')), 3, dt); return; }
+  if (ph === 'guest' && G.guest) { const g = G.guest; setCam(addressTarget(g.ball, g.aim, g.put ? CLUBS.find(c => c.putter) : clubById(g.shot.kind === 'tee' && G.h.par > 3 ? 'dr' : '7i')), g.cut ? 100 : 3, dt); g.cut = false; return; } /* a TV-style cut to him, so his routine is seen from the start */
   if (ph === 'intro') { introCam(dt); return; }
   if (ph === 'travel' && G.travel && G.travel.x !== undefined) {
     /* tracking shot: low and close beside the cart, drifting slowly from a little ahead to a little behind */
@@ -5744,7 +5798,7 @@ function drawItemsCached(items, ingame) {
   C.cam = { x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch }; C.stillN = still ? (C.stillN || 0) + 1 : 0;
   if (!ingame || save.settings.cacheOff) { C.layer = null; C.far = null; for (const it of items) it.f(); return; }
   if (C.stillN < 3) { C.layer = null; for (const it of items) it.f(); return; }
-  let dMax = 0; for (const it of items) if (!it.sc) dMax = Math.max(dMax, it.d);
+  let dMax = 0; for (const it of items) if (!it.sc && !it.ov) dMax = Math.max(dMax, it.d); /* a ball in the air (ov) is drawn on top and does not force the cached layer to be rebuilt every frame */
   const cut = dMax + .5, key = [G.h && G.h.seed, G.r && G.r.cur, G.view, G.phase === 'aim' || G.phase === 'swing' || G.phase === 'strike' || G.phase === 'down', Math.round(cut * 2), VW, RES, HD].join('|');
   const cached = it => it.sc && !it.fl && it.d > cut;
   if (!C.layer || C.layer.key !== key || C.layer.cv.width !== cv.width || C.layer.cv.height !== cv.height) {
@@ -5903,7 +5957,7 @@ function render() {
   else if (G.scr !== 'game') { G.mms = (G.mms || ms) * .93 + ms * .07; G.mqT = G.mqT || now;
     if (G.mms > 26 && now - G.mqT > 1500) { G.mqT = now; G.gqMenu = 1; } else if (G.mms < 12 && now - G.mqT > 5000) { G.mqT = now; G.gqMenu = 1.5; } }
 }
-function renderFrame() { renderFrame_(); if (!(G.scr === 'game' && G.h) && G.bgFade > 0) { ctx.fillStyle = `rgba(4,8,6,${G.bgFade})`; ctx.fillRect(0, 0, VW, VH); } }
+function renderFrame() { renderFrame_(); if (!(G.scr === 'game' && G.h) && G.scr !== 'snap' && G.bgFade > 0) { ctx.fillStyle = `rgba(4,8,6,${G.bgFade})`; ctx.fillRect(0, 0, VW, VH); } }
 function renderFrame_() {
   const ingame = G.scr === 'game' && G.h, h = ingame ? G.h : G.bgH;
   if (!h) { ctx.fillStyle = '#0b1410'; ctx.fillRect(0, 0, VW, VH); return; }
@@ -5981,7 +6035,7 @@ function renderFrame_() {
         const yy = p.y - r + drop * drop * r * 2.4; pDisc(p.x, yy, r + .7, '#1b1b1b'); pDisc(p.x, yy, r, ballDef().col); if (r > 2) pDisc(p.x - r * .35, yy - r * .35, r * .3, '#ffffff'); DC.restore(); } }); }
     if (b && b.st !== 'holed' && G.phase !== 'holed' && !b.sunk && G.phase !== 'travel') {
       const rz = (b.z || 0) - groundZ(h, b.x, b.y), p = proj(CAM, b.x, b.y, rz);
-      if (p) items.push({ d: p.d - .01, f: () => { const r = Math.max(1, .045 * p.s); pDisc(p.x, p.y - r, r + .7, '#1b1b1b'); pDisc(p.x, p.y - r, r, ballDef().col); if (r > 2) pDisc(p.x - r * .35, p.y - r * 1.35, r * .3, '#ffffff'); } });
+      if (p) items.push({ d: p.d - .01, ov: 1, f: () => { const r = Math.max(1, .045 * p.s); pDisc(p.x, p.y - r, r + .7, '#1b1b1b'); pDisc(p.x, p.y - r, r, ballDef().col); if (r > 2) pDisc(p.x - r * .35, p.y - r * 1.35, r * .3, '#ffffff'); } });
     }
   }
   if (ingame && G.nStatic !== undefined) for (let i = 0; i < G.nStatic; i++) items[i].sc = true; G.nStatic = undefined;
@@ -6106,16 +6160,23 @@ function addPeople(items) {
   }
   if (ph === 'guest' && G.guest) { const g = G.guest, club = g.put ? CLUBS.find(c => c.putter) : clubById(g.shot.kind === 'tee' && G.h.par > 3 ? 'dr' : g.L < 90 ? 'pw' : '7i'), sp = golferSpot(g.ball.x, g.ball.y, g.aim, club), p = proj(CAM, sp.x, sp.y, 0), t = g.t;
     if (p) { const k = p.s * 1.8 / 66, sm = x => x * x * (3 - 2 * x), t0 = g.t0;
-      /* practice swing (a smooth half swing beside the ball), step in, then the real swing with a full turn and a held finish */
-      let st;
-      if (g.put) { const bk = t < .2 ? 0 : t < t0 ? sm(Math.min(1, (t - .2) / (t0 - .2))) * clamp(.25 + g.L / 30, .3, .8) : 0, fl = t >= t0 ? Math.min(1, (t - t0) / .45) : 0; st = { putt: true, ballU: sp.off * 36.7, len: club.len, back: fl ? 0 : bk, down: 0, follow: fl * .8, t: G.t }; }
-      else if (t < 1.25) { const u = t / 1.25, b2 = u < .45 ? sm(u / .45) * .55 : 0, f2 = u >= .45 ? Math.min(.55, (u - .45) / .4 * .55) * (1 - Math.max(0, (u - .85) / .15)) : 0; st = { putt: false, ballU: sp.off * 36.7 + 14, len: club.len, back: f2 ? 0 : b2, down: 0, follow: f2, t: G.t }; }
-      else { const tb = t - (t0 - 1.05); const back = tb < 0 ? 0 : Math.min(1.05, sm(Math.min(1, tb / .85)) * 1.05), down = t < t0 ? 0 : Math.min(1, (t - t0) / .18), follow = t < t0 + .18 ? 0 : Math.min(1, (t - t0 - .18) / .7); st = { putt: false, ballU: sp.off * 36.7, len: club.len, back: follow ? 0 : back, down: follow ? 0 : down, follow, t: G.t }; }
+      /* practice swing beside the ball, step in, look at the target twice, then the real swing with a held finish */
+      const M = g.tm, tA = M.PR, tB = tA + M.ST, tC = tB + M.LK, tI = g.tImp, side = g.put ? 9 : 14, peak = g.put ? clamp(.25 + g.L / 30, .3, .8) : g.shot.kind === 'tee' && G.h.par > 3 ? 1.05 : .95;
+      let off = 0; const st = { putt: g.put, ballU: 0, len: club.len, back: 0, down: 0, follow: 0, t: G.t };
+      if (t < tA) { const u = t / tA; off = side;
+        if (g.put) { const ph2 = (u * 2) % 1; st.back = ph2 < .5 ? sm(ph2 / .5) * .35 : 0; st.follow = ph2 >= .5 ? Math.sin((ph2 - .5) / .5 * Math.PI) * .35 : 0; if (st.back && ph2 > .45) st.back = 0; }
+        else { st.back = u < .45 ? sm(u / .45) * .55 : 0; st.follow = u >= .45 ? Math.min(.55, (u - .45) / .4 * .55) * (1 - Math.max(0, (u - .85) / .15)) : 0; if (st.follow) st.back = 0; } }
+      else if (t < tB) off = side * (1 - sm((t - tA) / M.ST));
+      else if (t < tC) { const u = (t - tB) / M.LK; st.lookAt = Math.sin(((u * 2) % 1) * Math.PI); if (!g.put) st.back = Math.max(0, Math.sin(u * Math.PI * 4)) * .05; }
+      else if (t < t0) st.back = sm((t - tC) / M.BK) * peak;
+      else if (t < tI) { const u = (t - t0) / M.DN; if (g.put) st.back = peak * (1 - sm(u)); else { st.back = peak; st.down = u * u; } }
+      else { const u = t - tI; if (g.put) st.follow = Math.min(peak * 1.1, u / .35 * peak * 1.1); else { st.follow = Math.min(1, u / .75); if (g.good) st.twirl = clamp((u - .95) / .95, 0, 1); } }
+      st.ballU = sp.off * 36.7 + off;
       items.push({ d: p.d + .05, f: () => ell(p.x + p.s * .05, p.y, Math.max(2, p.s * .36), Math.max(1, p.s * .36 * clamp(CAM.z / p.d, .2, .5)), '#060b05', .32) });
       items.push({ d: p.d, f: () => charFx(p.x, p.y, k, () => drawGolferSide(HEMI, p.x, p.y, k, sidePose(st), club)) }); }
-    const tImp = g.t0 + (g.put ? .35 : .45), u = g.t < tImp ? 0 : Math.min(1, (g.t - tImp) / g.fly), ue = g.put ? 1 - (1 - u) * (1 - u) : u, apex = g.put ? 0 : clamp(g.L * .14, 4, 38);
+    const tImp = g.tImp, u = g.t < tImp ? 0 : Math.min(1, (g.t - tImp) / g.fly), ue = g.put ? 1 - (1 - u) * (1 - u) : u, apex = g.put ? 0 : clamp(g.L * .14, 4, 38);
     const bx = lerp(g.ball.x, g.land.x, ue), by = lerp(g.ball.y, g.land.y, ue), bz = apex * 4 * ue * (1 - ue), q = proj(CAM, bx, by, bz + .05);
-    if (q && !(u >= 1 && g.shot.holed)) items.push({ d: q.d - .1, f: () => { if (u > 0 && !g.put) for (let i = 1; i < 12; i++) { const u2 = Math.max(0, ue - i * .012), q2 = proj(CAM, lerp(g.ball.x, g.land.x, u2), lerp(g.ball.y, g.land.y, u2), apex * 4 * u2 * (1 - u2)); if (q2) { DC.globalAlpha = .5 * (1 - i / 12); pDisc(q2.x, q2.y, Math.max(.6, q.s * .05), '#ffffff'); } } DC.globalAlpha = 1; pDisc(q.x, q.y, Math.max(.8, q.s * .07), '#ffffff'); } });
+    if (q && !(u >= 1 && g.shot.holed)) items.push({ d: q.d - .1, ov: 1, f: () => { if (u > 0 && !g.put) for (let i = 1; i < 12; i++) { const u2 = Math.max(0, ue - i * .012), q2 = proj(CAM, lerp(g.ball.x, g.land.x, u2), lerp(g.ball.y, g.land.y, u2), apex * 4 * u2 * (1 - u2)); if (q2) { DC.globalAlpha = .5 * (1 - i / 12); pDisc(q2.x, q2.y, Math.max(.6, q.s * .05), '#ffffff'); } } DC.globalAlpha = 1; pDisc(q.x, q.y, Math.max(.8, q.s * .07), '#ffffff'); } });
   }
   if (G.r && G.r.guest && ph !== 'guest' && !(ph === 'holed' && G.cele && G.cele.stage !== 'drop')) {
     const q = proj(CAM, E0.x + rx * 4.2 - fx * 1.5, E0.y + ry * 4.2 - fy * 1.5, 0);
@@ -6213,7 +6274,14 @@ function drawTracer() {
   /* TV-style tracer: a soft glow under a bright core line, colour picked in Settings, fading toward the tee */
   const col = ({ red: '#ff3b30', yellow: '#ffd60a', white: '#ffffff', blue: '#4fc3ff' })[save.settings.tracer || 'red'], glow = mixHex(col, '#ffffff', .35), pts = [];
   for (let i = 0; i < tr.length; i += 3) { const p = proj(CAM, tr[i], tr[i + 1], tr[i + 2]); pts.push(p); }
-  for (let pass = 0; pass < 2; pass++) { let prev = null; for (let i = 0; i < pts.length; i++) { const p = pts[i]; if (p && prev && Math.abs(p.x - prev.x) < 80 && Math.abs(p.y - prev.y) < 80) { const f = .35 + .65 * i / pts.length; ctx.globalAlpha = pass ? f : f * .35; pLine(prev.x, prev.y, p.x, p.y, pass ? 1 : 3, pass ? col : glow); } prev = p; } }
+  /* batched: the line is split into a few bands that fade toward the tee, one path per band (not one per segment) */
+  const NB = 6, n = pts.length; ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (let pass = 0; pass < 2; pass++) { ctx.strokeStyle = pass ? col : glow; ctx.lineWidth = pass ? 1 : 3;
+    for (let bnd = 0; bnd < NB; bnd++) { const i0 = Math.floor(bnd * (n - 1) / NB), i1 = Math.floor((bnd + 1) * (n - 1) / NB); if (i1 <= i0) continue;
+      const f = .35 + .65 * (i0 + i1) / 2 / n; ctx.globalAlpha = pass ? f : f * .35; ctx.beginPath(); let prev = null;
+      for (let i = i0; i <= i1; i++) { const p = pts[i]; if (p && prev && Math.abs(p.x - prev.x) < 80 && Math.abs(p.y - prev.y) < 80) ctx.lineTo(p.x, p.y); else if (p) ctx.moveTo(p.x, p.y); prev = p; }
+      ctx.stroke(); } }
+  ctx.restore();
   ctx.globalAlpha = 1;
 }
 /* the driving range: your own timber hitting hut with a tin roof, and tall nets on wooden poles down both sides */
@@ -6306,7 +6374,8 @@ function drawMinimap(h) {
   const rough = (h.course.pal && h.course.pal.rough && h.course.pal.rough[0]) || '#2f4a2a';
   ctx.save(); ctx.imageSmoothingEnabled = true;
   ctx.fillStyle = 'rgba(8,13,11,.72)'; rrect(fx - 3, my - 3, BW + 6, BH + 50, 6); ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.1)'; ctx.lineWidth = .6; ctx.stroke();
-  rrect(fx, my, BW, BH, 4); ctx.save(); ctx.clip(); ctx.fillStyle = shadeHex(rough, .55); ctx.fillRect(fx, my, BW, BH); ctx.drawImage(h.cv, mx, myy, mw, mh); ctx.restore();
+  rrect(fx, my, BW, BH, 4); ctx.save(); ctx.clip(); ctx.fillStyle = shadeHex(rough, .55); ctx.fillRect(fx, my, BW, BH);
+  { /* the hole picture is shrunk once per hole (not every frame) */ const kk = Math.ceil(mw * RES) + 'x' + Math.ceil(mh * RES); if (!h.mini || h.mini.k !== kk || h.mini.src !== h.cv) { const mc = mkCanvas(Math.ceil(mw * RES), Math.ceil(mh * RES)), mxx = mc.getContext('2d'); mxx.imageSmoothingEnabled = true; mxx.imageSmoothingQuality = 'high'; mxx.drawImage(h.cv, 0, 0, mc.width, mc.height); h.mini = { k: kk, cv: mc, src: h.cv }; } ctx.drawImage(h.mini.cv, mx, myy, mw, mh); } ctx.restore();
   if (G.b) {
     const bx = mx + G.b.x * sc, by = myy + G.b.y * sc;
     if (G.phase === 'aim' || G.phase === 'swing') { ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = .8; ctx.setLineDash([1.6, 1.8]); ctx.beginPath(); ctx.moveTo(bx, by); const L = 30; let ex = bx + Math.cos(G.aim) * L, ey = by + Math.sin(G.aim) * L; ex = clamp(ex, fx + 1, fx + BW - 1); ey = clamp(ey, my + 1, my + BH - 1); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]); }
@@ -6613,16 +6682,17 @@ function pauseMenu() {
     <button class="pmresume" data-m="close">RESUME</button>
     <div class="pmgrp"><h3>This hole</h3>${round ? row('card', 'Scorecard') : ''}${row('map', 'Hole map', canAim ? '' : 'Before a shot only', !canAim)}${row('yards', 'Yardage book')}${round && G.r.event ? row('lboard', 'Leaderboard', 'Live') : ''}${row('help', 'Controls')}</div>
     <div class="pmgrp"><h3>Sound</h3>${sw('snd', 'Sound effects', save.settings.sound)}${sw('mus', 'Music', save.settings.music)}</div>
-    <div class="pmfoot">${round && G.r.guest === 'hemi' ? '<button class="pmout dng" data-m="hemiLeave">Leave Augusta</button>' : round ? `<button class="pmout" data-m="savequit">Save &amp; quit</button><button class="pmout dng" data-m="abandon">${G.r.event ? 'Withdraw' : 'Abandon round'}</button>` : `<button class="pmout dng" data-m="quit">${G.mode === 'practice' ? 'Leave practice' : 'Quit challenge'}</button>`}</div>
+    <div class="pmfoot">${round && G.r.guest === 'hemi' ? '<button class="pmout dng" data-m="hemiLeave">Leave Augusta</button>' : round ? `${G.r.event ? '' : '<button class="pmout" data-m="savequit">Save &amp; quit</button>'}<button class="pmout dng" data-m="abandon">${G.r.event ? 'Withdraw' : 'Abandon round'}</button>` : `<button class="pmout dng" data-m="quit">${G.mode === 'practice' ? 'Leave practice' : 'Quit challenge'}</button>`}</div>
   </div>`);
 }
 function itemUses() {
-  if (!G.r || G.phase !== 'aim') return ITEMS.map(it => { const m = it.id === 'mull' && mullPhase() && G.snap && G.mullOK && G.mode === 'round', w = m ? ((save.items.mull || 0) <= 0 ? 'None left (buy in the Pro Shop)' : '') : 'Only before a shot'; return { it, ok: !w, why: w }; });
-  const why = { mull: !G.snap ? 'No shot to replay yet' : !G.mullOK ? 'Only right after a shot' : '', gum: G.club.putter ? 'Not for putts' : G.gum ? 'Already chewing' : '', gimme: G.lie !== T.GREEN || dist2pin() * 3 > 6 ? 'Only inside 6 ft on the green' : '', bar: G.r.energy >= 100 ? 'Energy is full' : '', drink: G.r.energy >= 100 ? 'Energy is full' : '' };
-  return ITEMS.map(it => { const w = (save.items[it.id] || 0) <= 0 ? 'None left (buy in the Pro Shop)' : why[it.id]; return { it, ok: !w, why: w }; });
+  if (!G.r || G.phase !== 'aim') return ITEMS.map(it => { const m = it.id === 'mull' && !(G.r && G.r.event) && mullPhase() && G.snap && G.mullOK && G.mode === 'round', w = m ? ((save.items.mull || 0) <= 0 ? 'None left (buy in the Pro Shop)' : '') : 'Only before a shot'; return { it, ok: !w, why: w }; });
+  const comp = G.r && G.r.event;
+  const why = { mull: comp ? 'Not allowed in competitions' : !G.snap ? 'No shot to replay yet' : !G.mullOK ? 'Only right after a shot' : '', gum: G.club.putter ? 'Not for putts' : G.gum ? 'Already chewing' : '', gimme: comp ? 'Not allowed in competitions' : G.lie !== T.GREEN || dist2pin() * 3 > 6 ? 'Only inside 6 ft on the green' : '', bar: G.r.energy >= 100 ? 'Energy is full' : '', drink: G.r.energy >= 100 ? 'Energy is full' : '' };
+  return ITEMS.map(it => { const w = (save.items[it.id] || 0) <= 0 && !(it.id === 'drink' && save.redbull) ? 'None left (buy in the Pro Shop)' : why[it.id]; return { it, ok: !w, why: w }; });
 }
 function showItems() {
-  showModal(`<div class="col" style="min-width:calc(var(--u)*250);gap:calc(var(--u)*3)"><div class="u2">USE AN ITEM</div>${itemUses().map(({ it, ok, why }) => `<div class="li" style="margin:0">${sprTag('icon', it.id, 12)}<div class="grow"><div class="nm" style="font-size:calc(var(--u)*5.4)">${it.name.toUpperCase()} <span class="dimtxt">x${save.items[it.id] || 0}</span></div><div class="ds">${ok ? it.desc : why}</div></div><button class="btn sm ${ok ? 'y' : 'g'}" data-m="item" data-v="${it.id}" ${ok ? '' : 'disabled'}>USE</button></div>`).join('')}<button class="btn g sm" data-m="close">CLOSE</button></div>`);
+  showModal(`<div class="col" style="min-width:calc(var(--u)*250);gap:calc(var(--u)*3)"><div class="u2">USE AN ITEM</div>${itemUses().map(({ it, ok, why }) => `<div class="li" style="margin:0">${sprTag('icon', it.id, 12)}<div class="grow"><div class="nm" style="font-size:calc(var(--u)*5.4)">${it.id === 'drink' && save.redbull ? 'RED BULL' : it.name.toUpperCase()} <span class="dimtxt">${it.id === 'drink' && save.redbull ? 'FREE' : 'x' + (save.items[it.id] || 0)}</span></div><div class="ds">${ok ? it.desc : why}</div></div><button class="btn sm ${ok ? 'y' : 'g'}" data-m="item" data-v="${it.id}" ${ok ? '' : 'disabled'}>USE</button></div>`).join('')}<button class="btn g sm" data-m="close">CLOSE</button></div>`);
 }
 function yardageBook() {
   const rows = ownedClubs().filter(c => !c.putter).map(c => { const d = G.clubD && G.clubD[c.id], carry = d ? d.carry : c.carry * (1 + (save.clubs[c.id] || 0) * .03), tot = d ? d.tot : carry * 1.05; return `<tr><td>${fullName(c).toUpperCase()}</td><td><b>${Math.round(carry)}</b></td><td>${Math.round(tot)}</td><td>${Math.round(carry * .75)}</td><td>${Math.round(carry * .5)}</td><td>${Math.round(carry * .25)}</td></tr>`; }).join('');
@@ -6664,7 +6734,7 @@ MODAL.addEventListener('click', e => {
   else if (m === 'mus') { save.settings.music = !save.settings.music; if (save.settings.music) SFX.startMusic(); persist(); closeModal(); pauseMenu(); }
   else if (m === 'hemiLeave') showModal(`<div class="abandon"><div class="abico">⛳</div><div class="u2">LEAVE YOUR ROUND WITH HEMI?</div><div class="ablist"><div>✗ The invitation is one time only. If you leave now it is gone for good.</div><div>✗ Augusta stays closed to you.</div></div><div class="row" style="gap:calc(var(--u)*4)"><button class="btn y grow" data-m="close">KEEP PLAYING</button><button class="btn r grow" data-m="hemiLeaveYes">LEAVE</button></div></div>`);
   else if (m === 'hemiLeaveYes') { hemiForfeit(); closeModal(); exitGame(); showScreen('title'); toast('You left Augusta. Hemi\'s invitation has gone.'); }
-  else if (m === 'savequit') { closeModal(); persist(); exitGame(); showScreen('title'); }
+  else if (m === 'savequit') { if (G.r && G.r.event) return; closeModal(); persist(); exitGame(); showScreen('title'); }
   else if (m === 'quit') { const pr = G.mode === 'practice'; closeModal(); exitGame(); showScreen(pr ? 'practice' : 'title'); }
   else if (m === 'abandon') {
     const r = G.r, ev = r.event, c = courseById(r.courseId), played = r.scores.length, tp = toParSoFar(r);
@@ -6763,6 +6833,7 @@ function updateHUD() {
   const cadEl = $('hCaddie');
   if (ph === 'travel' && G.banter) { cadEl.classList.remove('hidden'); cadEl.textContent = G.banter; }
   else if (holed && G.cele && G.cele.say && G.cele.stage !== 'drop') { cadEl.classList.remove('hidden'); cadEl.textContent = G.cele.say; }
+  else if (ph === 'settle' && G.ackSay) { cadEl.classList.remove('hidden'); cadEl.textContent = G.ackSay; }
   else if (ph === 'guest' && G.hemiSay && G.guest && G.guest.said) { cadEl.classList.remove('hidden'); cadEl.textContent = G.hemiSay.txt; }
   else if (G.hemiLine && ph === 'aim' && G.view === 'golfer') { cadEl.classList.remove('hidden'); cadEl.textContent = G.hemiLine; }
   else if (G.adv && G.adv.txt && ph === 'aim' && G.view === 'golfer') { cadEl.classList.remove('hidden'); cadEl.textContent = G.adv.txt; }
@@ -6929,6 +7000,39 @@ function tournDeskHTML() {
     <div class="row" style="justify-content:space-between"><span class="u1 dimtxt">Food and drink here give you energy for the round.</span><button class="btn g sm" data-a="tournQuit">WITHDRAW</button></div></div>`;
 }
 /* the champion's moment: the club captain hands over the trophy and the room applauds */
+/* after the last round of any competition you go to the clubhouse for the prize giving (it is not optional):
+   the captain announces the winner, hands over the trophy (and your name goes on the honours board for a club
+   championship), the room watches your shot of the day on the TV, then congratulates you; a winner can shout the bar */
+function startCeremony() {
+  const C = save.ceremony; if (!C) return; save.ceremony = null; if (C.offer) save.offerPending = C.offer; persist();
+  if (C.tier && C.tier !== 'club') { startVenueCeremony(C); return; }
+  openClubhouse(C.cid, { back: 'title', meX: CH_BAR_X });
+  const c = G.ch, me = esc(save.name), fp = v => v === 0 ? 'level par' : v < 0 ? Math.abs(v) + ' under' : v + ' over';
+  c.host = { id: 'host', look: { hat: 'none', hair: 'short', build: 1.1, nobib: true }, c: { h: '#111', H: '#9e9e9e', s: '#f1c9a5', S: '#1f3b63', p: '#c9c3b0', k: '#2b1d14' } };
+  if (C.best) chReplayQueue(C.best);
+  const lines = [], btn = [], on = {}, hasRp = !!(C.best && C.best.path);
+  if (C.won) {
+    lines.push(`<b>Club captain:</b> "Ladies and gentlemen, the ${esc(C.name)}. Your winner, on ${fp(C.score)}... <b>${me}</b>!"`); btn.push('SHAKE HANDS');
+    lines.push(`<b>Captain:</b> "Congratulations. ${C.prize ? 'Your cheque for ' + priceHTML(C.prize) + '.' : 'A wonderful day of golf.'}"`); btn.push('TAKE THE TROPHY');
+    lines.push('<b>Captain:</b> "The trophy is yours. Hold it up!"'); btn.push('RAISE IT');
+    if (C.board) { lines.push(`<b>Captain:</b> "And your name goes up on the honours board: <b>${me}</b>, ${C.board}."`); btn.push('NICE'); }
+    if (patronOn()) { lines.push('<b>You:</b> "Thanks to everyone here, and to Grant Ashworth for his support."'); btn.push('CONTINUE'); }
+  } else {
+    lines.push(`<b>Club captain:</b> "Thanks for playing the ${esc(C.name)}, everyone. Your winner, on ${fp(C.winScore)}... <b>${esc(C.winner)}</b>!"`); btn.push('APPLAUD');
+    lines.push(`<b>Captain:</b> "${me}, ${C.missedCut ? 'tough week, but thanks for playing' : 'you finished ' + C.posTxt + (C.prize ? ', and that earns you ' + priceHTML(C.prize) : '') + '. Well played'}."`); btn.push('SHAKE HANDS');
+  }
+  if (hasRp) { lines.push(`<b>Captain:</b> "Before we finish, here's ${C.won ? 'the' : me + "'s"} shot of the day on the screen."`); btn.push('WATCH THE REPLAY');
+    on[lines.length] = () => { c.rpShow = true; c.rpT = c.t; SFX.play('crowd'); };
+    lines.push(`<i>On the TV: ${esc(C.best.label || 'shot of the day')}.</i> The room ${C.best.fin && C.best.fin.st === 'holed' ? 'erupts' : 'cheers'}.`); btn.push('WHAT A SHOT'); }
+  const pats = (c.patrons || []).map(p2 => p2.name).filter(Boolean), nm = i => pats[i % Math.max(1, pats.length)] || 'A member';
+  const said = C.won ? [`<b>${nm(0)}:</b> "Brilliant round. You earned that one."`, C.champ ? '<b>Jacob:</b> "Enjoy it. I\'m having that trophy back next year."' : `<b>${nm(1)}:</b> "Didn't think anyone would catch the leaders today."`, `<b>${nm(2)}:</b> "That shot on the telly! Unreal."`]
+    : [`<b>${nm(0)}:</b> "Unlucky today. ${C.pos <= 3 ? 'So close.' : 'You\'ll get them next time.'}"`, `<b>${nm(1)}:</b> "That shot on the telly was class though."`, `<b>${nm(2)}:</b> "Same time next week?"`];
+  const cost = (pats.length + 4) * chPrice(chStyle(C.cid).menu.find(m => m[2] === 'beer') || chStyle(C.cid).menu[0]);
+  c.script = { step: 0, t: 0, shake: false, host: true, noTrophy: !C.won, lines, btn, on,
+    done: C.won ? `<b>Champion of the ${esc(C.name)}.</b> Tradition says the winner shouts the bar. <button class="btn sm y" data-a="cerShout" data-v="${cost}">SHOUT THE BAR · ${priceHTML(cost)}</button> <button class="btn sm g" data-a="cerChat">NOT TODAY</button>` : null,
+    after: () => { let i = 0; const next = () => { if (!G.ch || G.ch !== c || c.party || i >= said.length) return; c.msg = said[i++]; rerender(); setTimeout(next, 3400); }; c.congrats = () => setTimeout(next, 300); if (!C.won) c.congrats(); } }; /* a winner hears them after choosing whether to shout */
+  c.msg = lines[0] + `<br><button class="btn sm y" data-a="chScript">${btn[0]}</button>`; setTimeout(() => SFX.play('crowd'), 400); rerender();
+}
 function prizeCeremony(e2) {
   const c = G.ch; c.host = { id: 'host', look: { hat: 'none', hair: 'short', build: 1.1, nobib: true }, c: { h: '#111', H: '#9e9e9e', s: '#f1c9a5', S: '#1f3b63', p: '#c9c3b0', k: '#2b1d14' } };
   c.script = { step: 0, t: 0, shake: false, host: true, lines: [`<b>Club captain:</b> "Ladies and gentlemen, please welcome your ${esc(e2.E.name)} champion... <b>${esc(save.name)}</b>!"`, '<b>Captain:</b> "Congratulations. A wonderful week of golf."', '<b>Captain:</b> "The trophy is yours. Hold it up!"'], btn: ['SHAKE HANDS', 'TAKE THE TROPHY', 'RAISE IT'], done: `Champion of the ${esc(e2.E.name)}. ${e2.prize ? 'Cheque: ' + priceHTML(e2.prize) + '.' : ''}` };
@@ -6952,6 +7056,8 @@ SCR.title = () => {
     </div>
     <div class="col tright">
       <div class="menu">
+        ${save.offerPending && !save.ceremony ? `<button class="btn y resumeb" data-a="offerOpen"><b>📞 ${OFFER_NAME[save.offerPending]} WANTS A WORD</b><span>${save.offerPending === 'redbull' ? 'A SPONSORSHIP OFFER' : 'A PRIVATE OFFER'}</span></button>` : ''}
+        ${save.ceremony ? `<button class="btn y resumeb" data-a="toClub"><b>🏆 PRIZE GIVING</b><span>${esc(courseById(save.ceremony.cid).short)} ${save.ceremony.tier && save.ceremony.tier !== 'club' ? 'MAIN STAGE' : 'CLUBHOUSE'} · EVERYONE'S WAITING</span></button>` : ''}
         ${r ? `<button class="btn y resumeb" data-a="resume"><b>▶ RESUME ROUND</b><span>${courseById(r.courseId).short} · HOLE ${r.start + r.cur + 1}</span></button>` : ''}
         <button class="btn ${r ? '' : 'y'}" data-a="go" data-v="setup">PLAY A ROUND</button>
         <div class="row"><button class="btn grow" data-a="go" data-v="events">EVENTS${save.tourn ? ' <span class="dotn"></span>' : ''}</button><button class="btn grow" data-a="go" data-v="practice">PRACTICE</button></div>
@@ -7134,7 +7240,7 @@ function shopItems(tab) {
       desc: g.bio + (own ? '' : `<br><span class="red">To unlock: ${reqText(g)}.</span><br><span class="dimtxt">You: best ${fmtIdx(save.hcp.low)} · ${save.stats.rounds} rounds · ${save.stats.eventWins || 0} wins</span>`),
       stats: [['POWER', g.pow, 10, g0.pow], ['ACCURACY', g.acc, 10, g0.acc], ['SHORT GAME', g.short, 10, g0.short], ['PUTTING', g.putt, 10, g0.putt], ['STAMINA', g.sta, 10, g0.sta]],
       act: eq ? '<button class="btn g" disabled>PLAYING</button>' : own ? `<button class="btn y" data-a="selGolfer" data-v="${g.id}">PLAY AS ${gName(g).toUpperCase()}</button>` : '<button class="btn g" disabled>LOCKED</button>', act2: own ? `<button class="btn b" data-a="lookEdit" data-v="${g.id}">CUSTOMISE LOOK</button>` : '' }; });
-  if (tab === 'carts') { const cur = cartDef(); return CARTS.map(c => { const own = save.carts.includes(c.id), eq = save.cart === c.id;
+  if (tab === 'carts') { const cur = cartDef(); return CARTS.filter(c => !c.hidden || save.carts.includes(c.id)).map(c => { const own = save.carts.includes(c.id), eq = save.cart === c.id;
     return { id: c.id, cost: own ? 0 : c.price, name: c.name, sub: c.model, badge: eq ? 'IN USE' : own ? 'OWNED' : priceHTML(c.price), on: eq, spr: sprTag('cart', c.id, 22), big: sprTag('cart', c.id, 100), desc: c.desc + `<br><span class="dimtxt">Energy left after 18 holes: about ${Math.max(0, Math.round(100 - c.drain * 1.05 * 18))}%.</span>`,
       stats: [['TOP SPEED', c.mph, 30, cur.mph], ['ENERGY/18', Math.round(100 - c.drain * 1.05 * 18), 100, Math.round(100 - cur.drain * 1.05 * 18)], ['COIN BONUS %', Math.round(((c.coin || 1) - 1) * 100), 12, Math.round(((cur.coin || 1) - 1) * 100)]],
       act: !own ? `<button class="btn y" data-a="buyCart" data-v="${c.id}">BUY ${priceHTML(c.price)}</button>` : eq ? '<button class="btn g" disabled>IN USE</button>' : `<button class="btn b" data-a="selCart" data-v="${c.id}">USE THIS</button>` }; }); }
@@ -7328,10 +7434,10 @@ SCR.summary = () => {
     <div class="panel" style="margin-bottom:calc(var(--u)*4)">${scorecardHTML(r, false)}</div>
     <div class="row" style="align-items:stretch">${cell('GROSS', S.total + ' (' + fmtPar(S.toPar) + ')', S.toPar < 0 ? 'red' : 'gold')}${S.net !== null ? cell('NET', S.net + ' (' + fmtPar(S.net - S.par) + ')', S.net < S.par ? 'red' : 'gold') : ''}${cell('FAIRWAYS', st.fir + '/' + st.firP)}${cell('GIR', st.gir + '/' + r.n)}${cell('PUTTS', st.putts)}${cell('COINS', '+' + fmt(r.coins))}</div>
     <div class="u1" style="margin-top:calc(var(--u)*3);line-height:1.7">${hc ? `HANDICAP: this round's differential <b>${hc.diff.toFixed(1)}</b> · index ${fmtIdx(hc.before)} → <b class="gold">${fmtIdx(hc.after)}</b>${hc.after === null ? ` (${save.hcp.rounds.length}/3 rounds)` : ''}` : 'Rounds of 1, 3 or 6 holes do not count for handicap.'}</div>
-    <div class="panel coinsum"><div class="u2">COINS EARNED</div>${(() => { const L = r.coinLog || {}, row = (l, v, why) => v ? `<tr><td>${l}</td><td class="dimtxt">${why}</td><td><b>+${fmt(v)}</b></td></tr>` : ''; return `<table class="lb">${row('HOLE SCORES', L.holes, 'pars, birdies and better pay most')}${row('HOLES PLAYED', L.played, '12 per hole, x course, tees and difficulty')}${row('BEAT YOUR ' + (S.net !== null ? 'HANDICAP' : 'PAR'), L.beat, S.beat ? 'by ' + S.beat + ' stroke' + (S.beat > 1 ? 's' : '') : '')}${row('PRIZE MONEY', L.prize, ev ? ev.E.name : '')}${row('SPONSOR', L.sponsor, mySponsor() ? mySponsor().name + ' retainer' : 'retainer')}${row('TROPHIES', S.trophy, 'unlocked this round')}<tr><td><b>TOTAL</b></td><td></td><td><b class="gold">+${fmt((r.coins || 0) + (S.trophy || 0))}</b></td></tr></table>`; })()}</div></div>
+    <div class="panel coinsum"><div class="u2">COINS EARNED</div>${(() => { const L = r.coinLog || {}, row = (l, v, why) => v ? `<tr><td>${l}</td><td class="dimtxt">${why}</td><td><b>+${fmt(v)}</b></td></tr>` : ''; return `<table class="lb">${row('HOLE SCORES', L.holes, 'pars, birdies and better pay most')}${row('HOLES PLAYED', L.played, '12 per hole, x course, tees and difficulty')}${row('BEAT YOUR ' + (S.net !== null ? 'HANDICAP' : 'PAR'), L.beat, S.beat ? 'by ' + S.beat + ' stroke' + (S.beat > 1 ? 's' : '') : '')}${row('PRIZE MONEY', L.prize, ev ? ev.E.name : '')}${row('SPONSOR', L.sponsor, mySponsor() ? mySponsor().name + ' retainer' : 'retainer')}${row('GRANT ASHWORTH', L.patron, 'his bonus for every win you thank him at')}${row('TROPHIES', S.trophy, 'unlocked this round')}<tr><td><b>TOTAL</b></td><td></td><td><b class="gold">+${fmt((r.coins || 0) + (S.trophy || 0))}</b></td></tr></table>`; })()}</div></div>
     ${S.spNews ? `<div class="panel spcall ${S.spNews.kind}"><div><div class="u2">${S.spNews.kind === 'drop' ? 'SPONSOR LOST' : S.spNews.kind === 'warn' ? 'SPONSOR WARNING' : S.spNews.kind === 'renew' ? 'DEAL RENEWED' : 'SPONSOR'}</div><div class="u1">${S.spNews.txt}</div></div>${S.spNews.poach ? `<button class="btn y" data-a="spOpen" data-v="${S.spNews.poach}">${sponsorDef(S.spNews.poach).name.toUpperCase()} WANTS YOU</button>` : ''}</div>` : ''}
     ${S.spOffer && save.sponsorOffer && !save.sponsor ? `<div class="panel spcall"><div><div class="u2">📞 ${sponsorDef(S.spOffer).name.toUpperCase()} CALLED</div><div class="u1">They want to sponsor you. Visit their office to sign.</div></div><button class="btn y" data-a="spOpen">VISIT ${sponsorDef(S.spOffer).name.toUpperCase()}</button></div>` : ''}
-    <div class="row" style="justify-content:flex-end;flex-wrap:wrap;margin-top:calc(var(--u)*3)">${S.best ? `<button class="btn y replayb" data-a="replay">▶ WATCH REPLAY<span class="u1">SHOT OF THE ROUND: ${esc(S.best.label.toUpperCase())}</span></button>` : ''}<button class="btn ${S.trial || ev || (save.shout && save.shout.cid === S.c.id) ? 'y' : 'b'}" data-a="toClub">${S.trial ? 'MEET THE CHAIRMAN' : ev && ev.mid && !ev.missed ? 'BACK TO THE CLUBHOUSE' : ev && !ev.mid ? 'PRIZE GIVING' : 'CLUBHOUSE'}</button><button class="btn b" data-a="go" data-v="board">PLAYER CARD</button>${ev ? '<button class="btn" data-a="go" data-v="events">EVENTS</button>' : '<button class="btn" data-a="again">PLAY AGAIN</button>'}<button class="btn g" data-a="go" data-v="title">MAIN MENU</button></div></div>`;
+    <div class="row" style="justify-content:flex-end;flex-wrap:wrap;margin-top:calc(var(--u)*3)">${save.ceremony ? `<div class="u1 dimtxt" style="align-self:center;margin-right:auto">Everyone's heading to the clubhouse for the prize giving.</div><button class="btn y" data-a="toClub">PRIZE GIVING ▶</button></div></div>` : ''}${save.ceremony ? '<!--' : ''}${S.best ? `<button class="btn y replayb" data-a="replay">▶ WATCH REPLAY<span class="u1">SHOT OF THE ROUND: ${esc(S.best.label.toUpperCase())}</span></button>` : ''}<button class="btn ${S.trial || ev || (save.shout && save.shout.cid === S.c.id) ? 'y' : 'b'}" data-a="toClub">${S.trial ? 'MEET THE CHAIRMAN' : ev && ev.mid && !ev.missed ? 'BACK TO THE CLUBHOUSE' : ev && !ev.mid ? 'PRIZE GIVING' : 'CLUBHOUSE'}</button><button class="btn b" data-a="go" data-v="board">PLAYER CARD</button>${ev ? '<button class="btn" data-a="go" data-v="events">EVENTS</button>' : '<button class="btn" data-a="again">PLAY AGAIN</button>'}<button class="btn g" data-a="go" data-v="title">MAIN MENU</button></div></div>${save.ceremony ? '-->' : ''}`;
 };
 const ordinal = n => (n % 100 >= 11 && n % 100 <= 13) ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th';
 SCR.chsum = () => {
@@ -7393,7 +7499,7 @@ function teeOff(cfg, fee, label) {
   if (fee > 0) confirmBox(`${label}<br><br>Total <b>${priceHTML(fee)}</b>`, go); else go();
 }
 const ACT = {
-  go: v => { if (v === 'title' && !save.seenHelp) { save.seenHelp = true; persist(); } closeModal(); showScreen(v); },
+  go: v => { if (save.ceremony && ['setup', 'events', 'practice'].includes(v)) { ACT.ceremonyFirst(); return; } if (v === 'title' && !save.seenHelp) { save.seenHelp = true; persist(); } closeModal(); showScreen(v); },
   resume: () => resumeRound(),
   selCourse: v => { SEL.course = v; rerender(); },
   join: v => { const c = courseById(v); if (((save.holesAt || {})[c.id] || 0) < 6) { SFX.play('err'); toast(`Play at least <b>6 holes</b> at ${c.name} before you can join`); return; } confirmBox(`Join <b>${c.name}</b>?<br><br>One-time fee <b>${priceHTML(c.member)}</b>. No more green fees here, ever.`, () => spend(c.member, () => { save.members.push(c.id); toast(`Welcome to <b>${c.name}</b>!`); })); },
@@ -7414,7 +7520,8 @@ const ACT = {
     if (E.fmt === 'gross' && idx > E.maxIdx) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">HANDICAP TOO HIGH</div><div class="u1">This one needs handicap <b>${fmtIdx(E.maxIdx)}</b> or better. You are <b class="gold">${fmtIdx(idx)}</b>. Try a net event.</div><button class="btn g" data-m="close">CLOSE</button></div>`); return; } tournEnter(E, false); },
   again: () => { if (!G.lastCfg) { showScreen('setup'); return; } const c = courseById(G.lastCfg.courseId); teeOff(Object.assign({}, G.lastCfg, { event: null }), isMember(c.id) ? 0 : feeFor(c, G.lastCfg.n), `Green fee at ${c.name}`); },
   buyTicket: v => { const c = courseById(v); confirmBox(`Fly to <b>${c.name}</b>?<br><span class="u1">${priceHTML(c.ticket)} once. After that you can play here any time.</span>`, () => { closeModal(); spend(c.ticket, () => { save.tickets.push(v); toast(`✈ Ticket booked: <b>${c.name}</b>`); }); }); },
-  toClub: () => { const S = G.summary; if (!S) return; if (S.trial) { S.trial = false; augustaTrialClub(); return; }
+  ceremonyFirst: () => { toast('The prize giving is waiting at the clubhouse first'); SFX.play('err'); },
+  toClub: () => { const S = G.summary; if (save.ceremony) { startCeremony(); return; } if (!S) return; if (S.trial) { S.trial = false; augustaTrialClub(); return; }
     const e2 = S.ev;
     if (e2 && e2.mid && !e2.missed) { openClubhouse(S.c.id, { back: 'events', meX: 300 }); return; }
     openClubhouse(S.c.id, { back: 'summary', meX: e2 && !e2.mid ? CH_BAR_X : undefined });
@@ -7697,6 +7804,7 @@ function closeClubhouse() { const back = G.ch && G.ch.back; G.ch = null; showScr
 function chWalkTo(x, then) { const c = G.ch; if (!c) return; c.me.tx = clamp(x, 40, CH_W - 40); c.me.then = then || null; }
 function updateClubhouse(dt) {
   const c = G.ch; if (!c) return; c.t += dt;
+  if (c.venue) { c.x = c.tgt = 0; c.moving = false; c.me.dir = 0; if (c.script) c.script.t += dt; if (c.talk) { c.talk.t += dt; if (c.talk.t > 5.5) c.talk = null; } venueUpdate(c, dt); chSnapStep(); return; }
   const me = c.me, busy = c.serve || (c.party && c.party.t < 10.5) || c.script;
   let mv = 0;
   if (!busy) { if (me.dir) { mv = me.dir; me.tx = null; me.then = null; } else if (me.tx !== null) { const d = me.tx - me.x; if (Math.abs(d) < 2) { me.x = me.tx; me.tx = null; const f = me.then; me.then = null; if (f) f(); } else mv = Math.sign(d); } }
@@ -7724,10 +7832,16 @@ function chSnapStep() {
   const c = G.ch; if (!c || !c.tv || !c.tv.q.length) return;
   G.mustDraw = true; /* this draws on the main canvas: the next render must paint over it (never skipped) */
   const [hi, kind, u] = c.tv.q.shift(), crs = courseById(c.cid), key = c.cid + '_' + hi;
-  let h = chHoleCache[key]; if (!h) { h = genHole(crs, hi, 'champ'); renderHole(h); chHoleCache[key] = h; }
+  let h, cam, RP = null;
+  if (kind === 'rp') { /* a frame of the TV replay: the camera follows the recorded ball */
+    RP = c.rp; if (!RP) return; h = RP.h; const n = RP.pts.length, idx = Math.round(u / (RP.N - 1) * (n - 1)), B = RP.pts[idx], S = RP.pts[0], E = RP.pts[n - 1], dir = Math.atan2(E[1] - S[1], E[0] - S[0]) || 0, len = Math.hypot(E[0] - S[0], E[1] - S[1]);
+    if (len < 18) { const gz = groundZ(h, S[0], S[1]); cam = { x: S[0] - Math.cos(dir) * 4.5, y: S[1] - Math.sin(dir) * 4.5, z: gz + 1.9, yaw: dir, pitch: .22 }; }
+    else { const back = 18, gz = groundZ(h, B[0], B[1]), cz = Math.max(gz + 5, B[2] * .8 + 4); cam = { x: B[0] - Math.cos(dir) * back, y: B[1] - Math.sin(dir) * back, z: cz, yaw: dir, pitch: Math.atan2(cz - B[2], back) * .85 + .03 }; }
+    RP.idx = idx; }
+  else { h = chHoleCache[key]; if (!h) { h = genHole(crs, hi, 'champ'); renderHole(h); chHoleCache[key] = h; } }
   const tee = h.tee, pin = h.pin, ay = Math.atan2(pin.y - tee.y, pin.x - tee.x);
-  let cam;
-  if (kind === 'win') cam = { x: pin.x + Math.cos(ay) * 34, y: pin.y + Math.sin(ay) * 34, z: 9, yaw: ay + Math.PI, pitch: .1 };
+  if (RP) { /* camera already set */ }
+  else if (kind === 'win') cam = { x: pin.x + Math.cos(ay) * 34, y: pin.y + Math.sin(ay) * 34, z: 9, yaw: ay + Math.PI, pitch: .1 };
   else { /* a drone flying the hole: behind the tee, then down the fairway, ending over the green */
     const s0 = -30 + (h.len + 10) * u, p = pathAt(h, clamp(s0, 0, h.len)), q = pathAt(h, clamp(s0 + 70, 0, h.len)), yw = Math.atan2(q.y - p.y, q.x - p.x) || ay, back = s0 < 0 ? -s0 : 0;
     cam = { x: p.x - Math.cos(yw) * (back + 14), y: p.y - Math.sin(yw) * (back + 14), z: 18 + 10 * Math.sin(u * Math.PI), yaw: yw, pitch: .26 + .1 * u }; }
@@ -7739,10 +7853,63 @@ function chSnapStep() {
     const W = kind === 'win' ? 300 : 256, Hh = kind === 'win' ? 138 : 144, out = mkCanvas(W, Hh), o = out.getContext('2d'); o.imageSmoothingEnabled = true;
     const sw = cv.width, sh = cv.height, ar = W / Hh, cw = Math.min(sw, sh * ar), chh = cw / ar;
     o.drawImage(cv, (sw - cw) / 2, Math.max(0, sh * .5 - chh * .55), cw, chh, 0, 0, W, Hh);
-    if (kind === 'win') c.win = out;
+    if (RP) { /* the tracer and the ball drawn over the frame, like TV coverage */
+      const sx = (sw - cw) / 2, sy = Math.max(0, sh * .5 - chh * .55), map = q => [(q.x * RES - sx) * W / cw, (q.y * RES - sy) * Hh / chh], hz = pt => pt[2] - groundZ(h, pt[0], pt[1]);
+      o.strokeStyle = 'rgba(255,70,55,.92)'; o.lineWidth = 1.6; o.lineCap = 'round'; o.beginPath(); let first = true; const st = Math.max(1, Math.floor(RP.idx / 80));
+      for (let i = 0; i <= RP.idx; i += st) { const q = proj(CAM, RP.pts[i][0], RP.pts[i][1], hz(RP.pts[i])); if (!q) continue; const [X, Y] = map(q); if (first) o.moveTo(X, Y); else o.lineTo(X, Y); first = false; } o.stroke();
+      const B = RP.pts[RP.idx], qb = proj(CAM, B[0], B[1], hz(B)); if (qb && !(RP.holed && RP.idx >= RP.pts.length - 1)) { const [X, Y] = map(qb), r = Math.max(1.6, .05 * qb.s * RES * W / cw); o.fillStyle = '#111'; o.beginPath(); o.arc(X, Y - r, r + .6, 0, 6.29); o.fill(); o.fillStyle = '#fff'; o.beginPath(); o.arc(X, Y - r, r, 0, 6.29); o.fill(); }
+      RP.frames.push(out); }
+    else if (kind === 'win') c.win = out;
     else { let sq = c.tv.seqs.find(x => x.hole === hi + 1); if (!sq) { sq = { hole: hi + 1, frames: [] }; c.tv.seqs.push(sq); } sq.frames.push(out); }
   } catch (e) { /* a failed shot just leaves the TV on the previous one */ }
   finally { G.bgH = keepH; Object.assign(CAM, keepC); G.scr = keepScr; PXR = 1; }
+}
+/* the champion and the trophy through the prize giving: reach for it, hold it at the chest, lift it high, and after
+   the last word lift it once more for the room before it goes into the cabinet (it is not carried around after) */
+const cerRecv = s => s.recv === undefined ? 2 : s.recv, cerRaise = s => s.raise === undefined ? 3 : s.raise;
+function cerHeld(c) {
+  const s = c.script;
+  if (s && s.host && !s.noTrophy) { const r = cerRecv(s); if (s.step === r) return s.t >= .5 ? 'hold' : null; if (s.step === cerRaise(s)) return 'raise'; return s.step > r ? 'hold' : null; }
+  if (c.champ !== undefined && !c.trophyAway) { const d = c.t - c.champ; if (d < 3.5) return 'raise'; if (d < 6) return 'hold'; c.trophyAway = true; }
+  return null;
+}
+const cerRaiseT = c => c.script ? c.script.t : c.t - c.champ;
+/* a speech bubble over someone's head */
+function drawTalkBubble(x, c, maxX) {
+  if (!c.talk) return; { const tk = c.talk, a = Math.min(1, tk.t * 5, (5.5 - tk.t) * 2); x.globalAlpha = a; x.font = '600 8px "Barlow", sans-serif';
+    const words = tk.text.split(' '), lines = []; let cur = ''; for (const w of words) { const tst = cur ? cur + ' ' + w : w; if (x.measureText(tst).width > 132) { lines.push(cur); cur = w; } else cur = tst; } if (cur) lines.push(cur);
+    const bw = Math.max(...lines.map(l => x.measureText(l).width)) + 14, bh = lines.length * 10 + 16, bx = clamp(tk.x - bw / 2, 6, maxX - bw - 6), by = tk.y - bh - 8;
+    x.fillStyle = 'rgba(252,249,242,.97)'; x.beginPath(); x.roundRect ? x.roundRect(bx, by, bw, bh, 6) : x.rect(bx, by, bw, bh); x.fill(); x.beginPath(); x.moveTo(tk.x - 4, by + bh); x.lineTo(tk.x + 4, by + bh); x.lineTo(tk.x, by + bh + 6); x.closePath(); x.fill();
+    x.fillStyle = '#7a5a2a'; x.font = '700 7px "Barlow Condensed", sans-serif'; x.fillText(tk.name.toUpperCase(), bx + 7, by + 10); x.fillStyle = '#2b1d14'; x.font = '600 8px "Barlow", sans-serif'; lines.forEach((l, i) => x.fillText(l, bx + 7, by + 20 + i * 10)); x.globalAlpha = 1; }
+}
+/* the trophy, base at (tx, ty) */
+function drawTrophyAt(x, tx, ty, sc) { x.save(); x.translate(tx, ty); if (sc !== 1) x.scale(sc, sc); const g = x.createLinearGradient(-8, 0, 8, 0); g.addColorStop(0, '#a87a1a'); g.addColorStop(.4, '#ffe58a'); g.addColorStop(1, '#b8861e'); x.fillStyle = g;
+      x.beginPath(); x.moveTo(-7, -20); x.lineTo(7, -20); x.quadraticCurveTo(7, -8, 1.5, -6); x.lineTo(1.5, -2); x.lineTo(4.5, 0); x.lineTo(-4.5, 0); x.lineTo(-1.5, -2); x.lineTo(-1.5, -6); x.quadraticCurveTo(-7, -8, -7, -20); x.fill();
+      x.strokeStyle = '#e8c45a'; x.lineWidth = 1.4; x.beginPath(); x.arc(-7.5, -15, 3.2, 1.2, 4.6); x.stroke(); x.beginPath(); x.arc(7.5, -15, 3.2, -1.5, 1.9); x.stroke(); x.fillStyle = '#2b1d14'; x.fillRect(-5, 0, 10, 3); x.fillStyle = 'rgba(255,255,255,.6)'; x.fillRect(-4.5, -19, 1.2, 9); x.restore(); }
+/* what is on the TV (also the giant screens at the big prize givings): your replay, an ad, or drone shots of the course */
+function chTvDraw(x, c, tx0, ty0, tw, th) {
+      const T = c.tv, seqs = T ? T.seqs.filter(q => q.frames.length >= 7) : [];
+      const adT = c.t % 32, adOn = adT > 25 && seqs && seqs.length;
+      const R2 = c.rp, rpOn = c.rpShow && R2 && R2.frames.length >= R2.N;
+      if (rpOn) { /* the replay of your shot of the day, on a loop with a short hold at the end */
+        const FD = .3, loop = R2.N * FD + 1.6, tt = (c.t - (c.rpT || 0)) % loop, fi = Math.min(R2.N - 1, Math.floor(tt / FD));
+        x.drawImage(R2.frames[fi], tx0, ty0, tw, th);
+        x.textAlign = 'left'; x.font = '700 7px "Barlow Condensed", sans-serif'; const cap = 'REPLAY  ·  ' + R2.label.toUpperCase(), cw2 = Math.min(tw - 12, x.measureText(cap).width + 11);
+        x.fillStyle = 'rgba(8,20,14,.86)'; x.fillRect(tx0 + 4, ty0 + th - 15, cw2, 11); x.fillStyle = '#e53935'; x.fillRect(tx0 + 4, ty0 + th - 15, 2, 11); x.fillStyle = '#fff'; fitText(x, cap, tx0 + 9, ty0 + th - 7, cw2 - 8, '700', 7, '"Barlow Condensed", sans-serif');
+        if (fi === R2.N - 1 && R2.holed) { x.fillStyle = 'rgba(8,20,14,.8)'; x.fillRect(tx0 + tw / 2 - 22, ty0 + 8, 44, 12); x.fillStyle = '#f5c451'; x.textAlign = 'center'; x.font = '800 8px "Barlow Condensed", sans-serif'; x.fillText('IN THE HOLE!', tx0 + tw / 2, ty0 + 17); x.textAlign = 'left'; } }
+      else if (adOn) chTvAd(x, tx0, ty0, tw, th, Math.floor(c.t / 32), adT - 25);
+      else if (seqs.length) { const FD = 1.4, lens = seqs.map(q => q.frames.length * FD), tot = lens.reduce((a, b) => a + b, 0); let tt = c.t % tot, k2 = 0; while (tt > lens[k2]) { tt -= lens[k2]; k2++; }
+        const sq = seqs[k2], fi = Math.min(sq.frames.length - 1, Math.floor(tt / FD)), f = (tt % FD) / FD, A = sq.frames[fi], B = sq.frames[Math.min(sq.frames.length - 1, fi + 1)];
+        x.save(); x.beginPath(); x.rect(tx0, ty0, tw, th); x.clip();
+        const zoomDraw = (img, z, a) => { const sw2 = img.width / z, sh2 = img.height / z; x.globalAlpha = a; x.drawImage(img, (img.width - sw2) / 2, (img.height - sh2) * .55, sw2, sh2, tx0, ty0, tw, th); };
+        zoomDraw(A, 1 + f * .18, 1); if (B !== A && f > .55) zoomDraw(B, 1 + (f - 1) * .18 + .01, (f - .55) / .45); x.globalAlpha = 1;
+        if (fi === 0 && f < .12) { x.fillStyle = `rgba(0,0,0,${(1 - f / .12) * .9})`; x.fillRect(tx0, ty0, tw, th); }
+        x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+        const hd = courseById(c.cid).holes[sq.hole - 1], cap = `HOLE ${sq.hole}  ·  PAR ${hd.p || '-'}  ·  ${hd.y ? hd.y + 'Y' : ''}`.replace(/\s+·\s*$/, ''); x.font = '700 7px "Barlow Condensed", sans-serif'; const cw2 = Math.min(tw - 12, x.measureText(cap).width + 11);
+        x.fillStyle = 'rgba(8,20,14,.86)'; x.fillRect(tx0 + 4, ty0 + th - 15, cw2, 11); x.fillStyle = '#f5c451'; x.fillRect(tx0 + 4, ty0 + th - 15, 2, 11); x.fillStyle = '#fff'; fitText(x, cap, tx0 + 9, ty0 + th - 7, cw2 - 8, '700', 7, '"Barlow Condensed", sans-serif');
+        x.fillStyle = 'rgba(8,20,14,.86)'; x.fillRect(tx0 + tw - 27, ty0 + 4, 23, 9); x.fillStyle = '#e53935'; x.beginPath(); x.arc(tx0 + tw - 22, ty0 + 8.5, 1.8, 0, 6.29); x.fill(); x.fillStyle = '#fff'; x.font = '700 6px "Barlow Condensed", sans-serif'; x.fillText('LIVE', tx0 + tw - 18.5, ty0 + 10.7);
+        x.restore(); }
+      else { const g = x.createLinearGradient(0, ty0, 0, ty0 + th); g.addColorStop(0, '#173a2a'); g.addColorStop(1, '#0d2219'); x.fillStyle = g; x.fillRect(tx0, ty0, tw, th); x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '700 7px "Barlow Condensed", sans-serif'; x.textAlign = 'center'; x.fillText('GOLF CHANNEL', tx0 + tw / 2, ty0 + th / 2 + 2); x.textAlign = 'left'; }
 }
 /* draw text no wider than maxW: shrink the font until it fits */
 function fitText(x, txt, X, Y, maxW, weight, size, fam) { let sz = size; x.font = `${weight} ${sz}px ${fam}`; while (sz > 3.5 && x.measureText(txt).width > maxW) { sz -= .25; x.font = `${weight} ${sz}px ${fam}`; } x.fillText(txt, X, Y); }
@@ -7868,6 +8035,7 @@ function chPeople() {
 }
 /* the main canvas draws the room while this screen is up */
 function drawClubhouse() {
+  if (G.ch.venue) { drawVenue(G.ch); return; }
   const c = G.ch, st = chStyle(c.cid), I = st.in, x = ctx, px = c.x;
   x.setTransform(RES, 0, 0, RES, -px * RES, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
   const vg = (y0, y1, a, b) => { const g = x.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
@@ -7964,9 +8132,7 @@ function drawClubhouse() {
       else if (/chowder|stew|soup|grits/.test(nm)) { x.fillStyle = '#e9e4da'; x.beginPath(); x.ellipse(0, -2, 5, 3, 0, 0, Math.PI); x.fill(); x.fillStyle = /stew/.test(nm) ? '#7a4a2a' : '#efe2c0'; x.beginPath(); x.ellipse(0, -2, 4.4 * left, 1.2, 0, 0, 6.29); x.fill(); }
       else { x.fillStyle = '#d6a24a'; x.beginPath(); x.ellipse(-1, -1.6, 4 * left, 1.8, 0, 0, 6.29); x.fill(); x.fillStyle = '#4f8a3a'; x.beginPath(); x.ellipse(3, -1.4, 2.2, 1.2, 0, 0, 6.29); x.fill(); }
       x.restore(); };
-    const trophyAt = (tx, ty) => { x.save(); x.translate(tx, ty); const g = x.createLinearGradient(-8, 0, 8, 0); g.addColorStop(0, '#a87a1a'); g.addColorStop(.4, '#ffe58a'); g.addColorStop(1, '#b8861e'); x.fillStyle = g;
-      x.beginPath(); x.moveTo(-7, -20); x.lineTo(7, -20); x.quadraticCurveTo(7, -8, 1.5, -6); x.lineTo(1.5, -2); x.lineTo(4.5, 0); x.lineTo(-4.5, 0); x.lineTo(-1.5, -2); x.lineTo(-1.5, -6); x.quadraticCurveTo(-7, -8, -7, -20); x.fill();
-      x.strokeStyle = '#e8c45a'; x.lineWidth = 1.4; x.beginPath(); x.arc(-7.5, -15, 3.2, 1.2, 4.6); x.stroke(); x.beginPath(); x.arc(7.5, -15, 3.2, -1.5, 1.9); x.stroke(); x.fillStyle = '#2b1d14'; x.fillRect(-5, 0, 10, 3); x.fillStyle = 'rgba(255,255,255,.6)'; x.fillRect(-4.5, -19, 1.2, 9); x.restore(); };
+    const trophyAt = (tx, ty) => drawTrophyAt(x, tx, ty, 1);
     const bottleAt = (bx2, by2, tilt, col) => { x.save(); x.translate(bx2, by2); x.rotate(tilt); x.fillStyle = col; x.beginPath(); x.roundRect ? x.roundRect(-2.2, -10, 4.4, 11, 1.2) : x.rect(-2.2, -10, 4.4, 11); x.fill(); x.fillRect(-.9, -14, 1.8, 4.5); x.fillStyle = '#efe6cf'; x.fillRect(-2.2, -6, 4.4, 3); x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(-1.5, -9, .7, 8); x.restore(); };
   { const bx0 = 380, bx1 = 740;
     x.fillStyle = vg(58, 150, shadeHex(I.woodD, 1.1), shadeHex(I.woodD, .8)); x.fillRect(bx0, 58, bx1 - bx0, 98);
@@ -7976,21 +8142,7 @@ function drawClubhouse() {
         x.fillStyle = col; x.beginPath(); x.roundRect ? x.roundRect(xx, yy - bh, bw2, bh, 1.2) : x.rect(xx, yy - bh, bw2, bh); x.fill(); x.fillRect(xx + bw2 * .3, yy - bh - 4, bw2 * .4, 4); x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(xx + .6, yy - bh + 2, .8, bh - 4); if (R() < .6) { x.fillStyle = '#efe6cf'; x.fillRect(xx, yy - bh * .6, bw2, bh * .3); } } }
     { /* the TV: live coverage of this course, cutting between drone shots */
       const tx0 = bx0 + 118, ty0 = 26, tw = 124, th = 70; x.fillStyle = '#0b0b0c'; x.beginPath(); x.roundRect ? x.roundRect(tx0 - 3, ty0 - 3, tw + 6, th + 6, 2) : x.rect(tx0 - 3, ty0 - 3, tw + 6, th + 6); x.fill(); x.fillStyle = '#1a1a1c'; x.fillRect(tx0 + tw / 2 - 2, ty0 - 10, 4, 7);
-      const T = c.tv, seqs = T ? T.seqs.filter(q => q.frames.length >= 7) : [];
-      const adT = c.t % 32, adOn = adT > 25 && seqs && seqs.length;
-      if (adOn) chTvAd(x, tx0, ty0, tw, th, Math.floor(c.t / 32), adT - 25);
-      else if (seqs.length) { const FD = 1.4, lens = seqs.map(q => q.frames.length * FD), tot = lens.reduce((a, b) => a + b, 0); let tt = c.t % tot, k2 = 0; while (tt > lens[k2]) { tt -= lens[k2]; k2++; }
-        const sq = seqs[k2], fi = Math.min(sq.frames.length - 1, Math.floor(tt / FD)), f = (tt % FD) / FD, A = sq.frames[fi], B = sq.frames[Math.min(sq.frames.length - 1, fi + 1)];
-        x.save(); x.beginPath(); x.rect(tx0, ty0, tw, th); x.clip();
-        const zoomDraw = (img, z, a) => { const sw2 = img.width / z, sh2 = img.height / z; x.globalAlpha = a; x.drawImage(img, (img.width - sw2) / 2, (img.height - sh2) * .55, sw2, sh2, tx0, ty0, tw, th); };
-        zoomDraw(A, 1 + f * .18, 1); if (B !== A && f > .55) zoomDraw(B, 1 + (f - 1) * .18 + .01, (f - .55) / .45); x.globalAlpha = 1;
-        if (fi === 0 && f < .12) { x.fillStyle = `rgba(0,0,0,${(1 - f / .12) * .9})`; x.fillRect(tx0, ty0, tw, th); }
-        x.textAlign = 'left'; x.textBaseline = 'alphabetic';
-        const hd = courseById(c.cid).holes[sq.hole - 1], cap = `HOLE ${sq.hole}  ·  PAR ${hd.p || '-'}  ·  ${hd.y ? hd.y + 'Y' : ''}`.replace(/\s+·\s*$/, ''); x.font = '700 7px "Barlow Condensed", sans-serif'; const cw2 = Math.min(tw - 12, x.measureText(cap).width + 11);
-        x.fillStyle = 'rgba(8,20,14,.86)'; x.fillRect(tx0 + 4, ty0 + th - 15, cw2, 11); x.fillStyle = '#f5c451'; x.fillRect(tx0 + 4, ty0 + th - 15, 2, 11); x.fillStyle = '#fff'; fitText(x, cap, tx0 + 9, ty0 + th - 7, cw2 - 8, '700', 7, '"Barlow Condensed", sans-serif');
-        x.fillStyle = 'rgba(8,20,14,.86)'; x.fillRect(tx0 + tw - 27, ty0 + 4, 23, 9); x.fillStyle = '#e53935'; x.beginPath(); x.arc(tx0 + tw - 22, ty0 + 8.5, 1.8, 0, 6.29); x.fill(); x.fillStyle = '#fff'; x.font = '700 6px "Barlow Condensed", sans-serif'; x.fillText('LIVE', tx0 + tw - 18.5, ty0 + 10.7);
-        x.restore(); }
-      else { const g = x.createLinearGradient(0, ty0, 0, ty0 + th); g.addColorStop(0, '#173a2a'); g.addColorStop(1, '#0d2219'); x.fillStyle = g; x.fillRect(tx0, ty0, tw, th); x.fillStyle = 'rgba(255,255,255,.5)'; x.font = '700 7px "Barlow Condensed", sans-serif'; x.textAlign = 'center'; x.fillText('GOLF CHANNEL', tx0 + tw / 2, ty0 + th / 2 + 2); x.textAlign = 'left'; }
+      chTvDraw(x, c, tx0, ty0, tw, th);
       x.fillStyle = 'rgba(255,255,255,.06)'; x.beginPath(); x.moveTo(tx0, ty0); x.lineTo(tx0 + 40, ty0); x.lineTo(tx0 + 10, ty0 + th); x.lineTo(tx0, ty0 + th); x.closePath(); x.fill(); }
     /* bartender behind the counter, polishing a glass */
     x.save(); x.beginPath(); x.rect(380, 0, 360, 213); x.clip(); drawGolferFront(c.barman, BX, BY, BK, bP); x.restore();
@@ -8028,7 +8180,7 @@ function drawClubhouse() {
         else if (t2 >= giveT) { if (t2 < giveT + .5) { const p0 = hand(BX, BY, BK, bP, 'r'), u = (t2 - giveT) / .5; glassAt(lerp(p0[0], mh2[0], u), lerp(p0[1], mh2[1], u), kind, 1, 0); } else glassAt(mh2[0], mh2[1], kind, Math.max(.12, 1 - (ES ? ES.sips : 0) * .22), myP2.tilt || 0); } }; }
     else c.late = null;
     /* the Chairman and Hemi after the Augusta round */
-    if (c.script && c.host) { const st2 = c.script.step, hp0 = st2 === 1 ? chPose('shake_c', c.script.t) : st2 === 2 ? chPose('coffer', Math.min(.35, c.script.t)) : chPose('ctalk', c.script.t); drawGolferFront(c.host, 528, 252, 1.6, hp0); if (st2 === 2 && c.script.t < .5) { const hh = hand(528, 252, 1.6, hp0, 'r'); trophyAt(hh[0], hh[1]); } }
+    if (c.script && c.host) { const st2 = c.script.step, hp0 = st2 === 1 ? chPose('shake_c', c.script.t) : st2 === cerRecv(c.script) && !c.script.noTrophy ? chPose('coffer', Math.min(.35, c.script.t)) : chPose('ctalk', c.script.t); drawGolferFront(c.host, 528, 252, 1.6, hp0); if (st2 === cerRecv(c.script) && c.script.t < .5 && !c.script.noTrophy) { const hh = hand(528, 252, 1.6, hp0, 'r'); trophyAt(hh[0], hh[1]); } }
     if (c.script && c.chair) { drawGolferFront(HEMI, 606, 252, 1.55, chPose(c.script.step >= 2 ? 'cclap' : 'idle', c.t)); drawGolferFront(c.chair, 527, 252, 1.6, chPose(c.script.shake ? 'shake_c' : 'idle', c.script.t)); }
     for (const lx of [426, 700]) { x.strokeStyle = '#2b2b2b'; x.lineWidth = .8; x.beginPath(); x.moveTo(lx, 0); x.lineTo(lx, 40); x.stroke(); if (I.lamp === 'chandelier') { x.fillStyle = '#c9a04a'; x.fillRect(lx - 14, 40, 28, 3); for (let i = -2; i <= 2; i++) { x.fillStyle = '#fff4d6'; x.fillRect(lx + i * 6 - 1, 34, 2.5, 6); } } else if (I.lamp === 'lantern') { x.fillStyle = '#2b2b2b'; x.fillRect(lx - 7, 40, 14, 14); x.fillStyle = '#ffdca0'; x.fillRect(lx - 5, 42, 10, 10); } else { x.fillStyle = I.accent; x.beginPath(); x.moveTo(lx - 12, 52); x.lineTo(lx - 4, 40); x.lineTo(lx + 4, 40); x.lineTo(lx + 12, 52); x.closePath(); x.fill(); }
       const g = x.createRadialGradient(lx, 52, 2, lx, 90, 110); g.addColorStop(0, 'rgba(255,225,170,.35)'); g.addColorStop(1, 'rgba(255,225,170,0)'); x.fillStyle = g; x.fillRect(lx - 110, 30, 220, 136); } }
@@ -8047,7 +8199,7 @@ function drawClubhouse() {
   const people = chPeople(), pt = c.party ? c.party.t : 0, draws = [];
   people.forEach((p, i) => { draws.push({ x: p.x, f: () => {
     if (p.walking) { DC.save(); if (p.dir < 0) { DC.translate(p.x, 0); DC.scale(-1, 1); DC.translate(-p.x, 0); } drawGolferSide(p.g, p.x, CH_FLOOR, p.g.k || 1.5, walkPose(c.t + i, 7.5), {}); DC.restore(); return; }
-    const clapping = (c.script && c.host && c.script.step >= 1) || (c.champ !== undefined && c.t - c.champ < 6);
+    const clapping = (c.script && c.host && c.script.step >= 1) || (c.champ !== undefined && c.t - c.champ < 5);
     const P0 = clapping ? chPose('cclap', c.t + i) : c.party && pt > 4 && pt < 7 ? chPose('ccheers', pt - 4 - i * .07) : c.party && pt >= 7 && pt < 10.5 ? chPose('cdrink', pt - 7 + i * .4) : c.talk && c.talkWho === p.who ? chPose('ctalk', c.talk.t) : chPose('idle', c.t + 2 + i * 1.7);
     drawGolferFront(p.g, p.x, CH_FLOOR, p.g.k || 1.5, P0);
     if (c.party && pt > 3.4 && pt < 10.5) { const hp = hand(p.x, CH_FLOOR, p.g.k || 1.5, P0, 'r'); glassAt(hp[0], hp[1], 'beer', Math.max(.3, 1 - Math.max(0, pt - 6) * .15), P0.tilt || 0); } } }); });
@@ -8055,8 +8207,8 @@ function drawClubhouse() {
     let P0; const sv2 = c.serve;
     if (c.moving) P0 = null;
     else if (c.script && c.script.shake) P0 = chPose('shake_g', c.script.t);
-    else if (c.script && c.host && c.script.step === 2) P0 = chPose('creach', c.script.t);
-    else if (c.champ !== undefined) P0 = chPose('cheer', c.t - c.champ < 4 ? c.t - c.champ : 0);
+    else if (cerHeld(c)) P0 = cerHeld(c) === 'raise' ? chPose('craise', cerRaiseT(c)) : chPose('chold', c.t);
+    else if (c.script && c.host && c.script.step === cerRecv(c.script) && !c.script.noTrophy) P0 = chPose('creach', c.script.t);
     else if (sv2) { const t2 = sv2.t; P0 = t2 < sv2.give - .3 ? chPose('idle', c.t) : t2 < sv2.give + .5 ? chPose('creach', t2 - sv2.give + .3) : (c.eat = eatPose(t2 - sv2.give - .5, sv2.m[2] === 'food' || sv2.m[2] === 'pie')).P; }
     else if (c.party && pt > 4 && pt < 7) P0 = chPose('ccheers', pt - 4);
     else if (c.party && pt >= 7 && pt < 10.5) P0 = chPose('cdrink', pt - 7);
@@ -8065,17 +8217,13 @@ function drawClubhouse() {
     draws.push({ x: me.x, me: true, f: () => {
       if (!P0) { DC.save(); if (me.face < 0) { DC.translate(me.x, 0); DC.scale(-1, 1); DC.translate(-me.x, 0); } drawGolferSide(g, me.x, CH_FLOOR, 1.55, walkPose(me.walk, 7.5), {}); DC.restore(); }
       else drawGolferFront(g, me.x, CH_FLOOR, 1.55, P0);
-      if (P0 && ((c.script && c.host && c.script.step === 2 && c.script.t >= .5) || c.champ !== undefined)) { const hl = hand(me.x, CH_FLOOR, 1.55, P0, 'l'), hr = hand(me.x, CH_FLOOR, 1.55, P0, 'r'); trophyAt((hl[0] + hr[0]) / 2, Math.min(hl[1], hr[1]) + 2); }
+      if (P0 && cerHeld(c)) { const hl = hand(me.x, CH_FLOOR, 1.55, P0, 'l'), hr = hand(me.x, CH_FLOOR, 1.55, P0, 'r'); trophyAt((hl[0] + hr[0]) / 2, Math.min(hl[1], hr[1]) + 1.5); }
       if (c.party && pt > 3.4 && pt < 10.5 && P0) { const hp = hand(me.x, CH_FLOOR, 1.55, P0, 'r'); glassAt(hp[0], hp[1], 'beer', Math.max(.3, 1 - Math.max(0, pt - 6) * .1), P0.tilt || 0); } } }); }
   draws.sort((p, q) => (p.me ? 1 : 0) - (q.me ? 1 : 0)).forEach(d => d.f());
   if (c.late) c.late();
   if (c.party && pt > 5 && pt < 5.6) { x.fillStyle = 'rgba(255,240,190,.7)'; for (let i = 0; i < 10; i++) { const a = i / 10 * 6.29 + pt * 3; x.fillRect(540 + Math.cos(a) * 30, 130 + Math.sin(a) * 10, 1.5, 1.5); } }
   /* speech bubble */
-  if (c.talk) { const tk = c.talk, a = Math.min(1, tk.t * 5, (5.5 - tk.t) * 2); x.globalAlpha = a; x.font = '600 8px "Barlow", sans-serif';
-    const words = tk.text.split(' '), lines = []; let cur = ''; for (const w of words) { const tst = cur ? cur + ' ' + w : w; if (x.measureText(tst).width > 132) { lines.push(cur); cur = w; } else cur = tst; } if (cur) lines.push(cur);
-    const bw = Math.max(...lines.map(l => x.measureText(l).width)) + 14, bh = lines.length * 10 + 16, bx = clamp(tk.x - bw / 2, 6, CH_W - bw - 6), by = tk.y - bh - 8;
-    x.fillStyle = 'rgba(252,249,242,.97)'; x.beginPath(); x.roundRect ? x.roundRect(bx, by, bw, bh, 6) : x.rect(bx, by, bw, bh); x.fill(); x.beginPath(); x.moveTo(tk.x - 4, by + bh); x.lineTo(tk.x + 4, by + bh); x.lineTo(tk.x, by + bh + 6); x.closePath(); x.fill();
-    x.fillStyle = '#7a5a2a'; x.font = '700 7px "Barlow Condensed", sans-serif'; x.fillText(tk.name.toUpperCase(), bx + 7, by + 10); x.fillStyle = '#2b1d14'; x.font = '600 8px "Barlow", sans-serif'; lines.forEach((l, i) => x.fillText(l, bx + 7, by + 20 + i * 10)); x.globalAlpha = 1; }
+  drawTalkBubble(x, c, CH_W);
   /* warm vignette */
   x.setTransform(RES, 0, 0, RES, 0, 0); const vgr = x.createRadialGradient(VW / 2, VH / 2, VH * .4, VW / 2, VH / 2, VW * .7); vgr.addColorStop(0, 'rgba(20,10,0,0)'); vgr.addColorStop(1, 'rgba(20,10,0,.45)'); x.fillStyle = vgr; x.fillRect(0, 0, VW, VH);
   PXR = 1; x.imageSmoothingEnabled = false;
@@ -8117,6 +8265,7 @@ function honourRows(cid) {
 /* ---------- the screen on top of the room: buttons, menus, chat ---------- */
 SCR.clubhouse = () => {
   const c = G.ch; if (!c) return SCR.title();
+  if (c.venue) return `<div class="scr chscr"><div class="hdr"><h2>${esc(c.cer.name.toUpperCase())} · PRIZE GIVING</h2>${coinsHTML()}</div><div class="grow chpan"></div>${c.msg ? `<div class="chmsg">${c.msg}</div>` : ''}</div>`;
   const st = chStyle(c.cid), sh = save.shout && save.shout.cid === c.cid;
   return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="chLeave">&lt; LEAVE</button><h2>${st.name.toUpperCase()}</h2>${isMember(c.cid) ? '<span class="chmem">MEMBER</span>' : `<button class="btn y sm chjoin" data-a="chJoin">JOIN THE CLUB · ${priceHTML(courseById(c.cid).member)}</button>`}${coinsHTML()}</div>
     <div class="grow chpan"></div>
@@ -8177,9 +8326,20 @@ Object.assign(ACT, {
     confirmBox(`Shout the whole bar a drink?<br>${priceHTML(cost)}`, () => { closeModal(); if (save.coins < cost) { SFX.play('err'); toast('Not enough coins'); return; } save.coins -= cost; save.shouts = (save.shouts || 0) + 1; persist(); updCoins(); chParty(false); }); },
   chShout: () => { const c = G.ch, st = chStyle(c.cid), n = save.shout.n, cost = n * chPrice(st.menu.find(m => m[2] === 'beer') || st.menu[0]); closeModal();
     save.coins -= cost; save.shouts = (save.shouts || 0) + 1; save.shout = null; persist(); updCoins(); chParty(true); },
-  chScript: v => { const s = G.ch && G.ch.script; if (!s) return; s.step++; s.t = 0; s.shake = s.step === 1; if (s.step === 1) SFX.play('clap'); if (s.step >= s.lines.length) { G.ch.script = null; G.ch.msg = s.done || null; if (s.host) { G.ch.champ = G.ch.t; SFX.play('crowd'); } } else G.ch.msg = s.lines[s.step] + `<br><button class="btn sm y" data-a="chScript">${s.btn[s.step] || 'CONTINUE'}</button>`; rerender(); }
+  cerShout: v => { const cost = +v; if (save.coins < cost) { toast('Not enough coins to shout the bar'); SFX.play('err'); return; } save.coins -= cost; save.shouts = (save.shouts || 0) + 1; persist(); updCoins(); chParty(false); const c = G.ch; setTimeout(() => { if (G.ch === c && c.congrats) { c.party = null; c.congrats(); } }, 11500); },
+  cerChat: () => { const c = G.ch; if (!c) return; c.msg = 'Maybe next time. The members toast you anyway.'; rerender(); setTimeout(() => { if (G.ch === c && c.congrats) c.congrats(); }, 2500); },
+  chScript: v => { const s = G.ch && G.ch.script; if (!s) return; s.step++; s.t = 0; s.shake = s.step === 1; if (s.step === 1) SFX.play('clap'); if (s.on && s.on[s.step]) s.on[s.step](); if (s.step >= s.lines.length) { G.ch.script = null; G.ch.msg = s.done || null; if (s.host && !s.noTrophy) { G.ch.champ = G.ch.t; SFX.play('crowd'); } if (s.after) s.after(); } else G.ch.msg = s.lines[s.step] + `<br><button class="btn sm y" data-a="chScript">${s.btn[s.step] || 'CONTINUE'}</button>`; rerender(); }
 });
 /* everyone gathers at the bar, gets a drink and raises a glass */
+/* queue the TV replay of a shot (from the round's highlight): 14 frames rendered one per frame, like the drone shots */
+function chReplayQueue(rec) {
+  const c = G.ch; if (!c || !rec || !rec.path || rec.path.length < 16) return;
+  const crs = courseById(rec.course), h = genHole(crs, rec.hi, rec.tee); renderHole(h); if (rec.pin) h.pin = { x: rec.pin.x, y: rec.pin.y };
+  const P = rec.path, m = P.length / 4, st = Math.max(1, Math.floor(m / 300)), pts = []; for (let i = 0; i < m; i += st) pts.push([P[i * 4], P[i * 4 + 1], P[i * 4 + 2]]); pts.push([P[(m - 1) * 4], P[(m - 1) * 4 + 1], P[(m - 1) * 4 + 2]]);
+  const holed = !!(rec.fin && rec.fin.st === 'holed'); if (holed) pts.push([h.pin.x, h.pin.y, groundZ(h, h.pin.x, h.pin.y)]);
+  c.rp = { h, pts, N: 14, label: rec.label || 'Shot of the day', frames: [], holed };
+  c.tv = c.tv || { seqs: [], q: [] }; c.tv.q = Array.from({ length: 14 }, (_, k) => [0, 'rp', k]).concat(c.tv.q);
+}
 function chParty(ace) {
   const c = G.ch; c.msg = null; c.talk = null; c.serve = null; c.me.tx = null; if (Math.abs(c.me.x - CH_BAR_X) > 3) c.me.x = CH_BAR_X;
   c.party = { t: 0 }; SFX.play('register'); rerender();
@@ -8191,7 +8351,7 @@ function chParty(ace) {
   const roomPt = e => { const r = cv.getBoundingClientRect(); return { x: G.ch.x + (e.clientX - r.left) / r.width * VW, y: (e.clientY - r.top) / r.height * VH }; };
   document.addEventListener('pointerdown', e => { if (G.scr !== 'clubhouse' || !G.ch) return; const w = e.target.closest('[data-walk]'); if (w) { G.ch.me.dir = +w.dataset.walk; e.preventDefault(); } });
   const stop = () => { if (G.ch) G.ch.me.dir = 0; }; document.addEventListener('pointerup', stop); document.addEventListener('pointercancel', stop);
-  document.addEventListener('click', e => { if (G.scr !== 'clubhouse' || !G.ch || !e.target.closest('.chpan')) return; const p = roomPt(e), c = G.ch;
+  document.addEventListener('click', e => { if (G.scr !== 'clubhouse' || !G.ch || G.ch.venue || !e.target.closest('.chpan')) return; const p = roomPt(e), c = G.ch;
     /* tap the pool table or the dartboard to go and play */
     if (hasPool(c.cid) && p.x > 136 && p.x < 304 && p.y > 184 && p.y < 252) { ACT.chGo('pool'); return; }
     if (hasDarts(c.cid) && p.x > 318 && p.x < 370 && p.y > 68 && p.y < 128) { ACT.chGo('darts'); return; }
@@ -8209,6 +8369,176 @@ function augustaTrialClub() {
     btn: ['SHAKE HANDS', 'CONTINUE', 'THANK HIM'], done: 'You swap numbers with Hemi and book a return visit. <b>Augusta is now open to you.</b>' } });
   G.ch.msg = G.ch.script.lines[0] + `<br><button class="btn sm y" data-a="chScript">${G.ch.script.btn[0]}</button>`; G.ch.me.x = CH_BAR_X; rerender();
 }
+/* =====================================================================
+   THE BIG PRIZE GIVINGS. Club and regional days finish in the clubhouse. A national ends at a marquee by the 18th
+   green with a crowd and press cameras; an international is a stadium show (grandstands, a giant screen, spotlights,
+   confetti cannons, fireworks and champagne); Augusta adds the green jacket and a flyover. Afterwards everyone
+   heads to the clubhouse, where a champion can shout the bar.
+   ===================================================================== */
+const VSF = 214; /* the stage floor */
+function venueFig(seed, name) {
+  const R = mulberry32(hashStr(seed + name)), fem = R() < .35, pick = a => a[Math.floor(R() * a.length)];
+  return { id: 'vf' + hashStr(seed + name), name, look: { hat: pick(['cap', 'cap', 'visor', 'none']), hair: fem ? pick(['pony', 'bun', 'long']) : pick(['short', 'curly', 'short', 'none']), build: .92 + R() * .2, fem, sleeve: 'short', nobib: true },
+    c: { h: pick(['#1b1b1b', '#f4f4f0', '#1f3b63', '#2e5d3a']), H: pick(['#2b1d14', '#6d4c41', '#d9b26c', '#111']), s: pick(['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#f6cfa8']), S: pick(['#f2efe6', '#1f3b63', '#c94f4f', '#2f4f4f', '#4e7a52', '#ffffff', '#3a3a3a', '#7fb3e0']), p: pick(['#2b2f33', '#cfc6b2', '#1b1b1b', '#e8e2d0']), k: '#f5f5f5' } };
+}
+function startVenueCeremony(C) {
+  openClubhouse(C.cid, { back: 'title', meX: 0, venue: C.tier, cer: C, figs: [], vn: { cf: [], fw: [], fl: [], sm: [], sp: [], jets: null, fwOn: false, nextFw: 0, cheer: 0 } });
+  const c = G.ch, T = C.tier, me = esc(save.name), fp = v => v === 0 ? 'level par' : v < 0 ? Math.abs(v) + ' under' : v + ' over';
+  const hostName = T === 'major' ? 'Chairman' : T === 'intl' ? 'Tournament director' : 'Golf NZ president';
+  c.hostName = hostName;
+  c.host = T === 'major' && c.chair ? c.chair : { id: 'host', look: { hat: 'none', hair: 'short', build: 1.08, nobib: true, sleeve: 'long' }, c: { h: '#111', H: '#9e9e9e', s: '#f1c9a5', S: T === 'intl' ? '#14213d' : '#1f3b63', p: '#2a2d33', k: '#2b1d14' } };
+  const names = (C.field || []).filter(n => n !== C.winner).slice(0, 4);
+  c.figs = names.map(n => venueFig(C.cid, n));
+  if (!C.won) c.winFig = venueFig(C.cid, C.winner || 'Winner');
+  if (C.best) chReplayQueue(C.best);
+  const lines = [], btn = [], on = {}, hasRp = !!(C.best && C.best.path), boom = () => { venueBoom(c, T); };
+  let recv, raise;
+  if (C.won) {
+    lines.push(`<b>${hostName}:</b> "Ladies and gentlemen, your ${esc(C.name)} champion, on ${fp(C.score)}... <b>${me}</b>!"`); btn.push('SHAKE HANDS');
+    lines.push(`<b>${hostName}:</b> "Congratulations. ${C.prize ? 'A cheque for ' + priceHTML(C.prize) + '.' : 'What a week of golf.'}"`); btn.push(T === 'major' ? 'THE JACKET' : 'TAKE THE TROPHY');
+    if (T === 'major') { lines.push('<b>Hemi</b> helps you into the champion\'s green jacket. The patrons rise to their feet.'); btn.push('TAKE THE TROPHY'); on[2] = () => { c.jacket = true; SFX.play('crowd'); c.vn.cheer = c.t + 3; }; }
+    recv = lines.length; lines.push(`<b>${hostName}:</b> "The ${esc(C.name)} trophy is yours. Lift it up!"`); btn.push('RAISE IT');
+    raise = lines.length; lines.push(T === 'major' ? 'Jets roar overhead trailing green and gold smoke. The whole course is on its feet.' : T === 'intl' ? 'Confetti cannons fire and the grandstands roar.' : 'Cameras flash from every side as the crowd cheers.'); btn.push('SOAK IT IN'); on[raise] = boom;
+    lines.push(`<b>You:</b> "Thank you all. ${patronOn() ? 'A special thanks to Grant Ashworth for his support. ' : ''}${T === 'major' ? 'This is a dream.' : 'What a week.'}"`); btn.push('CONTINUE');
+  } else {
+    lines.push(`<b>${hostName}:</b> "Ladies and gentlemen, your ${esc(C.name)} champion, on ${fp(C.winScore)}... <b>${esc(C.winner)}</b>!"`); btn.push('APPLAUD');
+    lines.push(`${esc(C.winner)} shakes hands and takes the cheque.`); btn.push('APPLAUD');
+    recv = lines.length; lines.push(`The trophy goes to ${esc(C.winner)}${T === 'major' ? ', in the green jacket' : ''}.`); btn.push('APPLAUD'); on[recv] = () => { if (T === 'major') c.jacket = true; };
+    raise = lines.length; lines.push(`${esc(C.winner)} lifts it high. The crowd roars.`); btn.push('CLAP'); on[raise] = boom;
+    lines.push(`<b>${hostName}:</b> "${me}, ${C.missedCut ? 'a tough week, but thanks for being part of it.' : 'you finished ' + C.posTxt + (C.prize ? ', and that earns you ' + priceHTML(C.prize) : '') + '. Well played.'}"`); btn.push('THANKS');
+    if (patronOn()) { lines.push('In your TV interview you thank Grant Ashworth for his support.'); btn.push('CONTINUE'); }
+  }
+  if (hasRp) { lines.push(`<b>${hostName}:</b> "Before we finish, ${C.won ? 'the shot of the week' : me + "'s shot of the week"} on the big screen."`); btn.push('WATCH THE REPLAY');
+    on[lines.length] = () => { c.rpShow = true; c.rpT = c.t; SFX.play('crowd'); };
+    lines.push(`<i>On the big screen: ${esc(C.best.label || 'shot of the week')}.</i> The crowd ${C.best.fin && C.best.fin.st === 'holed' ? 'erupts' : 'cheers'}.`); btn.push('WHAT A SHOT'); }
+  const nm = i => c.figs[i % Math.max(1, c.figs.length)], said = C.won ? ['"Brilliant golf. You earned that."', '"Couldn\'t catch you this week."', '"That shot on the big screen! Unreal."'] : ['"Well played this week."', C.missedCut ? '"Next week, mate. You\'ll be back."' : '"Close one. Next time."', '"Great shot on the big screen."'];
+  if (T === 'major') said.unshift(C.won ? '"Augusta champion. I knew you had it in you."' : '"You belong here. Keep going."');
+  c.script = { step: 0, t: 0, shake: false, host: true, noTrophy: false, recv, raise, lines, btn, on, done: null,
+    after: () => { c.msg = cerVenueDone(c); if (C.won && T !== 'national') c.vn.fwOn = true; let i = 0; const next = () => { if (G.ch !== c || i >= said.length) return; const k = T === 'major' && i === 0 ? -1 : i - (T === 'major' ? 1 : 0), f = k < 0 ? null : nm(k);
+      if (k >= 0 && !f) return; const X = k < 0 ? venueX(c).hemi : venueX(c).figs[k % c.figs.length]; c.talk = { text: said[i], x: X, y: VSF - 96, t: 0, name: k < 0 ? 'Hemi' : f.name }; SFX.play('chat'); i++; rerender(); setTimeout(next, 3600); }; setTimeout(next, 1200); rerender(); } };
+  c.msg = lines[0] + `<br><button class="btn sm y" data-a="chScript">${btn[0]}</button>`; setTimeout(() => SFX.play('crowd'), 400); rerender();
+}
+function cerVenueDone(c) {
+  const C = c.cer, T = c.venue, off = save.offerPending && !c.offerDone && C.won;
+  const nmT = esc(C.name.replace(/^The /, ''));
+  return `<b>${C.won ? 'Champion of the ' + nmT + '!' : 'That\'s the ' + nmT + ' done.'}</b> ${C.won && T !== 'national' && !c.sprayed ? '<button class="btn sm y" data-a="cerSpray">SPRAY THE CHAMPAGNE</button> ' : ''}${off ? `<button class="btn sm y" data-a="offerOpen">${OFFER_NAME[save.offerPending]} WANTS A WORD</button> ` : ''}<button class="btn sm ${C.won ? 'g' : 'y'}" data-a="cerToClub">HEAD TO THE CLUBHOUSE</button>`;
+}
+/* where everyone stands on the stage */
+function venueX(c) { const CX = VW / 2, won = c.cer.won; return { champ: CX - 26, host: CX + 32, me: won ? CX - 26 : CX - 100, hemi: CX + 96, figs: won ? [CX - 140, CX - 100, CX + 140, CX + 176] : [CX - 150, CX + 136, CX + 176, CX - 192] }; }
+function venueBoom(c, T) {
+  const V = c.vn, W = VW; V.cheer = c.t + 5; SFX.play('crowd'); setTimeout(() => SFX.play('clap'), 500);
+  const n = T === 'national' ? 50 : 150; for (let i = 0; i < n; i++) { const L = i % 2, x0 = L ? W / 2 - 150 : W / 2 + 150; V.cf.push({ x: x0, y: VSF - 20, vx: (L ? -1 : 1) * (-20 - Math.random() * 90) * (Math.random() < .5 ? 1 : -.4), vy: -150 - Math.random() * 130, c: ['#f5c451', '#ffffff', '#e53935', '#43a047', '#1e88e5', '#f48fb1'][i % 6], p: Math.random() * 6, t: 0 }); }
+  if (T === 'major') { V.jets = { t: 0, trails: [[], [], [], []] }; for (let i = 0; i < 3; i++) setTimeout(() => { if (G.ch === c) SFX.play('drive'); }, 400 + i * 250); }
+  if (T !== 'national') V.fwOn = true;
+}
+function venueUpdate(c, dt) {
+  const V = c.vn; if (!V) return; const W = VW;
+  for (const p of V.cf) { p.t += dt; p.vy = Math.min(p.vy + 160 * dt, 34); p.vx *= 1 - dt * 1.4; p.x += (p.vx + Math.sin(p.t * 5 + p.p) * 14) * dt; p.y += p.vy * dt; } V.cf = V.cf.filter(p => p.y < VH + 4 && p.t < 9);
+  if (V.fwOn && c.t > V.nextFw && V.fw.length < 260) { V.nextFw = c.t + .5 + Math.random() * .6; const x0 = 40 + Math.random() * (W - 80), y0 = 20 + Math.random() * 60, col = ['#ffd54f', '#ff5252', '#69f0ae', '#40c4ff', '#ffffff', '#e040fb'][Math.floor(Math.random() * 6)], N = 34;
+    for (let i = 0; i < N; i++) { const a = i / N * 6.283, sp = 40 + Math.random() * 26; V.fw.push({ x: x0, y: y0, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, c: col, t: 0, life: 1.2 + Math.random() * .5 }); } if (Math.random() < .7) SFX.play('putt'); }
+  for (const p of V.fw) { p.t += dt; p.vy += 32 * dt; p.vx *= 1 - dt * .9; p.x += p.vx * dt; p.y += p.vy * dt; } V.fw = V.fw.filter(p => p.t < p.life);
+  if (V.cheer > c.t || c.party) { if (Math.random() < .5) V.fl.push({ x: Math.random() * W, y: 120 + Math.random() * 100, t: 0 }); } else if (Math.random() < .08) V.fl.push({ x: Math.random() * W, y: 120 + Math.random() * 100, t: 0 });
+  for (const f of V.fl) f.t += dt; V.fl = V.fl.filter(f => f.t < .14);
+  if (V.jets) { const J = V.jets; J.t += dt; const jx = -60 + J.t * 170; J.trails.forEach((tr, i) => { if (J.t < 5) tr.push([jx - i * 16, 34 + i * 7 + Math.sin(J.t * 2 + i) * 1.5, c.t]); }); if (J.t > 12) V.jets = null; }
+  if (V.spray !== undefined && V.spray !== null && c.t - V.spray < 3.2) { const X = venueX(c).champ; for (let i = 0; i < 6; i++) V.sp.push({ x: X + 20, y: VSF - 80, vx: 30 + Math.random() * 70, vy: -110 - Math.random() * 70, t: 0 }); }
+  for (const p of V.sp) { p.t += dt; p.vy += 220 * dt; p.x += p.vx * dt; p.y += p.vy * dt; } V.sp = V.sp.filter(p => p.t < 1.4 && p.y < VH);
+}
+/* the crowd: drawn once into two layers (arms down, arms up) so a stadium of people costs one image a frame */
+function venueCrowd(c) {
+  const T = c.venue, key = T + '|' + VW + '|' + RES; if (c.vn.crowd && c.vn.crowd.key === key) return c.vn.crowd;
+  const W = VW, mk = () => { const cv2 = mkCanvas(Math.ceil(W * RES), Math.ceil(VH * RES)), x2 = cv2.getContext('2d'); x2.scale(RES, RES); return [cv2, x2]; };
+  const [A, ax] = mk(), [B, bx] = mk(), [F, fx] = mk(), R = mulberry32(hashStr(c.cid + T)), shirts = ['#e53935', '#1e88e5', '#fdd835', '#43a047', '#ffffff', '#8e24aa', '#fb8c00', '#263238', '#ec407a', '#00acc1', '#f2efe6', '#2e5d3a'], skins = ['#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffdbac'];
+  const person = (x, y, s, up) => { const sh = shirts[Math.floor(R() * shirts.length)], sk = skins[Math.floor(R() * skins.length)], hat = R() < .3 ? shirts[Math.floor(R() * shirts.length)] : null;
+    for (const [ctx2, arms] of [[ax, false], [bx, true]]) { ctx2.fillStyle = sh; ctx2.fillRect(x - 2.2 * s, y - 6 * s, 4.4 * s, 6 * s); if (arms && up) { ctx2.fillRect(x - 2.6 * s, y - 10.5 * s, 1 * s, 5 * s); ctx2.fillRect(x + 1.6 * s, y - 10.5 * s, 1 * s, 5 * s); ctx2.fillStyle = sk; ctx2.fillRect(x - 2.7 * s, y - 11.4 * s, 1.2 * s, 1.2 * s); ctx2.fillRect(x + 1.5 * s, y - 11.4 * s, 1.2 * s, 1.2 * s); }
+      ctx2.fillStyle = sk; ctx2.beginPath(); ctx2.arc(x, y - 7.8 * s, 1.7 * s, 0, 6.29); ctx2.fill(); if (hat) { ctx2.fillStyle = hat; ctx2.fillRect(x - 1.8 * s, y - 9.6 * s, 3.6 * s, 1.2 * s); } } };
+  const stand = (x0, x1, y0, y1, rows, slope) => { /* a grandstand: tiers of seats rising away from the stage */
+    for (const ctx2 of [ax, bx]) { ctx2.fillStyle = '#3a4048'; ctx2.beginPath(); ctx2.moveTo(x0, y1); ctx2.lineTo(x0, y0); ctx2.lineTo(x1, y0 + slope); ctx2.lineTo(x1, y1); ctx2.closePath(); ctx2.fill(); ctx2.fillStyle = 'rgba(255,255,255,.08)'; for (let r = 0; r < rows; r++) { const yy = y0 + (y1 - y0) * (r + 1) / rows; ctx2.fillRect(x0, yy, x1 - x0, .8); } }
+    for (let r = 0; r < rows; r++) { const yy = y0 + (y1 - y0) * (r + .9) / rows, s = .62 + .45 * r / rows; for (let xx = x0 + 3; xx < x1 - 2; xx += 5.2 * s + R() * 1.5) if (R() < .93) person(xx, yy + (slope * (xx - x0) / (x1 - x0)) * (1 - r / rows), s, R() < .8); } };
+  const W2 = W / 2;
+  if (T === 'national') { for (let r = 0; r < 4; r++) { const yy = 182 + r * 9, s = .8 + r * .12; for (const [x0, x1] of [[4, W2 - 178], [W2 + 178, W - 4]]) for (let xx = x0; xx < x1; xx += 5.5 * s + R() * 2) if (R() < .9) person(xx, yy, s, R() < .7); } }
+  else { stand(0, W2 - 128, T === 'major' ? 70 : 82, VSF - 6, T === 'major' ? 11 : 9, 26); stand(W2 + 128, W, T === 'major' ? 96 : 108, VSF - 6, T === 'major' ? 11 : 9, -26);
+    for (let r = 0; r < 2; r++) { const yy = VSF - 1 + r * 5, s = 1 + r * .1; for (const [x0, x1] of [[2, W2 - 196], [W2 + 196, W - 2]]) for (let xx = x0; xx < x1; xx += 5.8 * s) person(xx, yy, s, R() < .75); } }
+  /* the front rows in silhouette, in front of the stage */
+  for (let row = 0; row < 2; row++) for (let xx = -6 + row * 6; xx < W + 8; xx += 12 + R() * 6) { /* backs of heads and shoulders, lit faintly from the stage */
+    const s = row ? 1.25 + R() * .2 : 1 + R() * .15, hy = row ? 262 + R() * 4 : 247 + R() * 4, body = ['#1b1d23', '#24262d', '#2a2622', '#1f2329'][Math.floor(R() * 4)], hair = ['#141210', '#2b1d14', '#3a2a1e', '#6b5a48', '#1b1b1b'][Math.floor(R() * 5)];
+    fx.fillStyle = body; fx.beginPath(); fx.moveTo(xx - 9 * s, hy + 14); fx.quadraticCurveTo(xx - 9 * s, hy - 1 * s, xx - 3 * s, hy - 2 * s); fx.lineTo(xx + 3 * s, hy - 2 * s); fx.quadraticCurveTo(xx + 9 * s, hy - 1 * s, xx + 9 * s, hy + 14); fx.closePath(); fx.fill();
+    fx.fillStyle = hair; fx.beginPath(); fx.ellipse(xx, hy - 6.5 * s, 3.6 * s, 4.3 * s, 0, 0, 6.29); fx.fill();
+    fx.fillStyle = 'rgba(255,230,190,.16)'; fx.beginPath(); fx.ellipse(xx, hy - 9.5 * s, 2.6 * s, 1.2 * s, 0, Math.PI, 0); fx.fill(); fx.fillRect(xx - 7 * s, hy - 1.5 * s, 14 * s, .8);
+    if (R() < .1) { fx.fillStyle = 'rgba(200,225,255,.75)'; fx.fillRect(xx + 2 * s, hy - 15 * s, 2.6 * s, 4.2 * s); } }
+  return (c.vn.crowd = { key, A, B, F });
+}
+function drawVenue(c) {
+  const x = ctx, T = c.venue, W = VW, CX = W / 2, C = c.cer, V = c.vn, crs = courseById(c.cid), dusk = T !== 'national';
+  x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
+  const vg = (y0, y1, stops) => { const g = x.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, col]) => g.addColorStop(o, col)); return g; };
+  /* sky and the course behind the stage */
+  x.fillStyle = dusk ? vg(0, 170, [[0, '#18244a'], [.55, '#6a4f86'], [1, '#f1a35e']]) : vg(0, 170, [[0, crs.sky[0]], [1, crs.sky[1]]]); x.fillRect(0, 0, W, VH);
+  if (c.win) { x.globalAlpha = dusk ? .55 : 1; const sh = Math.min(138, 300 * 150 / W); x.drawImage(c.win, 0, (138 - sh) * .4, 300, sh, 0, 62, W, 150); x.globalAlpha = 1; if (dusk) { x.fillStyle = vg(62, 212, [[0, 'rgba(40,30,70,.15)'], [1, 'rgba(20,16,30,.45)']]); x.fillRect(0, 62, W, 150); } }
+  else { x.fillStyle = '#4f7a46'; x.fillRect(0, 150, W, 70); }
+  if (T === 'major') { /* towering pines */ const R = mulberry32(7); x.fillStyle = dusk ? '#1c2a22' : '#24432f'; for (let i = 0; i < 26; i++) { const tx = i * W / 25 + (R() - .5) * 10, th = 70 + R() * 50; x.beginPath(); x.moveTo(tx, 150 - th); x.lineTo(tx + 9, 150); x.lineTo(tx - 9, 150); x.closePath(); x.fill(); } }
+  /* fireworks and jets in the sky */
+  if (V.fw.length) { x.save(); x.globalCompositeOperation = 'lighter'; for (const p of V.fw) { x.globalAlpha = Math.max(0, 1 - p.t / p.life); x.fillStyle = p.c; x.fillRect(p.x - .8, p.y - .8, 1.6, 1.6); } x.restore(); x.globalAlpha = 1; }
+  if (V.jets) { const J = V.jets, cols = ['#2e7d32', '#f2c94c', '#ffffff', '#2e7d32']; x.lineCap = 'round'; J.trails.forEach((tr, i) => { if (tr.length < 2) return; x.strokeStyle = cols[i]; for (let k = 1; k < tr.length; k++) { const age = c.t - tr[k][2]; x.globalAlpha = Math.max(0, .75 - age * .1); x.lineWidth = 3 + age * 1.4; x.beginPath(); x.moveTo(tr[k - 1][0], tr[k - 1][1]); x.lineTo(tr[k][0], tr[k][1]); x.stroke(); } x.globalAlpha = 1;
+    if (J.t < 5) { const [jx, jy] = tr[tr.length - 1]; x.fillStyle = '#c9d1d9'; x.beginPath(); x.moveTo(jx + 9, jy); x.lineTo(jx - 4, jy - 4); x.lineTo(jx - 2, jy); x.lineTo(jx - 4, jy + 4); x.closePath(); x.fill(); } }); }
+  /* stands and crowd */
+  const CR = venueCrowd(c), up = (V.cheer > c.t || (c.script && c.script.step >= 1 && c.script.t < 2.5)) && Math.floor(c.t * 4) % 2 === 0;
+  x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.drawImage(up ? CR.B : CR.A, 0, 0); x.restore();
+  /* the set: a marquee for a national, a truss with a giant screen for the big ones */
+  if (T === 'national') {
+    x.fillStyle = '#f4f2ec'; x.fillRect(CX - 176, 100, 352, VSF - 100); x.fillStyle = 'rgba(0,0,0,.08)'; for (let i = 0; i < 4; i++) x.fillRect(CX - 176 + i * 88, 100, 2, VSF - 100);
+    for (let i = 0; i < 4; i++) { const px0 = CX - 176 + i * 88; x.fillStyle = '#ffffff'; x.beginPath(); x.moveTo(px0, 100); x.lineTo(px0 + 44, 72); x.lineTo(px0 + 88, 100); x.closePath(); x.fill(); x.fillStyle = 'rgba(0,0,0,.07)'; x.beginPath(); x.moveTo(px0 + 44, 72); x.lineTo(px0 + 88, 100); x.lineTo(px0 + 44, 100); x.closePath(); x.fill(); }
+    x.fillStyle = '#ffffff'; for (let xx = CX - 176; xx < CX + 176; xx += 11) { x.beginPath(); x.arc(xx + 5.5, 100, 5.5, 0, Math.PI); x.fill(); }
+    x.fillStyle = '#1f3b63'; x.fillRect(CX - 110, 80, 220, 18); x.fillStyle = '#f5c451'; x.textAlign = 'center'; fitText(x, C.name.toUpperCase(), CX, 93, 210, '800 italic', 11, '"Barlow Condensed", sans-serif');
+    for (const fx2 of [CX - 196, CX + 196]) { x.fillStyle = '#d0d4d8'; x.fillRect(fx2, 40, 1.6, VSF - 40); x.fillStyle = FLAGCOL[c.cid] || '#d8342c'; x.beginPath(); x.moveTo(fx2 + 1.6, 40); x.quadraticCurveTo(fx2 + 12, 44 + Math.sin(c.t * 3) * 2, fx2 + 24, 42); x.lineTo(fx2 + 24, 56); x.quadraticCurveTo(fx2 + 12, 58 + Math.sin(c.t * 3) * 2, fx2 + 1.6, 54); x.closePath(); x.fill(); }
+  } else {
+    const sx = CX - 86, sy = 26, sw = 172, sh = 88;
+    x.fillStyle = '#1b1e23'; for (const tx of [CX - 112, CX + 106]) x.fillRect(tx, 8, 6, VSF - 8); x.fillRect(CX - 112, 8, 224, 6);
+    x.strokeStyle = 'rgba(160,168,176,.55)'; x.lineWidth = .6; x.beginPath(); for (let yy = 14; yy < VSF; yy += 10) { x.moveTo(CX - 112, yy); x.lineTo(CX - 106, yy + 10); x.moveTo(CX + 106, yy); x.lineTo(CX + 112, yy + 10); } x.stroke();
+    x.fillStyle = '#050607'; x.fillRect(sx - 4, sy - 4, sw + 8, sh + 8); chTvDraw(x, c, sx, sy, sw, sh);
+    /* sweeping spotlights */
+    x.save(); x.globalCompositeOperation = 'lighter'; for (let i = 0; i < 4; i++) { const ox = CX + (i - 1.5) * 70, ang = Math.PI / 2 + Math.sin(c.t * .7 + i * 1.7) * .55 + (i < 2 ? .2 : -.2), L2 = 260, wd = .09;
+      const g = x.createLinearGradient(ox, 10, ox + Math.cos(ang) * L2, 10 - Math.sin(ang) * -L2); g.addColorStop(0, 'rgba(255,240,200,.22)'); g.addColorStop(1, 'rgba(255,240,200,0)'); x.fillStyle = g;
+      x.beginPath(); x.moveTo(ox, 10); x.lineTo(ox + Math.cos(ang - wd) * L2, 10 + Math.sin(ang - wd) * L2); x.lineTo(ox + Math.cos(ang + wd) * L2, 10 + Math.sin(ang + wd) * L2); x.closePath(); x.fill(); } x.restore();
+  }
+  /* the stage */
+  x.fillStyle = T === 'major' ? '#2c6b44' : T === 'intl' ? '#20242b' : '#7a5a3a'; x.fillRect(CX - 200, VSF - 2, 400, 6); x.fillStyle = T === 'major' ? '#173d27' : T === 'intl' ? '#111318' : '#5a4028'; x.fillRect(CX - 200, VSF + 4, 400, 30);
+  x.fillStyle = T === 'major' ? '#f2c94c' : '#f5c451'; x.fillRect(CX - 200, VSF + 4, 400, 1.2);
+  /* big cheque on an easel once it has been handed over */
+  if (C.won && C.prize && T !== 'major' && (!c.script || c.script.step >= 1)) { const bx = CX + 64, by = VSF - 58; x.fillStyle = '#5a4028'; x.fillRect(bx + 8, by + 20, 2, 38); x.fillRect(bx + 50, by + 20, 2, 38); x.fillStyle = '#ffffff'; x.fillRect(bx, by, 60, 26); x.strokeStyle = '#1f3b63'; x.lineWidth = .8; x.strokeRect(bx + 1.5, by + 1.5, 57, 23);
+    x.fillStyle = '#1f3b63'; x.textAlign = 'left'; fitText(x, 'PAY ' + save.name.toUpperCase(), bx + 4, by + 9, 52, '700', 5, '"Barlow Condensed", sans-serif'); x.fillStyle = '#111'; fitText(x, fmt(C.prize) + ' COINS', bx + 4, by + 19, 52, '800', 7, '"Barlow Condensed", sans-serif'); }
+  /* the people on stage */
+  const P = venueX(c), s = c.script, k = 1.42, champ = C.won ? golferById(save.golfer) : c.winFig, jk = g => { if (!c.jacket || !g) return g; return Object.assign({}, g, { look: Object.assign({}, g.look, { sleeve: 'long', nobib: true, capBrand: g.look.brand || null, brand: null }), c: Object.assign({}, g.c, { S: '#1f6b3a' }) }); };
+  const clap = (s && s.step >= 1) || (c.champ !== undefined && c.t - c.champ < 5) || V.cheer > c.t;
+  c.figs.forEach((f, i) => drawGolferFront(f, P.figs[i], VSF, k * .96, chPose(clap ? 'cclap' : 'idle', c.t + i * 1.3)));
+  if (T === 'major') drawGolferFront(HEMI, P.hemi, VSF, k, chPose(clap ? 'cclap' : 'idle', c.t + .7));
+  const rcv = s ? cerRecv(s) : -1, hp = s && s.shake ? chPose('shake_c', s.t) : s && s.step === rcv ? chPose('coffer', Math.min(.35, s.t)) : s ? chPose('ctalk', s.t) : chPose(clap ? 'cclap' : 'idle', c.t);
+  drawGolferFront(c.host, P.host, VSF, k * 1.03, hp);
+  const hand = (X0, k0, P0, side) => { const h2 = side === 'l' ? P0.lh : P0.rh, jy = (P0.jump || 0) - (P0.crouch || 0); return [X0 + h2[0] * k0, VSF - (h2[1] + jy) * k0]; };
+  if (s && s.step === rcv && s.t < .5) { const hh = hand(P.host, k * 1.03, hp, 'r'); drawTrophyAt(x, hh[0], hh[1], 1); }
+  const spraying = V.spray != null && c.t - V.spray < 3.4, held = spraying ? null : cerHeld(c);
+  const cp = s && s.shake ? chPose('shake_g', s.t) : held ? chPose(held === 'raise' ? 'craise' : 'chold', held === 'raise' ? cerRaiseT(c) : c.t) : s && s.step === rcv ? chPose('creach', s.t) : spraying ? chPose('cspray', c.t) : chPose('idle', c.t + 1);
+  drawGolferFront(jk(champ), P.champ, VSF, k, cp);
+  if (held) { const hl = hand(P.champ, k, cp, 'l'), hr = hand(P.champ, k, cp, 'r'); drawTrophyAt(x, (hl[0] + hr[0]) / 2, Math.min(hl[1], hr[1]) + 1.5, 1.05); }
+  if (spraying) { const hr = hand(P.champ, k, cp, 'r'); x.save(); x.translate(hr[0], hr[1]); x.rotate(.75); x.fillStyle = "#1e4a2a"; x.fillRect(-2.2, -12, 4.4, 13); x.fillRect(-1, -17, 2, 5); x.fillStyle = '#f2c94c'; x.fillRect(-2.2, -5, 4.4, 3); x.restore(); }
+  if (!C.won) drawGolferFront(golferById(save.golfer), P.me, VSF, k, chPose(clap ? 'cclap' : 'idle', c.t + 2));
+  if (V.sp.length) { x.fillStyle = 'rgba(255,246,210,.85)'; for (const p of V.sp) x.fillRect(p.x, p.y, 1.4, 1.4); }
+  /* front rows, camera flashes, confetti */
+  x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.drawImage(CR.F, 0, 0); x.restore();
+  for (const f of V.fl) { const g = x.createRadialGradient(f.x, f.y, 0, f.x, f.y, 7); g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(f.x - 7, f.y - 7, 14, 14); }
+  for (const p of V.cf) { x.fillStyle = p.c; const w2 = 1 + Math.abs(Math.sin(p.t * 9 + p.p)) * 1.6; x.fillRect(p.x - w2 / 2, p.y, w2, 1.3); }
+  drawTalkBubble(x, c, W);
+  x.setTransform(RES, 0, 0, RES, 0, 0); const vgr = x.createRadialGradient(W / 2, VH / 2, VH * .45, W / 2, VH / 2, W * .72); vgr.addColorStop(0, 'rgba(0,0,0,0)'); vgr.addColorStop(1, 'rgba(0,0,0,.4)'); x.fillStyle = vgr; x.fillRect(0, 0, W, VH);
+  x.textAlign = 'left'; PXR = 1; x.imageSmoothingEnabled = false;
+}
+Object.assign(ACT, {
+  cerSpray: () => { const c = G.ch; if (!c || !c.vn) return; c.vn.spray = c.t; c.trophyAway = true; c.sprayed = true; c.vn.cheer = c.t + 4; SFX.play('crowd'); c.msg = cerVenueDone(c); rerender(); },
+  cerToClub: () => { const c0 = G.ch; if (!c0 || !c0.venue) return; const C = c0.cer; openClubhouse(C.cid, { back: 'title', meX: CH_BAR_X }); const c = G.ch;
+    const pats = (c.patrons || []).map(p2 => p2.name).filter(Boolean), nm = i => pats[i % Math.max(1, pats.length)] || 'A member';
+    const said = C.won ? [`<b>${nm(0)}:</b> "We watched it all on the telly. Champion!"`, `<b>${nm(1)}:</b> "That trophy lift. Brilliant."`, `<b>${nm(2)}:</b> "You've put this place on the map."`] : [`<b>${nm(0)}:</b> "Big week. You'll be back."`, `<b>${nm(1)}:</b> "That shot on the big screen though!"`, `<b>${nm(2)}:</b> "Proud of you. Same time next week?"`];
+    c.congrats = () => { let i = 0; const next = () => { if (G.ch !== c || c.party || i >= said.length) return; c.msg = said[i++]; rerender(); setTimeout(next, 3400); }; setTimeout(next, 300); };
+    if (C.won) { const cost = (pats.length + 8) * chPrice(chStyle(C.cid).menu.find(m => m[2] === 'beer') || chStyle(C.cid).menu[0]); c.msg = `<b>The clubhouse is packed for the champion.</b> Tradition says you shout the bar. <button class="btn sm y" data-a="cerShout" data-v="${cost}">SHOUT THE BAR · ${priceHTML(cost)}</button> <button class="btn sm g" data-a="cerChat">NOT TODAY</button>`; }
+    else c.congrats();
+    rerender(); } });
 
 /* =====================================================================
    TRAVEL: overseas courses cost flights every trip (members get 20% off). The private jet club card (100,000)
@@ -8482,6 +8812,61 @@ function sponsorAfterRound(r, ev, toPar, st) {
   if (C.warn >= 2) { save.sponsor = null; LOOK_CACHE_CLEAR(); return { kind: 'drop', txt: `${sp.name} has ended your sponsorship after two missed goals. You keep the balls and upgrades.` }; }
   C.goal = { k: g.k, need: g.need, have: 0 }; C.left = SP_TERM; C.season = save.season ? save.season.no : 1; return { kind: 'warn', txt: `${sp.name} is not happy: goal missed. Final warning. Same goal next season.` };
 }
+/* ---------- offers that come after international wins: Grant Ashworth (a made-up billionaire and Augusta member),
+   Marco Vale (the made-up founder of the Amalfi Jet Club) and Red Bull ----------
+   1 win: Ashworth may offer to pay three-quarters of your Augusta membership plus a bonus per win (you thank him at prize givings), if you thank him at your prize givings.
+   2 wins and no Amalfi card: he gives you the card.  3 wins: Red Bull want you (alongside one golf brand). */
+const VALE = { name: 'Marco Vale', role: 'Founder, Amalfi Jet Club' }, ASHWORTH = { name: 'Grant Ashworth', role: 'Billionaire investor, Augusta member' };
+const OFFER_NAME = { augusta: 'GRANT ASHWORTH', amalfi: 'MARCO VALE', redbull: 'RED BULL' };
+function pickOffer() {
+  const n = save.stats.intlWins || 0, P = save.patron || (save.patron = {});
+  if (n >= 3 && !save.redbull && !P.rb) return 'redbull';
+  if (n >= 2 && !hasJet() && !P.amalfi) return 'amalfi';
+  if (!isMember('augusta') && P.aug !== 'yes' && Math.random() < (P.aug ? .35 : .6)) return 'augusta';
+  return null;
+}
+const patronOn = () => !!(save.patron && save.patron.thanks);
+function offerBody(k) {
+  const aug = courseById('augusta'), half = Math.round(aug.member / 4);
+  if (k === 'augusta') return { who: ASHWORTH, txt: `"Congratulations. I'd like to see you at Augusta. I'll cover three-quarters of your membership, have a word with the committee, and pay you a bonus every time you win. All I ask: thank me at your prize givings."`, deal: `You pay just <b>${priceHTML(half)}</b> (normally ${priceHTML(aug.member)}). Every event you win: a bonus from him (3,000 at club level up to 25,000 for a major). You thank Grant Ashworth at every prize giving.`, yes: `JOIN FOR ${priceHTML(half)}` };
+  if (k === 'amalfi') return { who: VALE, txt: `"Two big wins. A player like you should not queue at airports. The card is yours, on me."`, deal: `A free <b>${JET.name}</b> card: free flights, 25% off green fees abroad, the lounge.`, yes: 'ACCEPT THE CARD' };
+  const sp = mySponsor();
+  return { who: RB.rep, brand: RB.name, txt: `"Three international wins. We want you. A Red Bull cart and all the drinks you can handle. You wear our cap now and then."`, deal: `<b>Red Bull Cart</b> (same as the Maybach), free sports drinks on the course, and the Red Bull cap at casual rounds.${sp ? ` You'll need ${sp.name} to agree too.` : ''}`, yes: sp ? 'TALK TO BOTH' : 'SIGN WITH RED BULL' };
+}
+function offerHTML(k) {
+  const B = offerBody(k);
+  return `<div class="col" style="max-width:calc(var(--u)*250);gap:calc(var(--u)*2.5)"><div class="u2">${OFFER_NAME[k]}</div><div class="u1 dimtxt">${esc(B.who.name)} · ${esc(B.who.role)}</div>
+    <div class="bubble in" style="margin:0">${B.txt}</div><div class="u1">${B.deal}</div>
+    <div class="row" style="justify-content:flex-end"><button class="btn g sm" data-a="offerNo" data-v="${k}">NO THANKS</button><button class="btn y sm" data-a="offerYes" data-v="${k}">${B.yes}</button></div></div>`;
+}
+/* the Red Bull and golf-brand meeting: one deal works for both */
+function rbMeetHTML(reply) {
+  const sp = mySponsor(), opts = [['always', 'Red Bull cap at every round'], ['casual', `Red Bull cap at casual rounds, ${sp.name} cap at competitions`], ['none', 'No Red Bull cap, just the cart and drinks']];
+  return `<div class="col" style="max-width:calc(var(--u)*260);gap:calc(var(--u)*2.5)"><div class="u2">THREE-WAY MEETING</div><div class="u1 dimtxt">${esc(RB.rep.name)} (Red Bull) and ${esc(sp.rep.name)} (${sp.name})</div>
+    <div class="u1">Red Bull want their cap on you. ${sp.name} say the cap is in their contract. Find a deal both will sign.</div>
+    ${reply ? `<div class="bubble in" style="margin:0">${reply}</div>` : ''}
+    <div class="col" style="gap:calc(var(--u)*1.5)">${opts.map(([v, l]) => `<button class="btn sm g" data-a="rbPropose" data-v="${v}" style="text-align:left">${l}</button>`).join('')}</div>
+    <div class="row" style="justify-content:flex-end"><button class="btn g sm" data-a="offerNo" data-v="redbull">WALK AWAY</button></div></div>`;
+}
+function rbSign(cap, note) {
+  save.redbull = { since: Date.now(), cap }; save.patron = save.patron || {}; save.patron.rb = 'yes';
+  if (!save.carts.includes('redbull')) save.carts.push('redbull'); save.cart = 'redbull'; LOOK_CACHE_CLEAR(); persist(); closeModal(); SFX.play('trophy');
+  toast(note || `Signed with <b>Red Bull</b>. Your Red Bull Cart is ready, cap on at casual rounds.`); rerender();
+}
+Object.assign(ACT, {
+  offerOpen: () => { const k = save.offerPending; if (!k) return; showModal(offerHTML(k)); },
+  offerNo: v => { save.patron = save.patron || {}; if (v === 'augusta') save.patron.aug = 'no'; else if (v === 'amalfi') save.patron.amalfi = 'no'; else save.patron.rb = 'no'; save.offerPending = null; persist(); closeModal(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); },
+  offerYes: v => {
+    const P = save.patron = save.patron || {}, fin = () => { save.offerPending = null; persist(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); };
+    if (v === 'augusta') { const half = Math.round(courseById('augusta').member / 4); closeModal(); spend(half, () => { if (!save.members.includes('augusta')) save.members.push('augusta'); P.aug = 'yes'; P.thanks = true; SFX.play('trophy'); toast('Welcome to <b>Augusta National</b>. Grant Ashworth covered the rest.'); fin(); }); return; }
+    if (v === 'amalfi') { save.jet = { since: Date.now(), gift: VALE.name }; P.amalfi = 'yes'; closeModal(); SFX.play('trophy'); toast(`The <b>${JET.name}</b> card is yours. A gift from Marco Vale.`); fin(); return; }
+    if (mySponsor()) { showModal(rbMeetHTML()); return; }
+    rbSign('casual'); fin();
+  },
+  rbPropose: v => { const sp = mySponsor();
+    if (v === 'always') { showModal(rbMeetHTML(`<b>${esc(sp.rep.name)}:</b> "No. Our cap is in your contract."`)); SFX.play('err'); return; }
+    if (v === 'none') { showModal(rbMeetHTML(`<b>${esc(RB.rep.name)}:</b> "We need you wearing it sometimes. No cap, no deal."`)); SFX.play('err'); return; }
+    rbSign('casual', `<b>Deal.</b> ${sp.name} keep competitions, Red Bull get casual rounds and your cart.`); save.offerPending = null; persist(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); } });
 
 /* =====================================================================
    POOL: a pool table in the lounge at a couple of clubhouses. Top-down 2D eight-ball (reds and yellows, NZ pub style)
