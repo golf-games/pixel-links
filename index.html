@@ -3858,8 +3858,9 @@ function drawRealFace(x, y, r, k, P, lk, sk, hair) {
   for (const sd of [-1, 1]) pPoly(ovalU(x + sd * r * .12, y + r * .5, r * .075, r * .062, 12), dk(sd > 0 ? .88 : .93));
   pPoly(ovalU(x + r * .005, y + r * .47, r * .1, r * .08, 14), dk(1.02)); pPoly(ovalU(x - r * .03, y + r * .45, r * .04, r * .03, 10), dk(1.08));
   for (const sd of [-1, 1]) pPoly(ovalU(x + sd * r * .06, y + r * .545, r * .034, r * .018, 10), dk(.6));
-  /* jaw and chin: a firmer lower face */
-  pPoly(S2([[x + r * .38, y + r * .7], [x + r * .62, y + r * .62], [x + r * .5, y + r * .92], [x + r * .2, y + r * 1.06]], 3), dk(.93));
+  /* jaw and chin: a firmer lower face, with a five o'clock shadow if he has one */
+  if (lk.stubble) { DC.globalAlpha = .085; pPoly(S2([[x - r * .92, y + r * .3], [x - r * .45, y + r * .5], [x, y + r * .6], [x + r * .45, y + r * .5], [x + r * .92, y + r * .3], [x + r * .84, y + r * .78], [x + r * .5, y + r * 1.06], [x, y + r * 1.12], [x - r * .5, y + r * 1.06], [x - r * .84, y + r * .78]], 4), '#2a2430'); DC.globalAlpha = 1; }
+  if (!lk.jawWide) pPoly(S2([[x + r * .38, y + r * .7], [x + r * .62, y + r * .62], [x + r * .5, y + r * .92], [x + r * .2, y + r * 1.06]], 3), dk(.93));
   pPoly(ovalU(x, y + r * .98, r * .14, r * .05, 12), dk(.92));
   /* mouth: wide, flat and relaxed, thin lips */
   const lipU = mixHex(sk, '#8a4a40', .3), lipL = mixHex(sk, '#a05a50', .3), my = y + r * .74;
@@ -3917,7 +3918,7 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
   if (!lk.qzip) pRect(x - r * .4, y + r * .65, r * .8, r * .85, shadeHex(sk, .86)); if (!lk.qzip) pRect(x - r * .4, y + r * .9, r * .8, Math.max(1, r * .18), shadeHex(sk, .72));
   const fw = lk.slim ? (typeof lk.slim === 'number' ? lk.slim : .88) : 1, fq = fw / .88; /* a narrower, longer face for some characters */
   if (lk.realFace && HD) { /* one smooth face shape, lit softly from the upper left: no hard half-face shadow */
-    const sh0 = SH3; SH3 = 0; const fq2 = fw / .88, face = smoothPts([[x - r * fw, y - r * .2], [x - r * fw * .92, y - r * .7], [x - r * .55, y - r * .98], [x, y - r * 1.04], [x + r * .55, y - r * .98], [x + r * fw * .92, y - r * .7], [x + r * fw, y - r * .2], [x + r * fw * .97, y + r * .3], [x + r * .64 * fq2, y + r * .8], [x + r * .36 * fq2, y + r * 1.04], [x, y + r * 1.12], [x - r * .36 * fq2, y + r * 1.04], [x - r * .64 * fq2, y + r * .8], [x - r * fw * .97, y + r * .3]], 5);
+    const sh0 = SH3; SH3 = 0; const fq2 = fw / .88, face = smoothPts([[x - r * fw, y - r * .2], [x - r * fw * .92, y - r * .7], [x - r * .55, y - r * .98], [x, y - r * 1.04], [x + r * .55, y - r * .98], [x + r * fw * .92, y - r * .7], [x + r * fw, y - r * .2], [x + r * fw * .97, y + r * .3], ...(lk.jawWide ? [[x + r * .82, y + r * .78], [x + r * .5, y + r * 1.06], [x, y + r * 1.12], [x - r * .5, y + r * 1.06], [x - r * .82, y + r * .78]] : [[x + r * .64 * fq2, y + r * .8], [x + r * .36 * fq2, y + r * 1.04], [x, y + r * 1.12], [x - r * .36 * fq2, y + r * 1.04], [x - r * .64 * fq2, y + r * .8]]), [x - r * fw * .97, y + r * .3]], 5);
     pPoly(face, sk); DC.save(); DC.beginPath(); face.forEach((p0, i) => { const q = tf(p0[0], p0[1]); if (i) DC.lineTo(q[0], q[1]); else DC.moveTo(q[0], q[1]); }); DC.closePath(); DC.clip();
     const g0 = tf(x - r * .35, y - r * .35), gr = DC.createRadialGradient(g0[0], g0[1], r * .2, g0[0], g0[1], r * 1.6); gr.addColorStop(0, 'rgba(255,240,225,.10)'); gr.addColorStop(.55, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(60,30,15,.16)'); DC.fillStyle = gr; DC.fillRect(g0[0] - r * 3, g0[1] - r * 3, r * 6, r * 6);
     DC.restore(); SH3 = sh0; }
@@ -4299,14 +4300,50 @@ function drawBallHero(b, W, H) {
   drawBallIcon(b, cx, cy, r);
 }
 /* smooth vector ball for menus and the shop: shaded sphere, a soft dimple pattern, the alignment line and a highlight */
+/* each ball's own markings, so a range ball never looks like a tour ball. Brand names are plain text only (no logos) */
+const BALL_LOOK = {
+  std: { bands: ['#c62828'], stamp: 'PRACTICE', stampCol: '#c62828', scuff: true, dull: true },
+  supersoft: { stamp: 'SUPERSOFT', stampCol: '#1b1b1b', brand: 'Callaway', num: '2', numCol: '#1b1b1b', matte: true },
+  pissmissile: { stamp: 'PISS MISSILE', stampCol: '#111111', bold: true, bolts: '#e53935', num: '69', numCol: '#e53935' },
+  velocity: { stamp: 'VELOCITY', stampCol: '#1565c0', brand: 'Titleist', arrows: '#1565c0', num: '3', numCol: '#1565c0' },
+  zstar: { stamp: 'Z-STAR', stampCol: '#111111', brand: 'Srixon', bar: '#c62828', num: '1', numCol: '#c62828' },
+  chrome: { stamp: 'Callaway', stampCol: '#2a2a2a', serif: true, tracks: ['#1e4fc2', '#d7322e'], num: '2', numCol: '#2a2a2a' },
+  tp5: { stamp: 'TP5', stampCol: '#111111', bold: true, brand: 'TaylorMade', pix: true, num: '5', numCol: '#111111' },
+  prov1: { stamp: 'PRO V1', stampCol: '#111111', smallCaps: true, brand: 'Titleist', arrows: '#111111', num: '1', numCol: '#111111' },
+  prov1x: { stamp: 'PRO V1x', stampCol: '#111111', smallCaps: true, brand: 'Titleist', arrows: '#111111', num: '4', numCol: '#c62828' }
+};
+function drawBallMarks(b, cx, cy, r) {
+  const L = BALL_LOOK[b.id] || {}, x = DC, txt = (s, px, py, size, col, font, bold) => { x.fillStyle = col; x.font = `${bold ? 800 : 700} ${size}px ${font || '"Barlow Condensed", sans-serif'}`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s, px, py); };
+  if (L.scuff) { x.strokeStyle = 'rgba(120,110,95,.35)'; x.lineWidth = Math.max(.4, r * .035); for (const [a, b2, l] of [[-.5, .2, .35], [.3, -.45, .25], [.1, .55, .3], [-.25, -.3, .18]]) { x.beginPath(); x.moveTo(cx + a * r, cy + b2 * r); x.lineTo(cx + (a + l) * r, cy + (b2 + l * .3) * r); x.stroke(); }
+    x.fillStyle = 'rgba(150,140,120,.18)'; x.beginPath(); x.ellipse(cx + r * .35, cy + r * .4, r * .22, r * .12, .4, 0, 6.29); x.fill(); }
+  if (L.bands) { x.strokeStyle = L.bands[0]; x.lineWidth = r * .13; for (const o of [-.62, .3]) { x.beginPath(); x.ellipse(cx, cy + o * r, r * 1.02, r * .26, 0, Math.PI * .02, Math.PI * .98); x.stroke(); } /* one band above the word, one below */ }
+  if (L.tracks) { x.lineCap = 'round'; x.strokeStyle = L.tracks[0]; x.lineWidth = r * .07; for (const o of [-.28, .3]) { x.beginPath(); x.moveTo(cx - r * .98, cy + o * r + r * .02); x.quadraticCurveTo(cx, cy + o * r - r * .06, cx + r * .98, cy + o * r + r * .02); x.stroke(); }
+    x.strokeStyle = L.tracks[1]; x.lineWidth = r * .1; for (const sd of [-1, 1]) { x.beginPath(); x.moveTo(cx + sd * r * .62, cy); x.lineTo(cx + sd * r * .98, cy + r * .03); x.stroke(); } x.lineCap = 'butt'; }
+  const sw = r * (L.stamp && L.stamp.length > 8 ? .2 : L.bold ? .34 : .27);
+  x.font = L.smallCaps ? `600 ${r * .25}px "Barlow", sans-serif` : `700 ${sw}px "Barlow", sans-serif`; const stW = L.stamp ? x.measureText(L.stamp).width * (L.smallCaps ? .92 : 1) : 0;
+  if (L.arrows) { x.fillStyle = L.arrows; for (const sd of [-1, 1]) { const x0 = cx + sd * (stW / 2 + r * .07), x1 = cx + sd * r * .9, h = r * .045; x.beginPath(); x.moveTo(x0, cy - h); x.lineTo(x1 - sd * h * 3, cy - h); x.lineTo(x1, cy); x.lineTo(x1 - sd * h * 3, cy + h); x.lineTo(x0, cy + h); x.closePath(); x.fill(); } }
+  if (L.bar) { x.fillStyle = L.bar; x.fillRect(cx - r * .75, cy + r * .18, r * 1.5, r * .05); }
+  if (L.bolts) { x.fillStyle = L.bolts; for (const sd of [-1, 1]) { const bx = cx + sd * r * .8; x.beginPath(); x.moveTo(bx, cy - r * .22); x.lineTo(bx - sd * r * .1, cy + r * .02); x.lineTo(bx + sd * r * .02, cy + r * .02); x.lineTo(bx - sd * r * .06, cy + r * .24); x.lineTo(bx + sd * r * .1, cy - r * .04); x.lineTo(bx - sd * r * .02, cy - r * .04); x.closePath(); x.fill(); } }
+  if (L.pix) { const cols = ['#e53935', '#1e88e5', '#fdd835']; for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28 + .3, px = cx + Math.cos(a) * r * .68, py = cy + Math.sin(a) * r * .62; if (Math.abs(py - cy) < r * .25 || Math.abs(px - cx) < r * .3) continue; x.fillStyle = cols[i % 3]; x.beginPath(); x.moveTo(px, py - r * .07); x.lineTo(px + r * .07, py + r * .06); x.lineTo(px - r * .07, py + r * .06); x.closePath(); x.fill(); } }
+  if (L.stamp) { const font = L.serif ? 'Georgia, "Times New Roman", serif' : L.bold ? '"Barlow Condensed", sans-serif' : '"Barlow", sans-serif';
+    if (L.smallCaps) { const big = r * .27, sm = r * .2, parts = L.stamp.split(' '); x.font = `600 ${big}px "Barlow", sans-serif`; const tw = x.measureText(L.stamp).width * .92; let px = cx - tw / 2; x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+      for (const ch of L.stamp) { const up = /[A-Z0-9]/.test(ch) && (ch === 'P' || ch === 'V' || /[0-9]/.test(ch)); x.font = `600 ${up ? big : sm}px "Barlow", sans-serif`; x.fillStyle = L.stampCol; const ch2 = ch === 'x' ? 'x' : ch; x.fillText(up ? ch2 : ch2.toUpperCase(), px, cy + big * .36); px += x.measureText(up ? ch2 : ch2.toUpperCase()).width; } x.textBaseline = 'middle'; }
+    else txt(L.stamp, cx, cy + r * .02, sw, L.stampCol, font, L.bold); }
+  if (L.brand) txt(L.brand, cx, cy - r * .52, r * .17, L.stampCol, '"Barlow", sans-serif');
+  if (L.num) txt(L.num, cx + r * .02, cy + r * .58, r * .24, L.numCol, '"Barlow", sans-serif', true);
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+}
 function drawBallSmooth(b, cx, cy, r) {
-  const x = DC, col = b.col || '#ffffff', matte = b.id === 'supersoft';
+  const x = DC, L = BALL_LOOK[b.id] || {}, col = L.dull ? '#eeece4' : b.col || '#ffffff', matte = L.matte;
   x.save(); x.globalAlpha = .28; x.fillStyle = '#000'; x.beginPath(); x.ellipse(cx + r * .18, cy + r * .95, r * .9, r * .2, 0, 0, 6.29); x.fill(); x.globalAlpha = 1;
   let g = x.createRadialGradient(cx - r * .38, cy - r * .42, r * .08, cx, cy, r * 1.05); g.addColorStop(0, shadeHex(col, 1.12)); g.addColorStop(.55, col); g.addColorStop(1, shadeHex(col, .62)); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.fill();
   x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.clip();
-  x.fillStyle = 'rgba(0,0,0,.07)'; const st = r * .19; for (let yy = -r; yy <= r; yy += st * .87) for (let xx = -r + ((Math.round(yy / (st * .87)) & 1) ? st / 2 : 0); xx <= r; xx += st) { const d = Math.hypot(xx, yy) / r; if (d > .98) continue; const k = 1 - d * d * .55; x.beginPath(); x.ellipse(cx + xx, cy + yy, st * .3 * k, st * .3, Math.atan2(yy, xx), 0, 6.29); x.fill(); }
-  x.strokeStyle = b.band || b.mark || 'rgba(30,30,30,.7)'; x.lineWidth = Math.max(.6, r * .07); x.beginPath(); x.ellipse(cx + r * .05, cy + r * .08, r * .82, r * .22, -.25, Math.PI * .05, Math.PI * .95); x.stroke();
-  g = x.createRadialGradient(cx - r * .4, cy - r * .45, 0, cx - r * .4, cy - r * .45, r * .5); g.addColorStop(0, matte ? 'rgba(255,255,255,.35)' : 'rgba(255,255,255,.85)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(cx - r, cy - r, r * 2, r * 2);
+  /* dimples: each a soft dark cup with a lit lower edge, packed in a hex grid and foreshortened toward the rim */
+  const st = r * .17; for (let yy = -r; yy <= r; yy += st * .87) for (let xx = -r + ((Math.round(yy / (st * .87)) & 1) ? st / 2 : 0); xx <= r; xx += st) { const d = Math.hypot(xx, yy) / r; if (d > .99) continue; const k = Math.sqrt(1 - d * d), an = Math.atan2(yy, xx), rr = st * .4;
+    x.fillStyle = `rgba(0,0,0,${.05 + d * .05})`; x.beginPath(); x.ellipse(cx + xx, cy + yy, rr * (.35 + .65 * k), rr, an, 0, 6.29); x.fill();
+    if (r > 14) { x.fillStyle = 'rgba(255,255,255,.16)'; x.beginPath(); x.ellipse(cx + xx + Math.cos(an) * rr * .3, cy + yy + Math.sin(an) * rr * .3, rr * (.35 + .65 * k) * .55, rr * .5, an, 0, 6.29); x.fill(); } }
+  drawBallMarks(b, cx, cy, r);
+  g = x.createRadialGradient(cx - r * .4, cy - r * .45, 0, cx - r * .4, cy - r * .45, r * .5); g.addColorStop(0, matte ? 'rgba(255,255,255,.25)' : L.dull ? 'rgba(255,255,255,.4)' : 'rgba(255,255,255,.85)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(cx - r, cy - r, r * 2, r * 2);
   x.restore(); x.strokeStyle = 'rgba(0,0,0,.25)'; x.lineWidth = Math.max(.4, r * .03); x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.stroke();
 }
 function drawBallHeroSmooth(b, W, H) {
@@ -4461,7 +4498,7 @@ const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 /* canvas resolution: enough device pixels that people and text stay sharp on the screen you have (the ground is
    capped separately, so this mostly costs fill rate) */
 /* indoor 2D scenes are cheap to fill, so they get the full screen resolution (people stay crisp) */
-const SHARP_SCR = { clubhouse: 1, pool: 1, darts: 1, casino: 1, office: 1, flight: 1, spoffice: 1 };
+const SHARP_SCR = { clubhouse: 1, pool: 1, darts: 1, casino: 1, office: 1, airnz: 1, checkin: 1, flight: 1, spoffice: 1 };
 function applyRes(force) {
   const dpr = devicePixelRatio || 1, px = Math.min(innerWidth, innerHeight * VW / VH) * dpr, need = Math.ceil(px / VW - .15), scene = G && SHARP_SCR[G.scr], perf = typeof save !== 'undefined' && save.settings && save.settings.perf, want = force || (G && G.autoLow ? 2 : clamp(need, 2, scene ? (dpr > 1.4 ? 6 : 4) : perf ? 2 : (dpr > 1.4 ? 4 : 3)));
   if (G && G.autoLow) G.autoLow = false;
@@ -5575,7 +5612,9 @@ function finishRound() {
       { /* the prize giving at the clubhouse is now part of every competition */
         const champ = (E.id === 'clubchamp' || E.id === 'cs_final') && pos === 1, yr = champ ? (save.champs && save.champs[E.course]) : null;
         const w = all[0]; save.ceremony = { cid: E.course, eid: E.id, tier: cerTier(E), name: E.name, won: pos === 1, champ, board: yr ? String(yr) : null, score: me.toPar !== undefined ? me.toPar : me[key] - par, winScore: w.toPar !== undefined ? w.toPar : w[key] - par, winner: w.me ? save.name : w.name, pos, posTxt: (ties > 1 ? 'tied ' : '') + pos + ordinal(pos) + ' of ' + all.length, prize, best: thinBest(r.best), field: all.filter(x => !x.me).slice(0, 5).map(x => x.name), offer: null };
-        if (pos === 1 && E.tier === 'INTERNATIONAL') { s.intlWins = (s.intlWins || 0) + 1; if (typeof pickOffer === 'function') save.ceremony.offer = pickOffer(); } }
+        if (pos === 1 && E.tier === 'INTERNATIONAL') { s.intlWins = (s.intlWins || 0) + 1; if (typeof pickOffer === 'function') save.ceremony.offer = pickOffer(); }
+        /* a national win in NZ with no way to fly cheaply: Air New Zealand offer to pay half the Koru card */
+        if (pos === 1 && E.tier === 'NATIONAL' && !save.ceremony.offer && typeof hasKoru === 'function' && !hasKoru() && !hasJet() && !(save.patron && save.patron.airnz)) save.ceremony.offer = 'airnz'; }
       if (r.season === 'club' && save.cseason) {
         const S = save.cseason, fin = E.id === 'cs_final'; let mine = 0;
         all.forEach(x => { const p2 = all.filter(y => y[key] < x[key]).length, pts = fin ? 0 : (CSEASON_PTS[p2] || 3), k = x.me ? '__me' : x.name; S.pts[k] = (S.pts[k] || 0) + pts; if (x.me) mine = pts; });
@@ -5919,7 +5958,7 @@ function update(dt) {
   G.t += dt;
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) hideBanner(); }
   if (G.scr === 'clubhouse') { updateClubhouse(dt); return; }
-  if (G.scr === 'office' || G.scr === 'flight') { updateTravelScene(dt); return; }
+  if (G.scr === 'office' || G.scr === 'flight' || G.scr === 'airnz' || G.scr === 'checkin') { updateTravelScene(dt); return; }
   if (G.scr === 'pool') { updatePool(dt); return; }
   if (G.scr === 'darts') { updateDarts(dt); return; }
   if (G.scr === 'casino') { updateCasino(dt); return; }
@@ -6121,6 +6160,8 @@ function render() {
   if (G.scr === 'darts' && G.darts) { try { drawDarts(); } finally { PXR = 1; } return; }
   if (G.scr === 'casino' && G.cas) { try { drawCasinoBg(); } finally { PXR = 1; } return; }
   if (G.scr === 'spoffice' && G.sp) { try { drawSponsorOffice(); } finally { PXR = 1; } return; }
+  if (G.scr === 'airnz' && G.kr) { try { drawKoruDesk(); } finally { PXR = 1; } return; }
+  if (G.scr === 'checkin' && G.ci) { try { drawCheckin(); } finally { PXR = 1; } return; }
   if ((G.scr === 'office' && G.of) || (G.scr === 'flight' && G.fl)) { try { if (G.scr === 'office') drawOffice(); else drawFlight(); } finally { PXR = 1; } return; }
   try { renderFrame(); } finally { PXR = 1; }
   /* if this device struggles, quietly drop the ground back to 1x (characters stay sharp) */
@@ -7160,14 +7201,16 @@ function resumeRound() { if (!save.round) return; if (save.round.guest === 'hemi
 
 /* ---------- tournaments: you sign in at the clubhouse, meet your group, tee off; two-round events come back
    to the clubhouse between rounds (with the cut), and finish with the prize giving ---------- */
+/* every trip abroad goes through an airport: the Amalfi lounge with the jet card, otherwise Auckland check-in */
+function departAbroad(c, then) { if (hasJet()) openJetOffice({ c, then }); else openCheckin({ c, extra: 0, then }); }
 function tournEnter(E, season) {
   const go = () => { const dif = SEL.diff, rt = rating(E.course, 'champ', dif, 0, E.n);
-    const ec = courseById(E.course), fl = flightCost(ec), tot = E.fee + fl;
+    const ec = courseById(E.course), fl = 0, tot = E.fee + fl; /* flights are paid at check-in */
     if (tot > 0) { if (save.coins < tot) { SFX.play('err'); toast(`Need <b>${fmt(tot - save.coins)}</b> more coins`); return; } save.coins -= tot; save.stats.feesPaid += tot; }
-    save.tourn = tournNew(E, rt, dif, season); persist(); closeModal(); SFX.play('good'); const go2 = () => openClubhouse(E.course, { back: 'events', meX: 300 }); if (ec.abroad && hasJet()) startFlight(ec, go2); else go2(); };
+    save.tourn = tournNew(E, rt, dif, season); persist(); closeModal(); SFX.play('good'); const go2 = () => { if (save.tourn) save.tourn.flown = true; openClubhouse(E.course, { back: 'events', meX: 300 }); }; if (ec.abroad) departAbroad(ec, go2); else go2(); };
   if (save.tourn && save.tourn.id !== E.id) { confirmBox(`You are still in the <b>${EVENTS.find(e => e.id === save.tourn.id).name}</b>. Withdraw and enter this one?`, () => { save.tourn = null; closeModal(); tournEnter(E, season); }); return; }
   if (save.tourn && save.tourn.id === E.id) { ACT.tournGo(); return; }
-  confirmBox(`Enter the <b>${E.name}</b>?<br><span class="u1">${E.rounds > 1 ? E.rounds + ' rounds' + (E.cut ? ' with a cut' : '') : 'One round'} · ${E.fmt === 'net' ? 'net' : 'gross'} · ${E.field} players</span><br><br>Entry ${E.fee ? priceHTML(E.fee) : 'free'}${flightCost(courseById(E.course)) ? ` + flights ${priceHTML(flightCost(courseById(E.course)))}` : ''}`, go);
+  confirmBox(`Enter the <b>${E.name}</b>?<br><span class="u1">${E.rounds > 1 ? E.rounds + ' rounds' + (E.cut ? ' with a cut' : '') : 'One round'} · ${E.fmt === 'net' ? 'net' : 'gross'} · ${E.field} players</span><br><br>Entry ${E.fee ? priceHTML(E.fee) : 'free'}${courseById(E.course).abroad && !hasJet() ? ` · flights paid at the airport (about ${priceHTML(flightCost(courseById(E.course)))}${hasKoru() ? ' with Koru' : ''})` : ''}`, go);
 }
 function tournDeskHTML() {
   const c = G.ch, T = save.tourn; if (!c || !T) return '';
@@ -7241,7 +7284,7 @@ SCR.title = () => {
     </div>
     <div class="col tright">
       <div class="menu">
-        ${save.offerPending && !save.ceremony ? `<button class="btn y resumeb" data-a="offerOpen"><b>📞 ${OFFER_NAME[save.offerPending]} WANTS A WORD</b><span>${save.offerPending === 'redbull' ? 'A SPONSORSHIP OFFER' : 'A PRIVATE OFFER'}</span></button>` : ''}
+        ${save.offerPending && !save.ceremony ? `<button class="btn y resumeb" data-a="offerOpen"><b>📞 ${OFFER_NAME[save.offerPending]} WANTS A WORD</b><span>${save.offerPending === 'redbull' || save.offerPending === 'airnz' ? 'A SPONSORSHIP OFFER' : 'A PRIVATE OFFER'}</span></button>` : ''}
         ${save.ceremony ? `<button class="btn y resumeb" data-a="toClub"><b>🏆 PRIZE GIVING</b><span>${esc(courseById(save.ceremony.cid).short)} ${save.ceremony.tier && save.ceremony.tier !== 'club' ? 'MAIN STAGE' : 'CLUBHOUSE'} · EVERYONE'S WAITING</span></button>` : ''}
         ${r ? `<button class="btn y resumeb" data-a="resume"><b>▶ RESUME ROUND</b><span>${courseById(r.courseId).short} · HOLE ${r.start + r.cur + 1}</span></button>` : ''}
         <button class="btn ${r ? '' : 'y'}" data-a="go" data-v="setup">PLAY A ROUND</button>
@@ -7375,7 +7418,7 @@ SCR.events = () => {
   const idx = save.hcp.index, d = SEL.diff, T = save.tourn, tiers = ['CLUB', 'REGIONAL', 'NATIONAL', 'INTERNATIONAL', 'MAJOR'];
   const card = E => { const doneCC = E.once && save.clubChampSeason === (save.season ? save.season.no : 1);
     const c = courseById(E.course), okIdx = idx !== null && (E.fmt === 'net' || idx <= E.maxIdx), wins = save.wins[E.id] || 0, first = Math.round(E.purse * Math.min(1.5, DIFFS[d].mult) * prizeSplit(E.field)[0] / 10) * 10;
-    const lock = idx === null ? '3 rounds for a handicap first' : E.fmt === 'gross' && idx > E.maxIdx ? `Handicap ${fmtIdx(E.maxIdx)} or better` : c.invite && !augustaOpen() ? 'Invitation only' : '';
+    const natWon = EVENTS.some(e => e.tier === 'NATIONAL' && save.wins[e.id]), lock = idx === null ? '3 rounds for a handicap first' : E.tier === 'INTERNATIONAL' && !natWon ? 'Win a national event first' : E.fmt === 'gross' && idx > E.maxIdx ? `Handicap ${fmtIdx(E.maxIdx)} or better` : c.invite && !augustaOpen() ? 'Invitation only' : '';
     const live = T && T.id === E.id;
     return `<div class="evc ${lock ? 'lockd' : ''} ${live ? 'live' : ''}" data-a="enterEvent" data-v="${E.id}"><div class="evimg"><canvas class="thumb" data-thumb="${c.id}" data-hole="${(E.id.length * 3) % c.holes.length}"></canvas><span class="evtier">${E.tier}</span>${wins ? `<span class="evwin">★ ${wins}</span>` : ''}</div>
       <div class="evb"><div class="nm">${E.name}</div><div class="u1 dimtxt">${c.short || c.name}</div>
@@ -7410,7 +7453,7 @@ function statBar(label, v, max, cur) {
 function shopItems(tab) {
   const g0 = golferById(save.golfer);
   if (tab === 'travel') return [{ id: 'jet', name: JET.name + ' Card', sub: hasJet() ? 'Card holder' : 'Private jet membership', badge: hasJet() ? 'OWNED' : priceHTML(JET.price), on: hasJet(), spr: '<canvas data-spr="jetcard" data-id="s" style="width:calc(var(--u)*11)"></canvas>', big: '<canvas data-spr="jetcard" data-id="b" style="width:calc(var(--u)*110)"></canvas>', desc: `Fly to every overseas course for free, forever, and get 25% off green fees abroad. Without it you pay flights every trip (members get a 20% discount).<br>Bought in person at the ${JET.name} lounge.`, stats: [], act: `<button class="btn ${hasJet() ? 'b' : 'y'}" data-a="jetOffice">${hasJet() ? 'VISIT THE LOUNGE' : 'VISIT THE LOUNGE TO BUY'}</button>` },
-    { id: 'koru', name: KORU.name, sub: hasJet() ? 'Not needed with the jet card' : 'Half-price flights', badge: hasKoru() ? 'OWNED' : priceHTML(KORU.price), on: hasKoru(), spr: '<canvas data-spr="korucard" data-id="s" style="width:calc(var(--u)*11)"></canvas>', big: '<canvas data-spr="korucard" data-id="b" style="width:calc(var(--u)*110)"></canvas>', desc: 'Half price on every flight to an overseas course. Nothing else: green fees and the lounge are full price, and members still get their 20% off.<br>Buy it here, no visit needed.', stats: [], act: hasKoru() ? '<button class="btn g" disabled>OWNED</button>' : `<button class="btn y" data-a="koruBuy" ${hasJet() ? 'disabled' : ''}>BUY ${priceHTML(KORU.price)}</button>` }];
+    { id: 'koru', name: KORU.name, sub: hasJet() ? 'Not needed with the jet card' : 'Half-price flights', badge: hasKoru() ? 'OWNED' : priceHTML(KORU.price), on: hasKoru(), spr: '<canvas data-spr="korucard" data-id="s" style="width:calc(var(--u)*11)"></canvas>', big: '<canvas data-spr="korucard" data-id="b" style="width:calc(var(--u)*110)"></canvas>', desc: 'Half price on every flight to an overseas course. Nothing else: green fees and the lounge are full price, and members still get their 20% off.<br>Sign up in person at the Koru desk, Auckland Airport.', stats: [], act: hasKoru() ? '<button class="btn g" data-a="koruDesk">VISIT THE KORU DESK</button>' : `<button class="btn y" data-a="koruDesk" ${hasJet() ? 'disabled' : ''}>GO TO THE AIRPORT</button>` }];
   if (tab === 'clubs') return CLUBS.map(c => { const lvl = save.clubs[c.id], own = lvl !== undefined, L = lvl || 0, T0 = CLUB_TIERS[L];
     return { id: c.id, cost: !own ? c.price : L < CLUB_MAX ? upCost(c, L) : 0, extra: bagChart(c.id), name: fullName(c), sub: own ? T0.name : 'Not in bag', badge: !own ? priceHTML(c.price) : L >= CLUB_MAX ? 'MAX' : 'LV ' + L, spr: sprTag('club', c.id, 16, `data-lvl="${L}"`), big: sprTag('club', c.id, 64, `data-lvl="${L}"`),
       desc: (c.desc || (c.putter ? 'Each level steadies your stroke and pace control.' : 'Each level adds 3% distance and a 7% wider strike zone.')) + (own && L < CLUB_MAX ? `<br>Next: <b>${CLUB_TIERS[L + 1].name}</b>` : ''),
@@ -7675,10 +7718,14 @@ function rerender() { if (G.scr !== 'game') showScreen(G.scr); }
 
 /* ---------- actions ---------- */
 function teeOff(cfg, fee, label) {
+  if (cfg.fly && !hasJet() && cfg.gfee === undefined) { cfg = Object.assign({}, cfg, { gfee: fee }); fee = 0; } /* flights and the green fee are paid at check-in */
   if (save.shout) { const sc = courseById(save.shout.cid); SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*220)"><div class="u2">YOU OWE THE BAR</div><div class="u1">Tradition: after a hole in one you buy the members a drink at ${esc(sc.name)}.</div><div class="row"><button class="btn y" data-a="payShout">GO TO THE CLUBHOUSE</button><button class="btn g" data-m="close">LATER</button></div></div>`); return; }
   const go = () => {
     if (fee > 0) { if (save.coins < fee) { SFX.play('err'); toast(`Need <b>${fmt(fee - save.coins)}</b> more coins`); return; } save.coins -= fee; save.stats.feesPaid += fee; }
-    G.lastCfg = cfg; if (cfg.fly && hasJet()) startFlight(courseById(cfg.courseId), () => startRound(cfg)); else startRound(cfg);
+    G.lastCfg = cfg; const fc = courseById(cfg.courseId);
+    if (cfg.fly && hasJet()) openJetOffice({ c: fc, then: () => startRound(cfg) }); /* through the Amalfi lounge */
+    else if (cfg.fly) openCheckin({ c: fc, extra: cfg.gfee || 0, extraLabel: 'green fee', then: () => startRound(cfg) }); /* through Auckland Airport: you pay there */
+    else startRound(cfg);
   };
   if (save.round) { confirmBox('This replaces your saved round in progress. Continue?', () => { save.round = null; teeOff(cfg, fee, label); }); return; }
   if (fee > 0) confirmBox(`${label}<br><br>Total <b>${priceHTML(fee)}</b>`, go); else go();
@@ -7696,13 +7743,15 @@ const ACT = {
   setDiff: v => { save.settings.diff = v; SEL.diff = v; persist(); rerender(); },
   start: () => {
     const c = courseById(SEL.course), wxT = weatherOn(c.id, save.day); if (wxT.rain === 3) return; const fee = isMember(c.id) ? 0 : Math.round(feeFor(c, SEL.n) * wxFeeMult(wxT) / 5) * 5;
-    const gf = c.abroad && hasJet() ? Math.round(fee * .75 / 5) * 5 : fee, fl = flightCost(c);
+    const gf = c.abroad && hasJet() ? Math.round(fee * .75 / 5) * 5 : fee, fl = 0; /* flights are paid at the airport now */
+    if (c.abroad && !hasJet()) { teeOff({ courseId: c.id, n: SEL.n, start: SEL.start, tee: SEL.tee, diff: SEL.diff, fly: true, gfee: gf, guest: null }, 0, ''); return; }
     teeOff({ courseId: c.id, n: SEL.n, start: SEL.start, tee: SEL.tee, diff: SEL.diff, fly: c.abroad, guest: (SEL.partner && partnerInvite(c.id)) || null }, gf + fl, `${fl ? `Flights to ${c.name}: ${priceHTML(fl)}${isMember(c.id) ? ' (member rate)' : ''}<br>` : c.abroad && hasJet() ? 'Flying on your jet card.<br>' : ''}Green fee for ${SEL.n} hole${SEL.n > 1 ? 's' : ''}: ${gf ? priceHTML(gf) : 'free'}`);
   },
   enterEvent: v => { const E = EVENTS.find(e => e.id === v), idx = save.hcp.index, ec = courseById(E.course);
     if (ec.invite && !augustaOpen()) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">INVITATION ONLY</div><div>Members and guests only. Win a national event or bigger (like the Waikato Amateur Open) and watch your Golf NZ app inbox.</div><button class="btn g" data-m="close">CLOSE</button></div>`); return; }
     if (false) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">✈ PLANE TICKET NEEDED</div><div>${E.name} is at ${ec.name}. Buy a one-time ticket there first (${priceHTML(ec.ticket)}).</div><div class="row"><button class="btn y" data-a="buyTicket" data-v="${ec.id}">BUY TICKET</button><button class="btn g" data-m="close">CLOSE</button></div></div>`); return; }
     if (idx === null) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">YOU NEED A HANDICAP</div><div class="u1">Play <b>3 rounds</b> of 9 or 18 holes first. You have played <b class="gold">${save.hcp.rounds.length}/3</b>.</div><div class="row"><button class="btn y" data-a="go" data-v="setup">PLAY A ROUND</button><button class="btn g" data-m="close">CLOSE</button></div></div>`); return; }
+    if (E.tier === 'INTERNATIONAL' && !EVENTS.some(e => e.tier === 'NATIONAL' && save.wins[e.id])) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">NOT YET</div><div class="u1">International fields want proven players. Win a <b>national</b> event first: the Waikato Amateur Open, the Remarkables Invitational or the Kidnappers Classic.</div><button class="btn g" data-m="close">CLOSE</button></div>`); return; }
     if (E.fmt === 'gross' && idx > E.maxIdx) { SFX.play('err'); showModal(`<div class="col" style="max-width:calc(var(--u)*240)"><div class="u2">HANDICAP TOO HIGH</div><div class="u1">This one needs handicap <b>${fmtIdx(E.maxIdx)}</b> or better. You are <b class="gold">${fmtIdx(idx)}</b>. Try a net event.</div><button class="btn g" data-m="close">CLOSE</button></div>`); return; } tournEnter(E, false); },
   again: () => { if (!G.lastCfg) { showScreen('setup'); return; } const c = courseById(G.lastCfg.courseId); teeOff(Object.assign({}, G.lastCfg, { event: null }), isMember(c.id) ? 0 : feeFor(c, G.lastCfg.n), `Green fee at ${c.name}`); },
   buyTicket: v => { const c = courseById(v); confirmBox(`Fly to <b>${c.name}</b>?<br><span class="u1">${priceHTML(c.ticket)} once. After that you can play here any time.</span>`, () => { closeModal(); spend(c.ticket, () => { save.tickets.push(v); toast(`✈ Ticket booked: <b>${c.name}</b>`); }); }); },
@@ -7725,7 +7774,7 @@ const ACT = {
   enterClubSeason: v => { const E = EVENTS.find(e => e.id === v); tournEnter(E, 'club'); },
   enterSeason: v => { const E = EVENTS.find(e => e.id === v); if (save.hcp.index === null) { ACT.enterEvent(v); return; } tournEnter(E, true); },
   tournTee: () => { const T = save.tourn; if (!T) return; const E = EVENTS.find(e => e.id === T.id); G.ch = null; teeOff({ courseId: E.course, n: E.n, start: 0, tee: 'champ', diff: T.diff, event: E.id, season: T.season }, 0, ''); },
-  tournGo: () => { const T = save.tourn; if (!T) return; openClubhouse(EVENTS.find(e => e.id === T.id).course, { back: 'events', meX: 300 }); },
+  tournGo: () => { const T = save.tourn; if (!T) return; const cid = EVENTS.find(e => e.id === T.id).course, c = courseById(cid), go2 = () => { T.flown = true; persist(); openClubhouse(cid, { back: 'events', meX: 300 }); }; if (c.abroad && !T.flown) departAbroad(c, go2); else go2(); },
   tournQuit: () => confirmBox('Withdraw from the tournament?<br><span class="u1">Your entry fee is not refunded.</span>', () => { closeModal(); save.tourn = null; persist(); if (G.ch) closeClubhouse(); else rerender(); }),
   deskToggle: () => { if (G.ch) { G.ch.deskHide = !G.ch.deskHide; rerender(); } },
   drill: v => { SFX.play('ui'); startPractice(v); },
@@ -8790,18 +8839,64 @@ function drawKoruCard(x, W, H) {
   g = x.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.08)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.beginPath(); x.moveTo(W * .25, 0); x.lineTo(W * .5, 0); x.lineTo(W * .32, H); x.lineTo(W * .07, H); x.fill();
   x.restore(); x.strokeStyle = 'rgba(180,220,228,.3)'; x.lineWidth = Math.max(1, s); x.beginPath(); x.roundRect ? x.roundRect(1, 1, W - 2, H - 2, r) : x.rect(1, 1, W - 2, H - 2); x.stroke();
 }
+/* the Amalfi lounge view, drawn once and kept: golden hour over a coastal airfield, layered hills in haze, the sea,
+   a hangar, and the club's business jet (plain white, gold cheatline, no markings) with its airstair down. Still. */
+function drawAmalfiView(v, W, H) {
+  const lg = (y0, y1, st) => { const g = v.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+  v.fillStyle = lg(0, H * .7, [[0, '#e9a26a'], [.45, '#f6c896'], [1, '#fde9cf']]); v.fillRect(0, 0, W, H);
+  const sx = W * .72, sy = H * .6; let g = v.createRadialGradient(sx, sy, 2, sx, sy, W * .45); g.addColorStop(0, 'rgba(255,246,220,.95)'); g.addColorStop(.08, 'rgba(255,236,196,.7)'); g.addColorStop(.35, 'rgba(255,214,160,.18)'); g.addColorStop(1, 'rgba(255,214,160,0)'); v.fillStyle = g; v.fillRect(0, 0, W, H);
+  v.fillStyle = '#fff8e8'; v.beginPath(); v.arc(sx, sy, 7, 0, 6.29); v.fill();
+  for (const [cy, a, sp] of [[38, .35, 1.3], [52, .25, 1.9], [30, .2, 2.4]]) { v.fillStyle = `rgba(255,236,214,${a})`; for (let i = 0; i < 6; i++) { const cx = (i * W / 5 + cy * 3) % (W + 60) - 30; v.beginPath(); v.ellipse(cx, cy + Math.sin(i * sp) * 4, 34 + i % 3 * 10, 2.6, 0, 0, 6.29); v.fill(); } }
+  const hz = H * .7, ridge = (base, amp, seed, col) => { v.fillStyle = col; v.beginPath(); v.moveTo(0, H); for (let i = 0; i <= 40; i++) { const px = i * W / 40, py = base - amp * (.5 + .5 * Math.sin(i * .55 + seed)) * (.6 + .4 * Math.sin(i * .21 + seed * 2)); v.lineTo(px, py); } v.lineTo(W, H); v.fill(); };
+  ridge(hz - 6, 26, 1.2, '#c59a9a'); ridge(hz - 2, 20, 3.1, '#a77f86'); ridge(hz + 2, 12, 5.3, '#8a6a72');
+  v.fillStyle = lg(hz, hz + 8, [[0, '#e7b98c'], [1, '#c99a78']]); v.fillRect(0, hz + 2, W, 7); /* the sea catching the sun */
+  v.fillStyle = 'rgba(255,240,210,.55)'; v.fillRect(sx - 30, hz + 3, 60, 1); v.fillRect(sx - 18, hz + 5.5, 36, .8);
+  v.fillStyle = '#7d7a5c'; v.fillRect(0, hz + 9, W, 5); /* dry grass */
+  v.fillStyle = lg(hz + 14, H, [[0, '#8a7f74'], [1, '#5d5650']]); v.fillRect(0, hz + 14, W, H - hz - 14); /* warm-lit apron */
+  v.fillStyle = 'rgba(255,220,170,.18)'; v.fillRect(0, hz + 14, W, 3);
+  v.fillStyle = 'rgba(245,238,220,.6)'; for (let i = 0; i < W; i += 22) v.fillRect(i + 4, hz + 22, 11, .8); /* taxiway centreline, still */
+  v.fillStyle = '#e9c45a'; for (let i = 0; i < W; i += 16) { v.beginPath(); v.arc(i + 8, hz + 16, .7, 0, 6.29); v.fill(); } /* edge lights */
+  /* hangar on the left */
+  v.fillStyle = '#b3a08c'; v.beginPath(); v.moveTo(10, hz + 14); v.lineTo(10, hz - 10); v.quadraticCurveTo(48, hz - 24, 86, hz - 10); v.lineTo(86, hz + 14); v.fill();
+  v.fillStyle = '#6e5f52'; v.fillRect(20, hz - 6, 56, 20); v.fillStyle = 'rgba(255,214,150,.25)'; v.fillRect(20, hz - 6, 56, 3);
+  /* the jet: nose left, swept wings, rear engines, T-tail */
+  const nx = W * .3, fy = hz + 10, L = 96, by = fy + 9;
+  v.fillStyle = 'rgba(40,25,15,.35)'; v.beginPath(); v.moveTo(nx + 4, by + 9); v.lineTo(nx + L + 30, by + 9); v.lineTo(nx + L + 44, by + 13); v.lineTo(nx + 14, by + 13); v.fill(); /* long evening shadow */
+  v.fillStyle = '#d9d2c8'; v.beginPath(); v.moveTo(nx + 38, by - 2); v.lineTo(nx + 62, by - 12); v.lineTo(nx + 66, by - 12); v.lineTo(nx + 52, by - 2); v.fill(); /* far wing */
+  v.fillStyle = '#ece6dc'; v.beginPath(); v.moveTo(nx + L - 12, fy + 1); v.lineTo(nx + L - 1, fy - 12); v.lineTo(nx + L + 5, fy - 12); v.lineTo(nx + L + 4, fy + 2); v.fill(); /* fin */
+  v.fillStyle = '#f2ece2'; v.fillRect(nx + L - 6, fy - 13.2, 17, 1.8); /* T-tail */
+  let fg = v.createLinearGradient(0, fy, 0, by + 1); fg.addColorStop(0, '#fffaf0'); fg.addColorStop(.5, '#f4ede2'); fg.addColorStop(1, '#bfae9b'); v.fillStyle = fg;
+  v.beginPath(); v.moveTo(nx + 10, fy); v.lineTo(nx + L - 6, fy + .5); v.quadraticCurveTo(nx + L + 8, fy + 2, nx + L + 10, fy + 4); v.lineTo(nx + L - 10, by); v.lineTo(nx + 10, by + .5); v.quadraticCurveTo(nx - 6, by - 1, nx - 7, (fy + by) / 2 + 1); v.quadraticCurveTo(nx - 4, fy + 1, nx + 10, fy); v.fill();
+  v.fillStyle = 'rgba(255,236,200,.5)'; v.fillRect(nx + 6, fy + .6, L - 14, 1); /* sun on the crown */
+  v.fillStyle = '#c9a24a'; v.fillRect(nx - 2, fy + 5.6, L + 4, .9); /* gold cheatline */
+  v.fillStyle = '#1f2228'; v.beginPath(); v.moveTo(nx - 3, fy + 3); v.lineTo(nx + 4, fy + 1.6); v.lineTo(nx + 6, fy + 3.4); v.lineTo(nx - 4, fy + 4.2); v.fill();
+  v.fillStyle = '#2a2e35'; for (let i = 0; i < 8; i++) { v.beginPath(); v.ellipse(nx + 18 + i * 7.2, fy + 3.4, 1.2, 1.5, 0, 0, 6.29); v.fill(); } /* oval cabin windows */
+  v.fillStyle = '#ece6dc'; v.beginPath(); v.ellipse(nx + L - 14, fy + 1, 9, 2.8, 0, 0, 6.29); v.fill(); v.fillStyle = '#2a2a2a'; v.beginPath(); v.ellipse(nx + L - 22.5, fy + 1, 1, 2.2, 0, 0, 6.29); v.fill(); /* rear engine */
+  v.fillStyle = '#f6f0e6'; v.beginPath(); v.moveTo(nx + 36, by - 1); v.lineTo(nx + 70, by + 8); v.lineTo(nx + 75, by + 8); v.lineTo(nx + 56, by - 1); v.fill(); /* near wing */
+  v.fillStyle = '#c9a24a'; v.fillRect(nx + 70, by + 7.4, 5, .7);
+  v.fillStyle = '#3a3530'; v.fillRect(nx + 5, by, .8, 5); v.fillRect(nx + 54, by, 1.1, 5); v.fillStyle = '#141414'; for (const gx of [nx + 5.4, nx + 53.5, nx + 56.5]) { v.beginPath(); v.arc(gx, by + 5.6, 1.4, 0, 6.29); v.fill(); }
+  /* airstair down from the forward door, a strip of carpet at the foot */
+  v.fillStyle = '#f2ece2'; v.beginPath(); v.moveTo(nx + 8, fy + 2); v.lineTo(nx + 12, fy + 2); v.lineTo(nx + 2, by + 6); v.lineTo(nx - 3, by + 6); v.fill();
+  v.strokeStyle = 'rgba(120,100,80,.6)'; v.lineWidth = .35; for (let i = 1; i < 5; i++) { const t = i / 5; v.beginPath(); v.moveTo(nx + 8 - 11 * t, fy + 2 + (by + 4 - fy) * t); v.lineTo(nx + 12 - 10 * t, fy + 2 + (by + 4 - fy) * t); v.stroke(); }
+  v.fillStyle = '#7a1e22'; v.beginPath(); v.moveTo(nx - 4, by + 6); v.lineTo(nx + 2, by + 6); v.lineTo(nx - 8, by + 12); v.lineTo(nx - 16, by + 12); v.fill();
+  /* a second jet far off, warm haze over everything */
+  v.fillStyle = 'rgba(236,226,212,.8)'; v.beginPath(); v.ellipse(W * .86, hz + 13, 16, 1.8, 0, 0, 6.29); v.fill(); v.fillRect(W * .86 + 10, hz + 6, 2, 7);
+  v.fillStyle = 'rgba(255,210,160,.08)'; v.fillRect(0, 0, W, H);
+}
 /* ---------- the lounge ---------- */
-function openJetOffice() {
-  G.of = { t: 0, step: hasJet() ? 'member' : 'arrive', shake: 0, cardT: -1, msg: null, back: G.scr === 'office' ? 'shop' : (G.scr || 'shop') };
+const JET_TYPES = ['Gulfstream G650', 'Gulfstream G550', 'Bombardier Global 8000', 'Embraer Lineage 1000', 'Dassault Falcon 900', 'Dassault Falcon 2000'];
+function openJetOffice(depart) {
+  if (depart) depart.jet = JET_TYPES[Math.floor(Math.random() * JET_TYPES.length)];
+  G.of = { t: 0, depart: depart || null, step: hasJet() ? 'member' : 'arrive', shake: 0, cardT: -1, msg: null, back: G.scr === 'office' ? 'shop' : (G.scr || 'shop') };
   /* Kolin: navy-black quarter-zip over a white tee, Amalfi Jets chest logo, short textured hair with faded sides, warm light-olive skin, friendly smile, bare hands */
-  G.of.founder = { id: 'kj', look: { hat: 'none', hair: 'quiff', build: 1.0, qzip: true, logo: 'Amalfi Jets', shirt: '#f8f8f5', sleeve: 'long', watch: true, noGlove: true, slim: .94, realFace: true, eyeCol: '#4a2e1c' }, c: { h: '#111', H: '#17120f', s: '#e6bd98', S: '#1a1f2b', p: '#1a1f2b', k: '#22201e' } };
-  G.of.msg = hasJet() ? `<b>${JET.founder}:</b> "Welcome back. Your aircraft is always ready."` : `Welcome to the <b>${JET.name}</b> lounge. ${JET.founder}, the founder, is by the window.`;
+  G.of.founder = { id: 'kj', look: { hat: 'none', hair: 'quiff', build: 1.07, qzip: true, logo: 'Amalfi Jets', shirt: '#f8f8f5', sleeve: 'long', watch: true, noGlove: true, slim: 1, realFace: true, jawWide: true, stubble: true, eyeCol: '#4a2e1c' }, c: { h: '#111', H: '#17120f', s: '#e6bd98', S: '#1a1f2b', p: '#1a1f2b', k: '#22201e' } };
+  G.of.msg = depart ? `<b>${JET.founder}:</b> "Your ${depart.jet} to ${esc(depart.c.name)} is fuelled and waiting. A glass of champagne before you board?"` : hasJet() ? `<b>${JET.founder}:</b> "Welcome back. Your aircraft is always ready."` : `Welcome to the <b>${JET.name}</b> lounge. ${JET.founder}, the founder, is by the window.`;
   showScreen('office');
 }
 SCR.office = () => { const O = G.of; if (!O) return SCR.title(); const own = hasJet();
   return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="ofLeave">&lt; LEAVE</button><h2>${JET.name.toUpperCase()}</h2>${coinsHTML()}</div><div class="grow"></div>
     ${O.msg ? `<div class="chmsg">${O.msg}</div>` : ''}
-    <div class="row chbar"><button class="btn sm g" data-a="ofRead">THE CARD</button>${own ? '' : `<button class="btn sm ${O.step === 'arrive' ? 'y' : 'g'}" data-a="ofMeet">MEET ${JET.founder.split(' ')[0].toUpperCase()}</button><button class="btn sm ${O.step === 'met' ? 'y' : 'g'}" data-a="ofBuy" ${O.step === 'met' ? '' : 'disabled'}>BUY THE CARD ${priceHTML(JET.price)}</button>`}${own ? '<button class="btn sm g" data-a="ofDrink">A GLASS OF CHAMPAGNE</button>' : ''}</div></div>`; };
+    <div class="row chbar"><button class="btn sm g" data-a="ofRead">THE CARD</button>${own ? '' : `<button class="btn sm ${O.step === 'arrive' ? 'y' : 'g'}" data-a="ofMeet">MEET ${JET.founder.split(' ')[0].toUpperCase()}</button><button class="btn sm ${O.step === 'met' ? 'y' : 'g'}" data-a="ofBuy" ${O.step === 'met' ? '' : 'disabled'}>BUY THE CARD ${priceHTML(JET.price)}</button>`}${own ? `<button class="btn sm ${O.depart && O.sip === undefined ? 'y' : 'g'}" data-a="ofDrink">A GLASS OF CHAMPAGNE</button>` : ''}${O.depart ? '<button class="btn sm y" data-a="ofBoard">BOARD YOUR JET &gt;</button>' : ''}</div></div>`; };
 Object.assign(ACT, {
   ofLeave: () => { const b = G.of ? G.of.back : 'shop'; G.of = null; showScreen(b === 'office' ? 'shop' : b); },
   ofRead: () => showModal(`<div class="col" style="max-width:calc(var(--u)*250);gap:calc(var(--u)*3)"><canvas data-spr="jetcard" data-id="b" style="width:calc(var(--u)*150);align-self:center"></canvas><div class="u2">${JET.name.toUpperCase()} CARD</div><div class="u1">• Every flight to every overseas course, free, forever<br>• 25% off green fees abroad<br>• Your own short in-flight scene on the way<br>• The lounge is yours to visit any time</div><div class="u1 dimtxt">One payment of ${priceHTML(JET.price)}. Without it, flights are paid every trip (members of a course get 20% off theirs).</div><button class="btn g sm" data-m="close">CLOSE</button></div>`),
@@ -8811,25 +8906,22 @@ Object.assign(ACT, {
   ofBuy: () => { const O = G.of; if (!O || O.step !== 'met') return; if (save.coins < JET.price) { SFX.play('err'); O.msg = `<b>${JET.founder}:</b> "Come back when the timing is right. The door is always open." (You need ${priceHTML(JET.price - save.coins)} more.)`; rerender(); return; }
     confirmBox(`Buy the <b>${JET.name}</b> card for ${priceHTML(JET.price)}?`, () => { closeModal(); save.coins -= JET.price; save.jet = { since: Date.now() }; persist(); updCoins(); SFX.play('register'); setTimeout(() => SFX.play('trophy'), 500);
       O.step = 'member'; O.cardT = O.t; O.msg = `<b>${JET.founder}:</b> "Welcome to the club. Wheels up whenever you are."`; rerender(); toast(`<b>${JET.name}</b> card added. Every flight is now free.`); }); },
-  ofDrink: () => { const O = G.of; if (O) { O.sip = O.t; SFX.play('chat'); } },
+  ofBoard: () => { const O = G.of; if (!O || !O.depart) return; const d = O.depart; G.of = null; startFlight(d.c, d.then, false, d.jet); },
+  ofDrink: () => { const O = G.of; if (O) { O.sip = O.t; SFX.play('chat'); if (O.depart) { O.msg = `<b>${JET.founder}:</b> "Cheers. The crew have another bottle on ice for the flight."`; rerender(); } } },
   koruBuy: () => { if (hasKoru() || hasJet()) return; if (save.coins < KORU.price) { SFX.play('err'); toast(`Need ${priceHTML(KORU.price - save.coins)} more`); return; }
     confirmBox(`Buy the <b>${KORU.name}</b> for ${priceHTML(KORU.price)}?<br><span class="u1">Half price on every flight. Nothing else.</span>`, () => { closeModal(); save.coins -= KORU.price; save.koru = { since: Date.now() }; persist(); updCoins(); SFX.play('register'); toast(`<b>${KORU.name}</b> added. Flights are half price.`); rerender(); }); }
 });
-function updateTravelScene(dt) { if (G.of) G.of.t += dt; if (G.sp) G.sp.t += dt;
+function updateTravelScene(dt) { if (G.of) G.of.t += dt; if (G.kr) G.kr.t += dt; if (G.ci) G.ci.t += dt; if (G.sp) G.sp.t += dt;
   /* a cardholder gets the founder talking now and then, the odd time with a call from Mckenna */
-  if (G.of && G.scr === 'office' && hasJet() && G.of.step === 'member') { G.of.nextTalk = (G.of.nextTalk === undefined ? 4 : G.of.nextTalk) - dt; if (G.of.nextTalk <= 0) { G.of.nextTalk = 12 + Math.random() * 6; const line = OWNER_LINES[Math.floor(Math.random() * OWNER_LINES.length)]; G.of.msg = `<b>${JET.founder}:</b> "${line}"`; rerender(); } }
+  if (G.of && G.scr === 'office' && hasJet() && G.of.step === 'member') { G.of.nextTalk = (G.of.nextTalk === undefined ? 4 : G.of.nextTalk) - dt; if (G.of.nextTalk <= 0) { G.of.nextTalk = 12 + Math.random() * 6; const line = OWNER_LINES[Math.floor(Math.random() * OWNER_LINES.length)]; G.of.msg = `<b>${JET.founder}:</b> "${line}"`; if (/Mckenna/.test(line)) { G.of.call = G.of.t + .9; G.of.callBack = false; G.of.nextTalk += 4; } rerender(); }
+    if (G.of.call !== undefined && !G.of.callBack && G.of.t > G.of.call + 3.6) { G.of.callBack = true; G.of.msg = `<b>${JET.founder}:</b> "Sorry about that. Where were we?"`; rerender(); } }
   if (G.fl) { G.fl.t += dt; if (G.fl.t > G.fl.dur) { const f = G.fl.then; G.fl = null; f(); } } }
 function drawOffice() {
   const O = G.of, x = ctx, W = VW; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
   const vg = (y0, y1, a, b) => { const g = x.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
-  /* the view: an airfield at golden hour through floor-to-ceiling glass */
-  x.fillStyle = vg(0, 150, '#f0b27a', '#fbe2c4'); x.fillRect(0, 0, W, 170);
-  x.fillStyle = 'rgba(255,240,210,.8)'; x.beginPath(); x.arc(W * .72, 112, 14, 0, 6.29); x.fill();
-  x.fillStyle = '#8f8aa0'; x.beginPath(); x.moveTo(0, 128); for (let i = 0; i <= 24; i++) x.lineTo(i * W / 24, 120 - Math.abs(Math.sin(i * 1.7)) * 9 - (i % 5 === 0 ? 6 : 0)); x.lineTo(W, 140); x.lineTo(0, 140); x.fill();
-  x.fillStyle = '#6f7a62'; x.fillRect(0, 132, W, 40); x.fillStyle = '#4a4e52'; x.fillRect(0, 142, W, 10); x.fillStyle = '#f4f1e8'; for (let i = 0; i < W; i += 18) x.fillRect(i + ((O.t * 6) % 18), 146.5, 8, 1);
-  /* a jet on the apron */
-  { const jx = W * .3, jy = 138; x.fillStyle = '#f4f4f2'; x.beginPath(); x.ellipse(jx, jy, 34, 4.2, 0, 0, 6.29); x.fill(); x.beginPath(); x.moveTo(jx + 26, jy - 3); x.lineTo(jx + 38, jy - 15); x.lineTo(jx + 41, jy - 15); x.lineTo(jx + 34, jy - 2); x.fill(); x.fillStyle = '#d9d9d6'; x.beginPath(); x.moveTo(jx - 6, jy); x.lineTo(jx + 14, jy + 9); x.lineTo(jx + 18, jy + 9); x.lineTo(jx + 8, jy); x.fill();
-    x.fillStyle = '#1d2026'; for (let i = 0; i < 6; i++) x.fillRect(jx - 18 + i * 6, jy - 1.6, 3, 1.6); x.fillStyle = '#c9a24a'; x.fillRect(jx - 34, jy, 66, .8); x.fillStyle = '#2a2a2a'; x.fillRect(jx - 20, jy + 4, 1.5, 4); x.fillRect(jx + 12, jy + 4, 1.5, 4); }
+  /* the view: golden hour over the airfield through floor-to-ceiling glass (drawn once, nothing moves) */
+  if (!drawOffice.view || drawOffice.view.k !== RES || drawOffice.view.w !== W) { const c2 = mkCanvas(W * RES, 172 * RES), v = c2.getContext('2d'); v.scale(RES, RES); drawAmalfiView(v, W, 172); c2.k = RES; c2.w = W; drawOffice.view = c2; }
+  x.drawImage(drawOffice.view, 0, 0, W, 172);
   x.fillStyle = vg(172, 212, '#2a2c30', '#1b1d20'); x.fillRect(0, 172, W, 40); x.fillStyle = 'rgba(255,214,150,.35)'; x.fillRect(0, 172, W, 1); x.fillStyle = 'rgba(255,214,150,.08)'; for (let i = 0; i < W; i += 40) x.fillRect(i + 8, 180, 24, 28);
   /* glass wall mullions and reflections */
   for (let i = 0; i <= 6; i++) { x.fillStyle = '#1b1d21'; x.fillRect(i * W / 6 - 2, 0, 4, 172); }
@@ -8860,7 +8952,11 @@ function drawOffice() {
   if (O.msg !== O.lastMsg) { O.lastMsg = O.msg; O.msgAt = O.t; } /* Kolin's mouth moves when a new line appears, then stops */
   const fP = sh >= 0 && sh < 2 ? chPose('shake_c', sh) : O.sip !== undefined && O.t - O.sip < 3 ? chPose('ccheers', O.t - O.sip) : chPose(O.step === 'met' || O.step === 'member' ? 'ctalk' : 'idle', O.t - (O.msgAt || 0));
   const mP = sh >= 0 && sh < 2 ? chPose('shake_g', sh) : O.sip !== undefined && O.t - O.sip < 3 ? chPose('ccheers', O.t - O.sip) : O.cardT >= 0 && O.t - O.cardT < 4 ? chPose('creach', Math.min(.35, O.t - O.cardT)) : chPose('idle', O.t + 1);
+  const cu = O.call !== undefined ? O.t - O.call : -1, onCall = cu >= 0 && cu < 3.4;
+  if (onCall) { const sm = v => v * v * (3 - 2 * v), up = cu < .55 ? sm(cu / .55) : cu > 2.85 ? 1 - sm((cu - 2.85) / .55) : 1; /* phone out of the pocket, to the ear, an annoyed look, then away */
+    fP.rh = [lerp(9, 6.2, up), lerp(31, 60.5, up)]; fP.club = 'none'; fP.smile = 0; fP.mouth = cu > 1 && cu < 2.6 && Math.sin(cu * 11) > .3 ? 1 : 0; fP.frown = up > .5 ? 1 : 0; fP.look = up * .5; }
   drawGolferFront(O.founder, fx, 252, 1.62, fP);
+  if (onCall && cu > .12 && cu < 3.3) { const hx = fx + fP.rh[0] * 1.62, hy = 252 - (fP.rh[1] + (fP.jump || 0)) * 1.62; x.save(); x.translate(hx - 1.2, hy - 2.2); x.rotate(.25); x.fillStyle = '#0e0f12'; x.beginPath(); x.roundRect ? x.roundRect(-1.4, -3.2, 2.8, 5.6, .6) : x.rect(-1.4, -3.2, 2.8, 5.6); x.fill(); x.fillStyle = '#2a3a4c'; x.fillRect(-1.05, -2.8, 2.1, 4.6); x.restore(); }
   drawGolferFront(golferById(save.golfer), me, 252, 1.55, mP);
   if (O.sip !== undefined && O.t - O.sip < 3) for (const [px, P0, k0] of [[fx, fP, 1.62], [me, mP, 1.55]]) { const hx = px + P0.rh[0] * k0, hy = 252 - (P0.rh[1] + (P0.jump || 0)) * k0; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(hx - 1.6, hy - 9); x.lineTo(hx + 1.6, hy - 9); x.lineTo(hx + 1, hy - 2); x.lineTo(hx - 1, hy - 2); x.fill(); x.fillStyle = '#f2dc8a'; x.fillRect(hx - 1.3, hy - 7, 2.6, 4.5); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(hx - .3, hy - 2, .6, 3); }
   /* the card being handed over */
@@ -8868,24 +8964,401 @@ function drawOffice() {
   const vgr = x.createRadialGradient(W / 2, VH / 2, VH * .45, W / 2, VH / 2, W * .7); vgr.addColorStop(0, 'rgba(10,6,0,0)'); vgr.addColorStop(1, 'rgba(10,6,0,.4)'); x.fillStyle = vgr; x.fillRect(0, 0, W, VH);
   PXR = 1; x.imageSmoothingEnabled = false;
 }
-/* ---------- in flight, on the card ---------- */
-function startFlight(c, then) { G.fl = { t: 0, dur: 3.6, c, then, back: G.scr }; G.scr = 'flight'; UI.innerHTML = `<div class="scr chscr" style="justify-content:flex-end"><div class="chmsg" style="bottom:calc(var(--u)*14)">✈ Flying to <b>${esc(c.name)}</b> on your ${JET.name} card</div><button class="btn g sm" style="position:absolute;right:calc(var(--u)*8);top:calc(var(--u)*8);pointer-events:auto" data-a="flSkip">SKIP</button></div>`; SFX.play('cart'); }
-ACT.flSkip = () => { if (G.fl) G.fl.t = G.fl.dur; };
-function drawFlight() {
-  const F = G.fl, x = ctx, W = VW, t = F.t; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; x.imageSmoothingEnabled = true;
+/* ---------- the Koru desk: a plain service counter in the international check-in hall at Auckland Airport.
+   Deliberately ordinary next to the jet club: carpet tiles, strip lights, a departures board, a queue rope.
+   The airline's name appears only as plain text; no logo. The agent is an invented person. ---------- */
+const KORU_AGENT = { id: 'mere', look: { hat: 'none', hair: 'bun', build: .92, fem: true, lashes: true, sleeve: 'long', noGlove: true, eyeCol: '#3a2a1e', earrings: '#d9dde0' }, c: { h: '#111', H: '#2a1c14', s: '#c99470', S: '#17181b', p: '#17181b', k: '#111111' } };
+function openKoruDesk() {
+  G.kr = { t: 0, step: hasKoru() ? 'member' : 'arrive', cardT: -1, msg: hasKoru() ? '<b>Mere:</b> "Kia ora! Card still treating you well?"' : 'The Koru desk, international check-in, Auckland Airport. There is a short queue.', back: G.scr === 'airnz' ? 'shop' : (G.scr || 'shop') };
+  showScreen('airnz');
+}
+SCR.airnz = () => { const O = G.kr; if (!O) return SCR.title(); const own = hasKoru();
+  return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="krLeave">&lt; LEAVE</button><h2>KORU DESK · AUCKLAND AIRPORT</h2>${coinsHTML()}</div><div class="grow"></div>
+    ${O.msg ? `<div class="chmsg">${O.msg}</div>` : ''}
+    <div class="row chbar"><button class="btn sm g" data-a="krRead">THE CARD</button>${own ? '' : `<button class="btn sm ${O.step === 'arrive' ? 'y' : 'g'}" data-a="krQueue" ${O.step === 'arrive' ? '' : 'disabled'}>JOIN THE QUEUE</button><button class="btn sm ${O.step === 'desk' ? 'y' : 'g'}" data-a="krBuy" ${O.step === 'desk' ? '' : 'disabled'}>SIGN UP ${priceHTML(KORU.price)}</button>`}</div></div>`; };
+Object.assign(ACT, {
+  koruDesk: () => openKoruDesk(),
+  krLeave: () => { const b = G.kr ? G.kr.back : 'shop'; G.kr = null; showScreen(b === 'airnz' ? 'shop' : b); },
+  krRead: () => showModal(`<div class="col" style="max-width:calc(var(--u)*250);gap:calc(var(--u)*3)"><canvas data-spr="korucard" data-id="b" style="width:calc(var(--u)*150);align-self:center"></canvas><div class="u2">${KORU.name.toUpperCase()}</div><div class="u1">• Half price on every flight to an overseas course<br>• That's it: green fees are full price, and there's no lounge</div><div class="u1 dimtxt">One payment of ${priceHTML(KORU.price)}. Course members still get their 20% off flights on top.</div><button class="btn g sm" data-m="close">CLOSE</button></div>`),
+  krQueue: () => { const O = G.kr; if (!O || O.step !== 'arrive') return; O.step = 'queue'; O.qT = O.t; O.msg = 'You wait your turn behind a family with a lot of luggage...'; rerender();
+    setTimeout(() => { if (!G.kr || G.kr.step !== 'queue') return; G.kr.step = 'desk'; G.kr.msg = '<b>Mere:</b> "Kia ora, next please! After a Koru card? Half-price flights, sign here."'; SFX.play('chat'); rerender(); }, 2600); },
+  krBuy: () => { const O = G.kr; if (!O || O.step !== 'desk') return; if (save.coins < KORU.price) { SFX.play('err'); O.msg = `<b>Mere:</b> "Ah, the card's declined, sorry. Come back any time." (You need ${priceHTML(KORU.price - save.coins)} more.)`; rerender(); return; }
+    confirmBox(`Buy the <b>${KORU.name}</b> for ${priceHTML(KORU.price)}?<br><span class="u1">Half price on every flight. Nothing else.</span>`, () => { closeModal(); save.coins -= KORU.price; save.koru = { since: Date.now() }; persist(); updCoins(); SFX.play('register');
+      O.step = 'member'; O.cardT = O.t; O.msg = '<b>Mere:</b> "Sweet as, you\'re all set. Here\'s your card. Safe travels!"'; rerender(); toast(`<b>${KORU.name}</b> added. Flights are half price.`); }); }
+});
+/* the view from the Koru desk, drawn once and kept: overcast sky, harbour and hills, the apron, a 787-style widebody
+   in plain white with a black tail (no markings), an airbridge, a tug and baggage carts, a few raindrops on the glass */
+function drawKoruView(v, W, H) {
+  const lg = (y0, y1, stops) => { const g = v.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+  v.fillStyle = lg(0, H * .55, [[0, '#8f9aa3'], [.6, '#b7c0c6'], [1, '#cfd5d8']]); v.fillRect(0, 0, W, H);
+  for (const [cy, a] of [[10, .25], [22, .18], [34, .14]]) { v.fillStyle = `rgba(110,120,128,${a})`; v.beginPath(); for (let i = 0; i <= 8; i++) { const px = i * W / 8, py = cy + Math.sin(i * 1.9 + cy) * 3; i ? v.lineTo(px, py) : v.moveTo(px, py); } v.lineTo(W, cy + 9); v.lineTo(0, cy + 9); v.fill(); }
+  const hz = H * .5;
+  v.fillStyle = '#8d9a9c'; v.beginPath(); v.moveTo(0, hz); v.lineTo(18, hz - 5); v.lineTo(40, hz - 3); v.lineTo(64, hz - 8); v.lineTo(76, hz - 6); v.lineTo(102, hz - 4); v.lineTo(128, hz - 7); v.lineTo(W, hz - 3); v.lineTo(W, hz); v.fill(); /* low hills over the harbour */
+  v.fillStyle = '#9fa9ab'; v.fillRect(0, hz - 1, W, 2.5);
+  v.fillStyle = '#b9bdb9'; v.fillRect(W - 46, hz - 10, 46, 10); v.fillStyle = '#9ea3a2'; v.fillRect(W - 46, hz - 10, 46, 1.5); v.fillStyle = 'rgba(70,90,100,.45)'; for (let i = 0; i < 8; i++) v.fillRect(W - 44 + i * 5.6, hz - 7, 3.6, 4); /* distant terminal */
+  v.fillStyle = '#7c8a6e'; v.fillRect(0, hz + 1.5, W, 5); /* grass strip */
+  v.fillStyle = lg(hz + 6, H, [[0, '#7b7f80'], [1, '#5f6365']]); v.fillRect(0, hz + 6, W, H - hz - 6); /* wet apron */
+  v.fillStyle = 'rgba(210,215,218,.12)'; v.fillRect(0, hz + 6, W, 3);
+  v.strokeStyle = '#d9b43a'; v.lineWidth = .9; v.beginPath(); v.moveTo(-10, H - 6); v.quadraticCurveTo(W * .4, hz + 22, W + 10, hz + 18); v.stroke(); /* lead-in line */
+  v.fillStyle = 'rgba(240,240,236,.55)'; for (let i = 0; i < 6; i++) v.fillRect(6 + i * 27, H - 13, 14, .8);
+  /* the airliner, nose left, at the gate */
+  const fy = hz + 6, nx = 18, tx = W - 8, fh = 11.5, by = fy + 14;
+  v.fillStyle = 'rgba(0,0,0,.18)'; v.beginPath(); v.ellipse((nx + tx) / 2, by + 7.5, (tx - nx) * .45, 2.2, 0, 0, 6.29); v.fill(); /* reflection shadow on the wet apron */
+  /* far wing and engine, behind */
+  v.fillStyle = '#9da3a7'; v.beginPath(); v.moveTo(nx + 62, by - 4); v.lineTo(nx + 96, by - 16); v.lineTo(nx + 101, by - 16); v.lineTo(nx + 80, by - 4); v.fill();
+  /* tail: black fin and stabiliser */
+  v.fillStyle = '#16171a'; v.beginPath(); v.moveTo(tx - 30, fy + 1); v.lineTo(tx - 14, fy - 24); v.lineTo(tx - 6, fy - 24); v.lineTo(tx - 4, fy + 2); v.fill();
+  v.fillStyle = '#222428'; v.beginPath(); v.moveTo(tx - 22, by - 6); v.lineTo(tx - 6, by - 9); v.lineTo(tx - 2, by - 8); v.lineTo(tx - 12, by - 5); v.fill();
+  /* fuselage */
+  const fg = v.createLinearGradient(0, fy, 0, by); fg.addColorStop(0, '#fbfbfa'); fg.addColorStop(.55, '#eceeee'); fg.addColorStop(1, '#b9bec1');
+  v.fillStyle = fg; v.beginPath(); v.moveTo(nx + 8, fy); v.lineTo(tx - 26, fy); v.quadraticCurveTo(tx - 6, fy + 1, tx, fy + 5); v.lineTo(tx - 22, by - 2); v.lineTo(nx + 8, by); v.quadraticCurveTo(nx - 6, by - 1, nx - 6, (fy + by) / 2 + 1.5); v.quadraticCurveTo(nx - 4, fy + 1.5, nx + 8, fy); v.fill();
+  v.fillStyle = '#16171a'; v.beginPath(); v.moveTo(nx - 2, fy + 4); v.lineTo(nx + 5, fy + 2.4); v.lineTo(nx + 7, fy + 4.6); v.lineTo(nx - 3, fy + 5.4); v.fill(); /* flight-deck windows */
+  v.fillStyle = '#2b3036'; for (let i = 0; i < 30; i++) { const px = nx + 14 + i * 4.1; if (px > tx - 30) break; v.fillRect(px, fy + 4.6, 1.5, 1.3); } /* cabin windows */
+  v.strokeStyle = 'rgba(90,96,100,.6)'; v.lineWidth = .35; for (const dx2 of [10, 52, 96]) { v.strokeRect(nx + dx2, fy + 3.2, 3.2, 6.2); }
+  v.fillStyle = 'rgba(0,0,0,.08)'; v.fillRect(nx + 6, by - 3, tx - nx - 30, 2);
+  /* near wing and engine */
+  v.fillStyle = '#c7ccd0'; v.beginPath(); v.moveTo(nx + 56, by - 3); v.lineTo(nx + 110, by + 8); v.lineTo(nx + 116, by + 8); v.lineTo(nx + 84, by - 3); v.fill();
+  v.fillStyle = '#aab0b4'; v.fillRect(nx + 100, by + 6.5, 16, 1.5);
+  const eg = v.createLinearGradient(0, by + 1, 0, by + 9); eg.addColorStop(0, '#f2f3f3'); eg.addColorStop(1, '#9fa5a9'); v.fillStyle = eg; v.beginPath(); v.ellipse(nx + 62, by + 5, 9, 4, 0, 0, 6.29); v.fill();
+  v.fillStyle = '#2a2d31'; v.beginPath(); v.ellipse(nx + 53.5, by + 5, 1.6, 3.6, 0, 0, 6.29); v.fill(); v.fillStyle = '#5d6266'; v.fillRect(nx + 69, by + 3.5, 4, 3);
+  /* landing gear */
+  v.fillStyle = '#3b3e42'; v.fillRect(nx + 6, by - 1, .9, 6); v.fillRect(nx + 72, by - 1, 1.2, 6); v.fillRect(nx + 80, by - 1, 1.2, 6);
+  v.fillStyle = '#111214'; for (const gx of [nx + 6.5, nx + 70.5, nx + 73.5, nx + 78.5, nx + 81.5]) { v.beginPath(); v.arc(gx, by + 6, 1.7, 0, 6.29); v.fill(); }
+  /* airbridge: a tunnel from the terminal (off to the left) to the forward door, on a wheeled leg */
+  v.fillStyle = '#b8bcbf'; v.fillRect(-2, fy + .5, nx + 6, 8); v.fillStyle = '#a3a8ab'; v.fillRect(-2, fy + 6.5, nx + 6, 2); v.fillStyle = 'rgba(60,80,92,.45)'; v.fillRect(0, fy + 2.4, nx - 2, 2.2);
+  v.fillStyle = '#8f9497'; v.fillRect(nx + 2, fy, 3, 9.5); /* the hood against the door */
+  v.fillStyle = '#6f7477'; v.fillRect(nx - 10, fy + 8.5, 1.6, by - fy - 2); v.fillStyle = '#2b2d30'; v.fillRect(nx - 12, by + 5, 6, 1.6); v.beginPath(); v.arc(nx - 11, by + 7, 1.1, 0, 6.29); v.arc(nx - 7, by + 7, 1.1, 0, 6.29); v.fill();
+  /* tug, baggage carts and cones */
+  const gy2 = by + 14; v.fillStyle = '#e9e9e6'; v.fillRect(nx + 108, gy2 - 7, 9, 5); v.fillStyle = '#e0a22a'; v.fillRect(nx + 108, gy2 - 3, 9, 2); v.fillStyle = '#16171a'; v.beginPath(); v.arc(nx + 110, gy2, 1.2, 0, 6.29); v.arc(nx + 115.5, gy2, 1.2, 0, 6.29); v.fill();
+  for (let i = 0; i < 2; i++) { const cx3 = nx + 120 + i * 11; v.fillStyle = '#8a9093'; v.fillRect(cx3, gy2 - 5, 9, 3.5); v.fillStyle = '#3f6f9a'; v.fillRect(cx3 + 1, gy2 - 8, 3, 3); v.fillStyle = '#6a3a2a'; v.fillRect(cx3 + 4.5, gy2 - 7.5, 3.5, 2.5); v.fillStyle = '#16171a'; v.beginPath(); v.arc(cx3 + 1.5, gy2 - 1, 1, 0, 6.29); v.arc(cx3 + 7.5, gy2 - 1, 1, 0, 6.29); v.fill(); }
+  v.fillStyle = '#f07a1a'; for (const cx4 of [nx - 4, nx + 40]) { v.beginPath(); v.moveTo(cx4, by + 8); v.lineTo(cx4 + 1, by + 4); v.lineTo(cx4 + 2, by + 8); v.fill(); }
+  /* haze, then a few still raindrops on the glass */
+  v.fillStyle = 'rgba(200,206,210,.16)'; v.fillRect(0, 0, W, H);
+  for (let i = 0; i < 34; i++) { const px = (i * 47.3) % W, py = (i * 29.7 + (i % 5) * 11) % H, r = .5 + (i % 4) * .25; v.fillStyle = 'rgba(255,255,255,.28)'; v.beginPath(); v.arc(px, py, r, 0, 6.29); v.fill(); v.fillStyle = 'rgba(60,70,76,.22)'; v.beginPath(); v.arc(px + r * .3, py + r * .4, r * .6, 0, 6.29); v.fill(); }
+}
+function drawKoruDesk() {
+  const O = G.kr, x = ctx, W = VW; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
   const vg = (y0, y1, a, b) => { const g = x.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
-  /* the view outside: cloud tops sliding past */
-  x.fillStyle = vg(0, 270, '#5d8fc9', '#d9e8f5'); x.fillRect(0, 0, W, 270);
-  for (let i = 0; i < 18; i++) { const cx2 = ((i * 97 - t * (40 + (i % 3) * 30)) % (W + 160) + W + 160) % (W + 160) - 80, cy2 = 150 + (i % 4) * 22, r = 26 + (i % 5) * 9; x.fillStyle = `rgba(255,255,255,${.65 + (i % 3) * .1})`; x.beginPath(); x.ellipse(cx2, cy2, r * 1.8, r * .55, 0, 0, 6.29); x.fill(); }
-  /* cabin wall with two oval windows cut into it */
-  x.save(); x.beginPath(); x.rect(0, 0, W, 270); for (const wx of [W * .3, W * .62]) { x.moveTo(wx + 34, 108); x.ellipse(wx, 108, 34, 46, 0, 0, 6.29); } x.fillStyle = vg(0, 270, '#efe9df', '#d9d0c2'); x.fill('evenodd'); x.restore();
-  for (const wx of [W * .3, W * .62]) { x.strokeStyle = '#c9bfae'; x.lineWidth = 5; x.beginPath(); x.ellipse(wx, 108, 36, 48, 0, 0, 6.29); x.stroke(); x.strokeStyle = 'rgba(255,255,255,.5)'; x.lineWidth = 1; x.beginPath(); x.ellipse(wx, 108, 33, 45, 0, 0, 6.29); x.stroke(); }
-  x.fillStyle = '#6b4a2e'; x.fillRect(0, 176, W, 6); x.fillStyle = '#c9a24a'; x.fillRect(0, 182, W, 1.2);
-  /* a cream leather seat and a side table with champagne */
-  x.fillStyle = vg(170, 270, '#e8dcc6', '#cbb999'); x.beginPath(); x.roundRect ? x.roundRect(W * .08, 168, 110, 120, 18) : x.rect(W * .08, 168, 110, 120); x.fill(); x.strokeStyle = 'rgba(120,100,70,.35)'; x.lineWidth = 1; for (let i = 0; i < 4; i++) { x.beginPath(); x.moveTo(W * .08 + 14, 190 + i * 18); x.lineTo(W * .08 + 96, 190 + i * 18); x.stroke(); }
-  x.fillStyle = '#5a3a24'; x.fillRect(W * .7, 214, 90, 8); x.fillStyle = '#c9a24a'; x.fillRect(W * .7, 222, 90, 1.2);
-  { const gx = W * .74; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(gx - 3, 188); x.lineTo(gx + 3, 188); x.lineTo(gx + 2, 204); x.lineTo(gx - 2, 204); x.fill(); x.fillStyle = '#f2dc8a'; x.fillRect(gx - 2.4, 193, 4.8, 10); x.fillStyle = 'rgba(255,255,255,.8)'; for (let i = 0; i < 4; i++) x.fillRect(gx - 1 + (i % 2), 202 - ((t * 9 + i * 3) % 9), .8, .8); x.fillRect(gx - .4, 204, .8, 9); x.fillRect(gx - 3, 213, 6, 1); }
-  const fade = Math.min(1, t / .4, (F.dur - t) / .4); if (fade < 1) { x.fillStyle = `rgba(0,0,0,${1 - fade})`; x.fillRect(0, 0, W, 270); }
+  /* plain ceiling with fluorescent strips */
+  x.fillStyle = vg(0, 40, '#d8dbdc', '#c9cccd'); x.fillRect(0, 0, W, 40); for (let i = 0; i < W; i += 30) { x.fillStyle = '#b7babb'; x.fillRect(i, 0, 1, 40); } x.fillStyle = '#b7babb'; x.fillRect(0, 20, W, 1);
+  for (let i = 0; i < 5; i++) { const lx2 = 30 + i * (W - 60) / 4 - 22; x.fillStyle = '#f4f8f6'; x.fillRect(lx2, 8, 44, 4); x.fillStyle = 'rgba(240,250,245,.25)'; x.fillRect(lx2 - 6, 12, 56, 4); }
+  /* off-white wall */
+  x.fillStyle = vg(40, 200, '#e9e7e2', '#d6d3cc'); x.fillRect(0, 40, W, 160); x.fillStyle = '#bdb9b1'; x.fillRect(0, 196, W, 4);
+  /* the window: a grey Auckland morning over the apron, a parked widebody at the gate. Nothing moves out here. */
+  { const wx = 18, wy = 46, ww = 162, wh = 124;
+    if (!drawKoruDesk.view || drawKoruDesk.view.k !== RES) { const c2 = mkCanvas(ww * RES, wh * RES), v = c2.getContext('2d'); v.scale(RES, RES); drawKoruView(v, ww, wh); c2.k = RES; drawKoruDesk.view = c2; }
+    x.drawImage(drawKoruDesk.view, wx, wy, ww, wh);
+    x.fillStyle = '#8e9396'; x.fillRect(wx - 3, wy - 3, ww + 6, 3); x.fillRect(wx - 3, wy + wh, ww + 6, 4); x.fillRect(wx - 3, wy, 3, wh); x.fillRect(wx + ww, wy, 3, wh); x.fillRect(wx + ww / 2 - 1.2, wy, 2.4, wh);
+    x.fillStyle = 'rgba(255,255,255,.06)'; x.beginPath(); x.moveTo(wx + 10, wy); x.lineTo(wx + 40, wy); x.lineTo(wx + 14, wy + wh); x.lineTo(wx - 16, wy + wh); x.fill(); }
+  /* departures board */
+  { const bx = 188, by = 52, bw = 112, bh = 70; x.fillStyle = '#2a2d30'; x.fillRect(bx - 3, by - 3, bw + 6, bh + 6); x.fillStyle = '#0d0f12'; x.fillRect(bx, by, bw, bh);
+    x.fillStyle = '#f2c14e'; x.font = '700 6px "Barlow Condensed"'; x.textAlign = 'left'; x.fillText('DEPARTURES', bx + 5, by + 9); x.fillText('TIME', bx + 64, by + 9);
+    const rows = [['SYDNEY', '09:40', 'BOARDING'], ['LOS ANGELES', '10:15', 'ON TIME'], ['SINGAPORE', '11:05', 'ON TIME'], ['BELFAST', '12:30', 'DELAYED'], ['QUEENSTOWN', '12:45', 'ON TIME'], ['RAROTONGA', '13:20', 'ON TIME']];
+    x.font = '600 5px "Barlow Condensed"'; rows.forEach((r0, i) => { const yy = by + 18 + i * 8.4; x.fillStyle = '#e9e4d2'; x.fillText(r0[0], bx + 5, yy); x.fillText(r0[1], bx + 64, yy); x.fillStyle = r0[2] === 'DELAYED' ? '#ff7a5a' : r0[2] === 'BOARDING' ? '#7ee08a' : '#b9c2c8'; x.fillText(r0[2], bx + 82, yy); });
+    x.fillStyle = 'rgba(255,255,255,.04)'; x.fillRect(bx, by, bw, bh / 2); }
+  /* a plain sign over the counter, name in text only */
+  { const sx = W * .62 + 20, sw = 150; x.fillStyle = '#161719'; x.fillRect(sx, 58, sw, 26); x.fillStyle = '#ffffff'; x.font = '700 9px "Barlow"'; x.textAlign = 'center'; x.fillText('Air New Zealand', sx + sw / 2, 70); x.font = '600 5.5px "Barlow"'; x.fillStyle = '#7fd3c7'; x.fillText('KORU  ·  MEMBERSHIP SERVICES', sx + sw / 2, 79); x.textAlign = 'left'; }
+  /* grey carpet tiles */
+  x.fillStyle = vg(200, 270, '#6b6f72', '#5a5e61'); x.fillRect(0, 200, W, 70); x.fillStyle = 'rgba(0,0,0,.08)'; for (let i = 0; i < W; i += 26) x.fillRect(i, 200, 1, 70); for (let j = 212; j < 270; j += 16) x.fillRect(0, j, W, 1);
+  /* the agent behind the counter */
+  if (O.msg !== O.lastMsg) { O.lastMsg = O.msg; O.msgAt = O.t; }
+  const ax = W * .62 + 90, aP = chPose(O.step === 'desk' || O.step === 'member' ? 'ctalk' : 'idle', O.t - (O.msgAt || 0));
+  drawGolferFront(KORU_AGENT, ax, 246, 1.45, aP);
+  /* counter: grey laminate, a monitor, a card machine, a stack of brochures */
+  { const cx0 = W * .62 + 20, cw = 150; x.fillStyle = 'rgba(0,0,0,.2)'; x.fillRect(cx0 + 4, 250, cw, 6);
+    x.fillStyle = '#c9cbcc'; x.fillRect(cx0 - 4, 186, cw + 8, 5); x.fillStyle = vg(191, 252, '#2a2c2f', '#1d1f21'); x.fillRect(cx0, 191, cw, 61); x.fillStyle = '#7fd3c7'; x.fillRect(cx0, 196, cw, 1);
+    x.fillStyle = '#2b2b2b'; x.fillRect(cx0 + 96, 168, 30, 18); x.fillStyle = '#5c86b0'; x.fillRect(cx0 + 98, 170, 26, 14); x.fillStyle = '#2b2b2b'; x.fillRect(cx0 + 109, 184, 4, 3);
+    x.fillStyle = '#3a3a3a'; x.fillRect(cx0 + 22, 180, 9, 6); x.fillStyle = '#9fd0e6'; x.fillRect(cx0 + 23.5, 181, 6, 2);
+    for (let i = 0; i < 3; i++) { x.fillStyle = ['#f2f2ee', '#e6eef0', '#f2f2ee'][i]; x.fillRect(cx0 + 46 + i * 2, 182 - i * 1.4, 16, 4); } x.fillStyle = '#7fd3c7'; x.fillRect(cx0 + 50, 179.6, 8, .8); }
+  /* queue barrier: chrome posts with a black belt */
+  { const posts = [W * .3, W * .44, W * .58]; x.fillStyle = '#1a1a1a'; for (let i = 0; i < posts.length - 1; i++) { x.fillRect(posts[i], 214, posts[i + 1] - posts[i], 2.4); }
+    for (const px of posts) { x.fillStyle = '#9aa1a6'; x.fillRect(px - 1, 213, 2.2, 36); x.fillStyle = '#c9ced2'; x.fillRect(px - .6, 213, .8, 36); x.fillStyle = '#7d8388'; x.beginPath(); x.ellipse(px + .1, 249, 5, 1.6, 0, 0, 6.29); x.fill(); x.fillStyle = '#d9dde0'; x.fillRect(px - 1.6, 211.5, 3.4, 2); } }
+  /* a family queueing with suitcases (only while you wait) */
+  if (O.step === 'arrive' || O.step === 'queue') { const qx = O.step === 'queue' ? lerp(W * .5, W * .78, clamp((O.t - O.qT) / 2.2, 0, 1)) : W * .5, gone = O.step === 'queue' && O.t - O.qT > 2.2;
+    if (!gone) { x.fillStyle = '#2f5d8a'; x.beginPath(); x.roundRect ? x.roundRect(qx + 12, 222, 14, 22, 2) : x.rect(qx + 12, 222, 14, 22); x.fill(); x.fillStyle = '#1a1a1a'; x.fillRect(qx + 17, 216, 4, 6); x.fillStyle = '#b23a3a'; x.beginPath(); x.roundRect ? x.roundRect(qx - 4, 228, 12, 16, 2) : x.rect(qx - 4, 228, 12, 16); x.fill(); } }
+  /* a bin and a charging pillar */
+  x.fillStyle = '#4a4e52'; x.fillRect(W - 30, 222, 14, 26); x.fillStyle = '#5c6166'; x.fillRect(W - 31, 220, 16, 3);
+  /* you */
+  const meX = O.step === 'arrive' ? W * .3 : O.step === 'queue' ? lerp(W * .3, W * .57, clamp((O.t - O.qT - .3) / 2.2, 0, 1)) : W * .57;
+  const walking = O.step === 'queue' && O.t - O.qT > .3 && O.t - O.qT < 2.5;
+  const mP = walking ? chPose('cwalk', O.t) : O.cardT >= 0 && O.t - O.cardT < 4 ? chPose('creach', Math.min(.35, O.t - O.cardT)) : chPose('idle', O.t + 1);
+  drawGolferFront(golferById(save.golfer), meX, 252, 1.55, mP);
+  /* the card across the counter */
+  if (O.cardT >= 0 && O.t - O.cardT < 4) { const u = clamp((O.t - O.cardT) / .8, 0, 1), cx2 = lerp(ax - 20, meX + 24, u), cy2 = 184 - Math.sin(u * Math.PI) * 5; if (!drawKoruDesk.card) { drawKoruDesk.card = mkCanvas(68, 43); drawKoruCard(drawKoruDesk.card.getContext('2d'), 68, 43); } x.drawImage(drawKoruDesk.card, cx2 - 8, cy2 - 5, 16, 10); }
+  PXR = 1; x.imageSmoothingEnabled = false;
+}
+/* ---------- Auckland Airport, international check-in: where you pay for flights when you don't have the jet card.
+   Koru members use the Koru counter (half-price fares); everyone else queues at economy. Invented staff. ---------- */
+const CI_AGENTS = [{ id: 'aroha_ci', look: { hat: 'none', hair: 'pony', build: .92, fem: true, lashes: true, sleeve: 'long', noGlove: true, eyeCol: '#3a2a1e' }, c: { h: '#111', H: '#3a2418', s: '#d8a57e', S: '#17181b', p: '#17181b', k: '#111' } },
+  { id: 'sam_ci', look: { hat: 'none', hair: 'short', build: 1.02, sleeve: 'long', noGlove: true, eyeCol: '#3a2a1e' }, c: { h: '#111', H: '#1d1612', s: '#b07c56', S: '#17181b', p: '#17181b', k: '#111' } }];
+const fullFare = c => Math.round((c.ticket || 2000) * (isMember(c.id) ? .8 : 1) / 10) * 10;
+const koruFare = c => Math.round(fullFare(c) * .5 / 10) * 10;
+function openCheckin(o) { G.ci = Object.assign({ t: 0, step: 'hall', lane: null, back: G.scr || 'title' }, o); G.ci.msg = `International check-in, Auckland Airport. Your flight to <b>${esc(o.c.name)}</b> leaves soon.`; showScreen('checkin'); }
+SCR.checkin = () => { const O = G.ci; if (!O) return SCR.title(); const c = O.c, ex = O.extra || 0;
+  const btns = O.step === 'hall' ? `<button class="btn sm ${hasKoru() ? 'y' : 'g'}" data-a="ciLane" data-v="koru" ${hasKoru() ? '' : 'disabled title="Koru members only"'}>KORU CHECK-IN${hasKoru() ? '' : ' · MEMBERS ONLY'}</button><button class="btn sm ${hasKoru() ? 'g' : 'y'}" data-a="ciLane" data-v="eco">ECONOMY CHECK-IN</button>`
+    : O.step === 'desk' ? `<button class="btn sm y" data-a="ciPay">PAY &amp; CHECK IN ${priceHTML((O.lane === 'koru' ? koruFare(c) : fullFare(c)) + ex)}</button>`
+    : O.step === 'done' ? `<button class="btn sm y" data-a="ciGate">TO THE GATE &gt;</button>` : '';
+  return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="ciLeave">&lt; LEAVE</button><h2>AUCKLAND AIRPORT · CHECK-IN</h2>${coinsHTML()}</div><div class="grow"></div>
+    ${O.msg ? `<div class="chmsg">${O.msg}</div>` : ''}<div class="row chbar">${btns}</div></div>`; };
+Object.assign(ACT, {
+  ciLeave: () => { const b = G.ci ? G.ci.back : 'title'; G.ci = null; showScreen(b === 'checkin' ? 'title' : b); },
+  ciLane: v => { const O = G.ci; if (!O || O.step !== 'hall') return; if (v === 'koru' && !hasKoru()) return;
+    if (v === 'eco' && hasKoru()) { showModal(`<div class="col" style="max-width:calc(var(--u)*230);gap:calc(var(--u)*3)"><div class="u2">YOU'RE A KORU MEMBER</div><div class="u1">Use the Koru counter: no queue, Premium Economy, and half the fare (${priceHTML(koruFare(O.c))} instead of ${priceHTML(fullFare(O.c))}).</div><div class="row"><button class="btn y" data-a="ciKoru">GO TO KORU</button><button class="btn g" data-a="ciEco">ECONOMY ANYWAY</button></div></div>`); return; }
+    if (v === 'eco!') v = 'eco'; O.lane = v; O.step = 'walk'; O.walkT = O.t; O.msg = v === 'koru' ? 'Straight to the Koru counter. No queue.' : 'You join the economy queue...'; rerender();
+    setTimeout(() => { if (!G.ci || G.ci.step !== 'walk') return; const c = G.ci.c, ex = G.ci.extra || 0; G.ci.step = 'desk'; G.ci.msg = v === 'koru' ? `<b>Aroha:</b> "Kia ora, welcome back. ${esc(c.name.split(' (')[0])} today? Premium Economy at the Koru fare: ${priceHTML(koruFare(c))}${ex ? ` plus your ${G.ci.extraLabel || 'green fee'}` : ''}."` : `<b>Sam:</b> "Next please! Flying to ${esc(c.loc ? c.loc.split(',').pop().trim() : c.name)}? That's ${priceHTML(fullFare(c))}${ex ? ` plus your ${G.ci.extraLabel || 'green fee'}` : ''}."`; SFX.play('chat'); rerender(); }, v === 'koru' ? 1300 : 2600); },
+  ciPay: () => { const O = G.ci; if (!O || O.step !== 'desk') return; const tot = (O.lane === 'koru' ? koruFare(O.c) : fullFare(O.c)) + (O.extra || 0);
+    if (save.coins < tot) { SFX.play('err'); O.msg = `Card declined. You need ${priceHTML(tot - save.coins)} more.`; rerender(); return; }
+    save.coins -= tot; save.stats.feesPaid += tot; persist(); updCoins(); SFX.play('register'); O.step = 'done'; O.passT = O.t; O.msg = `${O.lane === 'koru' ? '<b>Aroha:</b>' : '<b>Sam:</b>'} "All checked in. Here's your boarding pass, gate 8. Have a great trip!"`; rerender(); },
+  ciGate: () => { const O = G.ci; if (!O || O.step !== 'done') return; G.ci = null; startFlight(O.c, O.then, true, null, O.lane === 'koru' ? 'prem' : 'eco'); },
+  ciKoru: () => { closeModal(); ACT.ciLane('koru'); }, ciEco: () => { closeModal(); ACT.ciLane('eco!'); }
+});
+/* the panorama behind the check-in counters: a long glass wall onto the gates, drawn once and kept */
+function drawCheckinView(v, W, H) {
+  const lg = (y0, y1, st) => { const g = v.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+  v.fillStyle = lg(0, H * .6, [[0, '#8e9aa4'], [.7, '#bcc5ca'], [1, '#d2d8db']]); v.fillRect(0, 0, W, H);
+  for (const [cy, a] of [[8, .22], [18, .16], [28, .12]]) { v.fillStyle = `rgba(105,115,124,${a})`; v.beginPath(); for (let i = 0; i <= 10; i++) { const px = i * W / 10, py = cy + Math.sin(i * 1.7 + cy) * 3; i ? v.lineTo(px, py) : v.moveTo(px, py); } v.lineTo(W, cy + 8); v.lineTo(0, cy + 8); v.fill(); }
+  const hz = H * .52; v.fillStyle = '#909c9e'; v.beginPath(); v.moveTo(0, hz); for (let i = 0; i <= 20; i++) v.lineTo(i * W / 20, hz - 3 - 5 * Math.abs(Math.sin(i * .9 + .4))); v.lineTo(W, hz); v.fill();
+  v.fillStyle = '#7c8a6e'; v.fillRect(0, hz, W, 4);
+  v.fillStyle = lg(hz + 4, H, [[0, '#7d8183'], [1, '#606466']]); v.fillRect(0, hz + 4, W, H - hz - 4);
+  v.fillStyle = 'rgba(210,215,218,.12)'; v.fillRect(0, hz + 4, W, 2);
+  /* a narrowbody taxiing far off, then two widebodies at the gates, nose in toward us (left) */
+  drawPlane(v, W * .52, hz + 7, .34, 0, 'liner', 1, true);
+  for (const [px, s] of [[W * .3, .62], [W * .74, .66]]) { drawPlane(v, px, hz + 26, s, 0, 'liner', 1, true);
+    const dx = px - 150 * s / 2 + 8 * s; v.fillStyle = '#b6babd'; v.fillRect(dx - 34, hz + 26 - 13 * s - 6, 34, 7); v.fillStyle = 'rgba(60,80,92,.45)'; v.fillRect(dx - 32, hz + 26 - 13 * s - 4, 28, 2); v.fillStyle = '#8f9497'; v.fillRect(dx - 2, hz + 26 - 13 * s - 7, 3, 9); v.fillStyle = '#6f7477'; v.fillRect(dx - 20, hz + 26 - 13 * s + 1, 1.4, 12 * s + 2); } /* airbridges */
+  v.strokeStyle = '#d9b43a'; v.lineWidth = .8; for (const px of [W * .3, W * .74]) { v.beginPath(); v.moveTo(px - 60, H); v.quadraticCurveTo(px - 30, hz + 30, px + 40, hz + 28); v.stroke(); }
+  const gy = H - 8; v.fillStyle = '#e9e9e6'; v.fillRect(W * .5, gy - 6, 8, 4); v.fillStyle = '#e0a22a'; v.fillRect(W * .5, gy - 2, 8, 1.6); for (let i = 0; i < 3; i++) { v.fillStyle = '#8a9093'; v.fillRect(W * .5 + 10 + i * 9, gy - 4, 7.5, 3); v.fillStyle = ['#3f6f9a', '#6a3a2a', '#3d6b47'][i]; v.fillRect(W * .5 + 11 + i * 9, gy - 7, 3, 3); }
+  v.fillStyle = 'rgba(200,206,210,.14)'; v.fillRect(0, 0, W, H);
+  for (let i = 0; i < 40; i++) { const px = (i * 47.3) % W, py = (i * 29.7 + (i % 5) * 11) % H, r = .45 + (i % 4) * .2; v.fillStyle = 'rgba(255,255,255,.26)'; v.beginPath(); v.arc(px, py, r, 0, 6.29); v.fill(); }
+}
+/* side-view aircraft, nose to the right in local units (flip for nose left). y = 0 is the belly line.
+   kind 'liner': a 787-style widebody, plain white with a black tail (no markings).
+   kind 'biz': a long-range business jet, white with a gold cheatline, rear engines and a T-tail. */
+function drawPlane(x, cx, cy, s, ang, kind, gear, flip) {
+  x.save(); x.translate(cx, cy); x.rotate(ang || 0); x.scale(s * (flip ? -1 : 1), s);
+  const biz = kind === 'biz', L = biz ? 92 : 150, H = biz ? 9.5 : 14, tl = -L / 2, nz = L / 2;
+  const fus = () => { x.beginPath(); x.moveTo(tl + 8, -H); x.lineTo(nz - 16, -H); x.bezierCurveTo(nz - 4, -H, nz + 2, -H * .55, nz + 2, -H * .32); x.bezierCurveTo(nz + 1, -.4, nz - 8, 0, nz - 16, 0); x.lineTo(tl + 22, 0); x.lineTo(tl, -H * .62); x.lineTo(tl + 2, -H); x.closePath(); };
+  /* far wing */
+  x.fillStyle = biz ? '#cfc8bd' : '#9aa1a6'; x.beginPath(); x.moveTo(biz ? -6 : -14, -H * .45); x.lineTo(biz ? -22 : -40, -H - (biz ? 10 : 16)); x.lineTo(biz ? -17 : -33, -H - (biz ? 10 : 16)); x.lineTo(biz ? 8 : 10, -H * .45); x.fill();
+  /* fin and tailplane */
+  x.fillStyle = biz ? '#efe9de' : '#15161a'; x.beginPath(); x.moveTo(tl + 4, -H + 1); x.lineTo(tl + (biz ? 4 : 2), -H - (biz ? 14 : 24)); x.lineTo(tl + (biz ? 11 : 14), -H - (biz ? 14 : 24)); x.lineTo(tl + (biz ? 22 : 30), -H + .5); x.fill();
+  if (biz) { x.fillStyle = '#e6dfd2'; x.fillRect(tl + 1, -H - 15, 18, 1.8); x.fillStyle = '#c9a24a'; x.fillRect(tl + 2, -H - 13.2, 9, .7); }
+  else { x.fillStyle = '#22242a'; x.beginPath(); x.moveTo(tl + 2, -H * .55); x.lineTo(tl - 6, -H * .9); x.lineTo(tl - 2, -H * .95); x.lineTo(tl + 14, -H * .6); x.fill(); }
+  /* fuselage */
+  const g = x.createLinearGradient(0, -H, 0, 0); g.addColorStop(0, '#ffffff'); g.addColorStop(.55, biz ? '#f6f0e6' : '#eef0f0'); g.addColorStop(1, biz ? '#bfae9b' : '#aab0b4'); x.fillStyle = g; fus(); x.fill();
+  x.fillStyle = 'rgba(255,255,255,.55)'; x.fillRect(tl + 10, -H + .6, L - 30, .9);
+  if (biz) { x.fillStyle = '#c9a24a'; x.fillRect(tl + 10, -H * .42, L - 14, .8); x.fillStyle = '#e2c47a'; x.fillRect(tl + 10, -H * .32, L - 22, .35); }
+  /* windows, flight deck, doors */
+  x.fillStyle = '#23272d'; if (biz) for (let i = 0; i < 9; i++) { x.beginPath(); x.ellipse(-26 + i * 6.4, -H * .62, 1.3, 1.7, 0, 0, 6.29); x.fill(); }
+  else for (let i = 0; i < 34; i++) { const px = tl + 26 + i * 3.4; if (px > nz - 20) break; x.fillRect(px, -H * .66, 1.3, 1.2); }
+  x.beginPath(); x.moveTo(nz - 9, -H * .78); x.lineTo(nz - 2, -H * .62); x.lineTo(nz - 3, -H * .5); x.lineTo(nz - 10, -H * .6); x.fill();
+  x.strokeStyle = 'rgba(90,96,100,.55)'; x.lineWidth = .3; for (const dx of biz ? [nz - 16] : [nz - 22, 10, -30]) x.strokeRect(dx, -H * .9, biz ? 3 : 3.4, H * .78);
+  /* near wing and engines */
+  x.fillStyle = biz ? '#f4eee4' : '#c6cbcf'; x.beginPath(); x.moveTo(biz ? -8 : -12, -H * .2); x.lineTo(biz ? -26 : -48, biz ? 5 : 9); x.lineTo(biz ? -20 : -40, biz ? 5 : 9); x.lineTo(biz ? 12 : 16, -H * .2); x.fill();
+  if (biz) { x.fillStyle = '#c9a24a'; x.fillRect(-26, 4.4, 6, .6); x.fillStyle = '#e8e1d5'; x.beginPath(); x.ellipse(tl + 24, -H * .95, 9, 2.8, 0, 0, 6.29); x.fill(); x.fillStyle = '#2a2a2a'; x.beginPath(); x.ellipse(tl + 32.5, -H * .95, .9, 2.3, 0, 0, 6.29); x.fill(); }
+  else { const eg = x.createLinearGradient(0, -2, 0, 8); eg.addColorStop(0, '#f2f3f3'); eg.addColorStop(1, '#9aa0a4'); x.fillStyle = eg; x.beginPath(); x.ellipse(-4, 3.5, 12, 5, 0, 0, 6.29); x.fill(); x.fillStyle = '#25282c'; x.beginPath(); x.ellipse(8, 3.5, 1.8, 4.4, 0, 0, 6.29); x.fill(); x.fillStyle = '#5d6266'; x.fillRect(-18, 2, 4, 3); }
+  /* gear */
+  if (gear > 0) { const gl = (biz ? 5 : 7) * gear; x.fillStyle = '#3b3e42'; x.fillRect(nz - 22, 0, 1, gl); x.fillRect(biz ? -6 : -8, 0, 1.4, gl); if (!biz) x.fillRect(-2, 0, 1.4, gl);
+    x.fillStyle = '#111214'; const wr = biz ? 1.4 : 1.9; for (const wx of biz ? [nz - 21.5, -5.3] : [nz - 21.5, -9.5, -6.5, -2.5, .5]) { x.beginPath(); x.arc(wx, gl, wr * Math.max(.3, gear), 0, 6.29); x.fill(); } }
+  x.restore();
+}
+/* the takeoff, side on: the jet (or the airliner) rolls, rotates and climbs away. eco = Auckland grey, else golden hour */
+function drawTakeoff(x, W, t, dur, eco) {
+  const lg = (y0, y1, st) => { const g = x.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+  x.fillStyle = eco ? lg(0, 170, [[0, '#8d99a3'], [1, '#d3d9dc']]) : lg(0, 170, [[0, '#e49a62'], [.6, '#f7cfa0'], [1, '#fdeccf']]); x.fillRect(0, 0, W, 270);
+  if (!eco) { const sg = x.createRadialGradient(W * .78, 140, 2, W * .78, 140, 160); sg.addColorStop(0, 'rgba(255,246,220,.9)'); sg.addColorStop(.12, 'rgba(255,230,190,.4)'); sg.addColorStop(1, 'rgba(255,230,190,0)'); x.fillStyle = sg; x.fillRect(0, 0, W, 270); x.fillStyle = '#fff7e4'; x.beginPath(); x.arc(W * .78, 140, 8, 0, 6.29); x.fill(); }
+  for (let i = 0; i < 7; i++) { x.fillStyle = eco ? 'rgba(120,130,138,.25)' : 'rgba(255,236,214,.3)'; x.beginPath(); x.ellipse((i * 97) % W, 30 + (i * 23) % 70, 50 + i % 3 * 16, 3.5, 0, 0, 6.29); x.fill(); }
+  const hz = 162; x.fillStyle = eco ? '#8d989a' : '#a77f86'; x.beginPath(); x.moveTo(0, hz); for (let i = 0; i <= 30; i++) x.lineTo(i * W / 30, hz - 8 - 10 * Math.abs(Math.sin(i * .7 + 1))); x.lineTo(W, hz); x.fill();
+  x.fillStyle = eco ? '#7d8a6e' : '#8a7f5e'; x.fillRect(0, hz, W, 22);
+  x.fillStyle = eco ? '#5f6466' : '#6a625a'; x.fillRect(0, 184, W, 30); x.fillStyle = eco ? 'rgba(220,225,228,.12)' : 'rgba(255,220,170,.15)'; x.fillRect(0, 184, W, 3);
+  x.fillStyle = '#f2f0ea'; for (let i = 0; i < W; i += 34) x.fillRect(i, 198, 18, 1.4); for (let i = 0; i < W; i += 20) { x.fillStyle = eco ? '#f3f0c8' : '#ffe08a'; x.beginPath(); x.arc(i + 6, 186, 1, 0, 6.29); x.fill(); x.beginPath(); x.arc(i + 6, 212, 1, 0, 6.29); x.fill(); }
+  x.fillStyle = eco ? '#6f7a62' : '#7a7050'; x.fillRect(0, 214, W, 56);
+  const u = clamp(t / dur, 0, 1), px = -90 + (W + 260) * Math.pow(u, 1.55), rot = clamp((u - .42) / .16, 0, 1), alt = u > .5 ? Math.pow((u - .5) / .5, 1.4) * 150 : 0;
+  const s = eco ? 1.0 : 1.15, py = 200 - alt, ang = -rot * .17 - (alt > 0 ? .02 : 0), gear = 1 - clamp((alt - 18) / 25, 0, 1);
+  if (alt < 40) { x.fillStyle = `rgba(0,0,0,${.25 * (1 - alt / 40)})`; x.beginPath(); x.ellipse(px, 202, (eco ? 95 : 60) * (1 - alt / 80), 2.4, 0, 0, 6.29); x.fill(); }
+  if (eco && alt < 30) { x.fillStyle = 'rgba(220,226,230,.16)'; for (let i = 0; i < 6; i++) { x.beginPath(); x.ellipse(px - 50 - i * 16, 199 - i * .6, 12 + i * 5, 1.6 + i * .5, 0, 0, 6.29); x.fill(); } } /* spray off the wet runway */
+  else if (!eco && alt < 10) { x.fillStyle = 'rgba(255,240,220,.18)'; for (let i = 0; i < 4; i++) { x.beginPath(); x.ellipse(px - 70 - i * 16, 196 - alt, 12 + i * 3, 2.4, 0, 0, 6.29); x.fill(); } } /* heat shimmer */
+  drawPlane(x, px, py, s, ang, eco ? 'liner' : 'biz', gear);
+  x.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 6; i++) x.fillRect(px - 160 - i * 20, py - 14 + i * 3, 50, .6); /* speed */
+}
+function drawCheckin() {
+  const O = G.ci, x = ctx, W = VW; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
+  const vg = (y0, y1, a, b) => { const g = x.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
+  /* high hall ceiling with strip lights */
+  x.fillStyle = vg(0, 40, '#d8dbdc', '#c6c9ca'); x.fillRect(0, 0, W, 40); for (let i = 0; i < 6; i++) { const lx2 = 20 + i * (W - 40) / 5 - 22; x.fillStyle = '#f4f8f6'; x.fillRect(lx2, 8, 44, 3.5); x.fillStyle = 'rgba(240,250,245,.22)'; x.fillRect(lx2 - 6, 11.5, 56, 4); }
+  x.fillStyle = vg(40, 200, '#e9e7e2', '#d3d0c9'); x.fillRect(0, 40, W, 160); x.fillStyle = '#bdb9b1'; x.fillRect(0, 196, W, 4);
+  /* a long glass wall onto the gates */
+  { const wx = 16, wy = 44, ww = W - 32, wh = 70; if (!drawCheckin.view || drawCheckin.view.k !== RES || drawCheckin.view.w !== ww) { const c2 = mkCanvas(ww * RES, wh * RES), v = c2.getContext('2d'); v.scale(RES, RES); drawCheckinView(v, ww, wh); c2.k = RES; c2.w = ww; drawCheckin.view = c2; }
+    x.drawImage(drawCheckin.view, wx, wy, ww, wh); x.fillStyle = '#8e9396'; x.fillRect(wx - 3, wy - 3, ww + 6, 3); x.fillRect(wx - 3, wy + wh, ww + 6, 3); x.fillRect(wx - 3, wy, 3, wh); x.fillRect(wx + ww, wy, 3, wh); for (let i = 1; i < 6; i++) x.fillRect(wx + i * ww / 6 - 1, wy, 2, wh);
+    x.fillStyle = 'rgba(255,255,255,.05)'; for (let i = 0; i < 6; i++) { x.beginPath(); x.moveTo(wx + i * ww / 6 + 8, wy); x.lineTo(wx + i * ww / 6 + 26, wy); x.lineTo(wx + i * ww / 6 + 12, wy + wh); x.lineTo(wx + i * ww / 6 - 6, wy + wh); x.fill(); } }
+  /* overhead signs, text only */
+  const sign = (sx, sw, t1, t2, acc) => { x.fillStyle = '#161719'; x.fillRect(sx, 118, sw, 20); x.fillStyle = '#ffffff'; x.font = '700 8px "Barlow"'; x.textAlign = 'center'; x.fillText(t1, sx + sw / 2, 128); x.font = '600 5px "Barlow"'; x.fillStyle = acc; x.fillText(t2, sx + sw / 2, 135); x.textAlign = 'left'; };
+  const kx = 24, ex2 = W - 184;
+  sign(kx, 150, 'KORU CHECK-IN', 'Air New Zealand · members', '#7fd3c7'); sign(ex2, 160, 'ECONOMY CHECK-IN', 'Air New Zealand · international', '#d9dde0');
+  x.fillStyle = vg(200, 270, '#6b6f72', '#5a5e61'); x.fillRect(0, 200, W, 70); x.fillStyle = 'rgba(0,0,0,.08)'; for (let i = 0; i < W; i += 26) x.fillRect(i, 200, 1, 70); for (let j = 212; j < 270; j += 16) x.fillRect(0, j, W, 1);
+  if (O.msg !== O.lastMsg) { O.lastMsg = O.msg; O.msgAt = O.t; }
+  const talkK = O.lane === 'koru' && O.step !== 'walk', talkE = O.lane === 'eco' && O.step !== 'walk';
+  drawGolferFront(CI_AGENTS[0], kx + 100, 244, 1.4, chPose(talkK ? 'ctalk' : 'idle', O.t - (talkK ? O.msgAt || 0 : -1)));
+  drawGolferFront(CI_AGENTS[1], ex2 + 110, 244, 1.45, chPose(talkE ? 'ctalk' : 'idle', O.t - (talkE ? O.msgAt || 0 : -2)));
+  const counter = (cx0, cw, acc) => { x.fillStyle = '#c9cbcc'; x.fillRect(cx0 - 3, 186, cw + 6, 5); x.fillStyle = vg(191, 252, '#2a2c2f', '#1d1f21'); x.fillRect(cx0, 191, cw, 61); x.fillStyle = acc; x.fillRect(cx0, 196, cw, 1); x.fillStyle = '#2b2b2b'; x.fillRect(cx0 + cw - 44, 168, 26, 18); x.fillStyle = '#5c86b0'; x.fillRect(cx0 + cw - 42, 170, 22, 14);
+    x.fillStyle = '#8a8f92'; x.fillRect(cx0 + 6, 236, 34, 14); x.fillStyle = '#3a3d40'; x.fillRect(cx0 + 6, 236, 34, 2); x.fillStyle = '#16181a'; x.fillRect(cx0 + 8, 238.5, 30, 1.2); }; /* bag-drop scale */
+  counter(kx + 30, 120, '#7fd3c7'); counter(ex2 + 30, 130, '#d9dde0');
+  /* the economy queue: a few travellers with suitcases */
+  const qn = O.lane === 'eco' && O.step !== 'hall' ? Math.max(0, 3 - Math.floor((O.t - O.walkT) / .8)) : 3;
+  for (let i = 0; i < qn; i++) { const qx = ex2 + 10 - i * 26; x.fillStyle = ['#2f5d8a', '#8a3a3a', '#3d6b47'][i]; x.beginPath(); x.roundRect ? x.roundRect(qx, 214, 12, 20, 2) : x.rect(qx, 214, 12, 20); x.fill(); x.fillStyle = '#1a1a1a'; x.fillRect(qx + 4, 209, 4, 5); x.fillStyle = '#2b2b2b'; x.beginPath(); x.arc(qx + 3, 235, 1.3, 0, 6.29); x.arc(qx + 9, 235, 1.3, 0, 6.29); x.fill(); }
+  /* you */
+  const home = W * .5, tgt = O.lane === 'koru' ? kx + 160 : ex2 - 6, u = O.step === 'hall' ? 0 : O.step === 'walk' ? clamp((O.t - O.walkT) / (O.lane === 'koru' ? 1.1 : 2.4), 0, 1) : 1, meX = lerp(home, tgt, u * u * (3 - 2 * u));
+  const sm = v => v * v * (3 - 2 * v), pu = O.step === 'done' ? O.t - O.passT : -1, sd = O.lane === 'koru' ? -1 : 1, hk = sd < 0 ? 'lh' : 'rh';
+  const mP = O.step === 'walk' && u < 1 ? chPose('cwalk', O.t) : chPose('idle', O.t + 1);
+  /* the pass: slid across (0-0.7s) into your reaching hand, brought up to read (to 1.6s), then into your pocket (to 2.3s) */
+  let hand = null, passA = 1, passS = 1;
+  if (pu >= 0 && pu < 2.4) { const reach = [sd * 16.5, 37.5], read = [sd * 5.5, 43], pocket = [sd * 8.6, 31.5];
+    if (pu < .7) hand = [lerp(mP[hk][0], reach[0], sm(clamp(pu / .45, 0, 1))), lerp(mP[hk][1], reach[1], sm(clamp(pu / .45, 0, 1)))];
+    else if (pu < 1.6) { const v = sm(clamp((pu - .7) / .4, 0, 1)); hand = [lerp(reach[0], read[0], v), lerp(reach[1], read[1], v)]; if (pu > 1.1) mP.look = .4; }
+    else { const v = sm(clamp((pu - 1.6) / .5, 0, 1)); hand = [lerp(read[0], pocket[0], v), lerp(read[1], pocket[1], v)]; passS = 1 - v * .5; passA = 1 - clamp((pu - 1.95) / .25, 0, 1); }
+    mP[hk] = hand; mP.club = 'none'; mP.smile = 1; }
+  x.fillStyle = '#3f6f9a'; x.beginPath(); x.roundRect ? x.roundRect(meX + 14, 222, 11, 26, 2) : x.rect(meX + 14, 222, 11, 26); x.fill(); x.fillStyle = '#1a1a1a'; x.fillRect(meX + 17.5, 216, 4, 6); /* your bag */
+  drawGolferFront(golferById(save.golfer), meX, 252, 1.55, mP);
+  if (pu >= 0 && pu < 2.4) { const from = O.lane === 'koru' ? kx + 100 : ex2 + 110, hx = meX + hand[0] * 1.55, hy = 252 - hand[1] * 1.55 - 2;
+    const fly = clamp(pu / .7, 0, 1), px2 = pu < .7 ? lerp(from + sd * -8, hx, sm(fly)) : hx, py2 = pu < .7 ? lerp(184, hy, sm(fly)) - Math.sin(fly * Math.PI) * 8 : hy, rot = pu < .7 ? (1 - fly) * .5 * sd : pu < 1.6 ? -.08 * sd : .9 * sd * sm(clamp((pu - 1.6) / .5, 0, 1));
+    x.save(); x.globalAlpha = passA; x.translate(px2, py2); x.rotate(rot); x.scale(passS, passS); x.fillStyle = 'rgba(0,0,0,.2)'; x.fillRect(-6.5, -3, 14, 7); x.fillStyle = '#ffffff'; x.fillRect(-7, -3.5, 14, 7); x.fillStyle = '#1b1c1e'; x.fillRect(-7, -3.5, 4, 7);
+    x.fillStyle = '#7fd3c7'; x.fillRect(-2, -1.8, 7, .8); x.fillStyle = '#9aa1a6'; x.fillRect(-2, -.2, 5, .6); x.fillRect(-2, 1.1, 6, .6); x.fillStyle = '#1b1c1e'; for (let i = 0; i < 6; i++) x.fillRect(4.2 + (i % 2) * .5, -2.6 + i * .9, .4, .6); x.restore(); }
+  PXR = 1; x.imageSmoothingEnabled = false;
+}
+/* ---------- in flight, on the card ---------- */
+function startFlight(c, then, eco, jetName, cls) { G.fl = { t: 0, dur: eco ? 11.5 : 9, c, then, eco: !!eco, cls: cls || 'eco', back: G.scr }; G.scr = 'flight'; UI.innerHTML = `<div class="scr chscr" style="justify-content:flex-end"><div class="chmsg" style="bottom:calc(var(--u)*14)">✈ Flying to <b>${esc(c.name)}</b> ${eco ? 'with Air New Zealand' + (cls === 'prem' ? ' · Premium Economy' : '') : `on the club's ${jetName || 'jet'}`}</div><button class="btn g sm" style="position:absolute;right:calc(var(--u)*8);top:calc(var(--u)*8);pointer-events:auto" data-a="flSkip">SKIP</button></div>`; SFX.play('cart'); }
+ACT.flSkip = () => { if (G.fl) G.fl.t = G.fl.dur; };
+/* Air New Zealand, the view from your seat: the seat back in front with its screen, tray and pocket, rows ahead with
+   heads above the seats, overhead bins, a window with the wing outside, soft mood lighting.
+   prem = Premium Economy (Koru): roomier leather seats, a proper meal and a glass of wine. */
+function drawEcoPOV(x, W, t, prem) {
+  const lg = (y0, y1, st) => { const g = x.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; }, P = (pts, c) => { x.fillStyle = c; x.beginPath(); pts.forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.closePath(); x.fill(); };
+  const rr = (a, b, w, h, r, c) => { x.fillStyle = c; x.beginPath(); x.roundRect ? x.roundRect(a, b, w, h, r) : x.rect(a, b, w, h); x.fill(); };
+  /* ceiling and mood light */
+  x.fillStyle = lg(0, 120, [[0, '#d9dbdc'], [1, '#c4c8ca']]); x.fillRect(0, 0, W, 270);
+  const mood = prem ? 'rgba(150,110,200,.22)' : 'rgba(120,150,200,.16)'; x.fillStyle = mood; x.fillRect(0, 0, W, 70);
+  /* overhead bins, left and right, in perspective toward the front */
+  P([[0, 18], [W * .36, 44], [W * .36, 62], [0, 92]], '#e9ebea'); P([[0, 92], [W * .36, 62], [W * .36, 66], [0, 100]], '#b9bec0');
+  P([[W, 18], [W * .64, 44], [W * .64, 62], [W, 92]], '#e9ebea'); P([[W, 92], [W * .64, 62], [W * .64, 66], [W, 100]], '#b9bec0');
+  x.fillStyle = '#a5abae'; for (const [a, b] of [[40, 70], [110, 60], [W - 52, 70], [W - 122, 60]]) x.fillRect(a, b, 16, 2); /* bin handles */
+  P([[W * .36, 44], [W * .64, 44], [W * .6, 50], [W * .4, 50]], '#f2f3f2'); x.fillStyle = 'rgba(255,250,230,.8)'; for (let i = 0; i < 3; i++) x.fillRect(W * .44 + i * 18, 46, 8, 1.4); /* ceiling lights down the aisle */
+  /* left sidewall with a window: the wing and cloud tops outside */
+  P([[0, 96], [70, 84], [70, 190], [0, 230]], '#dfe1e0');
+  x.save(); x.beginPath(); x.ellipse(36, 140, 16, 22, -.08, 0, 6.29); x.clip(); x.fillStyle = lg(118, 162, [[0, '#5d8fc9'], [1, '#d9e8f5']]); x.fillRect(18, 116, 40, 48);
+  for (let i = 0; i < 5; i++) { const cx2 = ((i * 23 - t * 18) % 60 + 60) % 60 + 10; x.fillStyle = 'rgba(255,255,255,.85)'; x.beginPath(); x.ellipse(cx2, 152 + i % 2 * 4, 10, 3, 0, 0, 6.29); x.fill(); }
+  P([[18, 150], [58, 142], [58, 146], [18, 158]], '#c9ced2'); x.fillStyle = '#15161a'; x.fillRect(54, 136, 3, 7); /* wing with a black winglet */
+  x.fillStyle = '#e7e9e8'; x.fillRect(18, 116, 40, 10); x.restore(); /* blind pulled a little */
+  x.strokeStyle = '#c3c7c8'; x.lineWidth = 3; x.beginPath(); x.ellipse(36, 140, 17.5, 23.5, -.08, 0, 6.29); x.stroke();
+  /* rows ahead, getting smaller toward the front, with heads above some seats */
+  const seatC = prem ? '#3a3f46' : '#2f3338', cover = prem ? '#4a7f8c' : '#ecefee';
+  for (let row = 3; row >= 1; row--) { const s = 1 - row * .17, y0 = 120 - row * 14, w = 66 * s, gap = 4 * s, cx0 = W * .5;
+    for (const sd of [-1, 1]) for (let k = 0; k < (prem ? 2 : 3); k++) { const sx = cx0 + sd * (16 * s + k * (w + gap)) - (sd < 0 ? w : 0); rr(sx, y0, w, 70 * s, 8 * s, shadeHex(seatC, 1 + row * .08)); rr(sx + 4 * s, y0 + 2 * s, w - 8 * s, 10 * s, 4 * s, cover);
+      if ((row + k + (sd > 0 ? 1 : 0)) % 2) { x.fillStyle = ['#2a1d14', '#5a3b24', '#111', '#8a6a44'][(row + k) % 4]; x.beginPath(); x.ellipse(sx + w / 2, y0 - 3 * s, 9 * s, 8 * s, 0, Math.PI, 0); x.fill(); } } }
+  x.fillStyle = lg(150, 270, [[0, '#6a6e72'], [1, '#4a4e52']]); P([[W * .43, 150], [W * .57, 150], [W * .66, 270], [W * .34, 270]], prem ? '#5a5560' : '#55595d'); /* aisle carpet */
+  /* the seat back in front of you */
+  const bx = W * .5 - (prem ? 110 : 96), bw = prem ? 220 : 192, by = 108;
+  rr(bx, by, bw, 180, 18, lg(by, 270, [[0, shadeHex(seatC, 1.18)], [1, shadeHex(seatC, .8)]]));
+  x.fillStyle = 'rgba(255,255,255,.035)'; for (let i = 0; i < bw; i += 3) x.fillRect(bx + i, by + 4, 1, 170); /* fabric weave */
+  rr(bx + 14, by + 4, bw - 28, 22, 8, cover); if (!prem) { x.fillStyle = '#4a7f8c'; x.fillRect(bx + 14, by + 22, bw - 28, 4); }
+  /* screen with the flight map */
+  const sx0 = W * .5 - 46, sy0 = by + 34; rr(sx0 - 3, sy0 - 3, 98, 60, 4, '#0b0d10'); x.fillStyle = lg(sy0, sy0 + 54, [[0, '#123352'], [1, '#0b2236']]); x.fillRect(sx0, sy0, 92, 54);
+  x.fillStyle = '#1f4f3a'; P([[sx0 + 6, sy0 + 40], [sx0 + 18, sy0 + 30], [sx0 + 26, sy0 + 44], [sx0 + 12, sy0 + 50]], '#2c5a3f'); P([[sx0 + 66, sy0 + 10], [sx0 + 86, sy0 + 6], [sx0 + 88, sy0 + 30], [sx0 + 72, sy0 + 26]], '#2c5a3f'); /* land */
+  x.strokeStyle = '#7fd3c7'; x.setLineDash([2, 2]); x.lineWidth = .8; x.beginPath(); x.moveTo(sx0 + 16, sy0 + 40); x.quadraticCurveTo(sx0 + 46, sy0 + 4, sx0 + 78, sy0 + 18); x.stroke(); x.setLineDash([]);
+  const pu = clamp(t / 4.2, 0, 1), qx = (1 - pu) ** 2 * (sx0 + 16) + 2 * (1 - pu) * pu * (sx0 + 46) + pu * pu * (sx0 + 78), qy = (1 - pu) ** 2 * (sy0 + 40) + 2 * (1 - pu) * pu * (sy0 + 4) + pu * pu * (sy0 + 18); x.fillStyle = '#ffffff'; x.beginPath(); x.arc(qx, qy, 1.6, 0, 6.29); x.fill();
+  x.fillStyle = '#d9e4ea'; x.font = '600 4.5px "Barlow"'; x.fillText(`${Math.round(10668 * Math.min(1, t / 1.5))} m  ·  ${Math.round(900 * Math.min(1, t / 1.5))} km/h`, sx0 + 4, sy0 + 7);
+  x.fillStyle = '#2a2d31'; x.fillRect(sx0 + 40, sy0 + 58, 12, 2); /* USB */
+  /* tray table down, with food and drink */
+  const ty = by + 100; rr(bx + 18, ty, bw - 36, 10, 3, '#cfd2d3'); x.fillStyle = '#b5b9bb'; x.fillRect(bx + 18, ty + 8, bw - 36, 2); x.fillStyle = '#9da2a5'; x.fillRect(W * .5 - 6, by + 94, 12, 3); /* latch */
+  if (prem) { rr(W * .5 - 34, ty - 7, 44, 8, 2, '#f4f4f1'); x.fillStyle = '#7a4a2a'; x.beginPath(); x.ellipse(W * .5 - 18, ty - 5, 10, 3, 0, 0, 6.29); x.fill(); x.fillStyle = '#6aa04a'; x.beginPath(); x.ellipse(W * .5 - 4, ty - 5, 5, 2.4, 0, 0, 6.29); x.fill(); x.fillStyle = '#c9ced2'; x.fillRect(W * .5 + 12, ty - 7, 1, 7); x.fillRect(W * .5 + 15, ty - 7, 1, 7); /* plated meal and cutlery */
+    const gx = W * .5 + 32; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(gx - 4, ty - 22); x.lineTo(gx + 4, ty - 22); x.quadraticCurveTo(gx + 4, ty - 12, gx, ty - 11); x.quadraticCurveTo(gx - 4, ty - 12, gx - 4, ty - 22); x.fill(); x.fillStyle = '#7a1e2e'; x.beginPath(); x.moveTo(gx - 3.6, ty - 17); x.lineTo(gx + 3.6, ty - 17); x.quadraticCurveTo(gx + 3.6, ty - 12.5, gx, ty - 11.6); x.quadraticCurveTo(gx - 3.6, ty - 12.5, gx - 3.6, ty - 17); x.fill(); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(gx - .4, ty - 11, .8, 9); x.fillRect(gx - 3, ty - 2, 6, .8); }
+  else { const cx3 = W * .5 + 30; x.fillStyle = '#f4f4f2'; x.fillRect(cx3 - 5, ty - 11, 10, 11); x.fillStyle = '#8a5a3a'; x.fillRect(cx3 - 4.2, ty - 10, 8.4, 2); x.fillStyle = '#4a7f8c'; x.fillRect(cx3 - 5, ty - 6, 10, 1.2); rr(W * .5 - 30, ty - 5, 18, 5, 1, '#e9d8b4'); x.fillStyle = '#b8864a'; x.fillRect(W * .5 - 28, ty - 4, 14, 1); } /* tea and a biscuit */
+  /* seat pocket with the safety card */
+  rr(bx + 26, by + 134, bw - 52, 30, 6, shadeHex(seatC, .75)); x.fillStyle = '#f2f2ee'; x.fillRect(bx + 40, by + 126, 22, 12); x.fillStyle = '#4a7f8c'; x.fillRect(bx + 40, by + 126, 22, 3); x.fillStyle = '#d9dde0'; x.fillRect(bx + 66, by + 128, 18, 10);
+  /* your armrests */
+  for (const sd of [-1, 1]) { rr(sd < 0 ? 0 : W - 70, 236, 70, 34, 10, prem ? '#3a3f46' : '#2a2d31'); x.fillStyle = prem ? '#5a6068' : '#45494e'; x.fillRect(sd < 0 ? 4 : W - 66, 238, 62, 4); x.fillStyle = '#9aa1a6'; x.fillRect(sd < 0 ? 40 : W - 50, 244, 8, 3); }
+  if (prem) { x.fillStyle = 'rgba(255,230,200,.10)'; x.fillRect(0, 0, W, 270); }
+}
+/* other passengers (invented), seen in the row behind yours */
+const PAX = [
+  { look: { hat: 'none', hair: 'short', build: 1.05, sleeve: 'short', noGlove: true, eyeCol: '#3a2a1e' }, c: { h: '#111', H: '#3a2a1e', s: '#e8b48c', S: '#6d8fa8', p: '#3a3d42', k: '#222' } },
+  { look: { hat: 'none', hair: 'long', build: .9, fem: true, lashes: true, sleeve: 'long', noGlove: true, eyeCol: '#2f2016' }, c: { h: '#111', H: '#1a1410', s: '#c68a62', S: '#b5525a', p: '#2e3440', k: '#222' } },
+  { look: { hat: 'none', hair: 'curly', build: 1.1, sleeve: 'short', noGlove: true, glasses: true }, c: { h: '#111', H: '#8a6a44', s: '#f1c8a4', S: '#3d6b47', p: '#5a5e61', k: '#222' } },
+  { look: { hat: 'none', hair: 'bun', build: .92, fem: true, lashes: true, sleeve: 'long', noGlove: true, eyeCol: '#3e2a1c' }, c: { h: '#111', H: '#2a1c14', s: '#a8714e', S: '#e9e4d6', p: '#2b2f36', k: '#222' } },
+  { look: { hat: 'cap', hair: 'short', build: 1.0, sleeve: 'short', noGlove: true }, c: { h: '#1f3b5c', H: '#5d4037', s: '#d29a6a', S: '#ececec', p: '#3a3d42', k: '#222' } }];
+/* a person sitting, facing us: drawn standing with the hips at the cushion, then the seat front (drawn after)
+   hides the legs. Hands rest forward; sip > 0 raises the right hand with a glass */
+function drawSeated(g, X, yc, k, t, sip) {
+  if (!g) return; const P = chPose('idle', t); P.club = 'none'; P.jump = 0; P.lean = 0; P.kneeL = P.kneeR = 0;
+  P.lh = [-8.5, 36 + Math.sin(t * .8) * .2]; P.rh = sip > 0 ? [lerp(8.5, 3, sip), lerp(36, 56, sip)] : [8.5, 36 + Math.sin(t * .8 + 1) * .2]; if (sip > .6) P.smile = 1;
+  drawGolferFront(g, X, yc + 33 * k, k, P);
+  return P;
+}
+const seatedGlass = (x, X, yc, k, P, wine) => { const hx = X + P.rh[0] * k, hy = yc + 33 * k - P.rh[1] * k; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(hx - 1.6, hy - 9); x.lineTo(hx + 1.6, hy - 9); x.lineTo(hx + 1, hy - 2); x.lineTo(hx - 1, hy - 2); x.fill(); x.fillStyle = wine ? '#7a1e2e' : '#f2dc8a'; x.fillRect(hx - 1.3, hy - 7, 2.6, 4.5); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(hx - .3, hy - 2, .6, 3); };
+/* the private jet's cabin: two cream quilted-leather club seats facing us, you in one and your caddie in the other
+   (or an empty seat), a walnut table with champagne on ice, strawberries and an orchid, oval windows behind */
+function drawCabinLux(x, W, t) {
+  const lg = (y0, y1, st) => { const g = x.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; }, rr = (a, b, w, h, r, c) => { x.fillStyle = c; x.beginPath(); x.roundRect ? x.roundRect(a, b, w, h, r) : x.rect(a, b, w, h); x.fill(); };
+  x.fillStyle = lg(0, 200, [[0, '#4f86c4'], [1, '#e2eef8']]); x.fillRect(0, 0, W, 200);
+  for (let i = 0; i < 18; i++) { const cx2 = ((i * 97 - t * (40 + (i % 3) * 30)) % (W + 160) + W + 160) % (W + 160) - 80, cy2 = 70 + (i % 4) * 14, r = 18 + (i % 5) * 7; x.fillStyle = `rgba(255,255,255,${.7 + (i % 3) * .1})`; x.beginPath(); x.ellipse(cx2, cy2, r * 1.8, r * .5, 0, 0, 6.29); x.fill(); }
+  const wins = [W * .14, W * .38, W * .62, W * .86];
+  x.save(); x.beginPath(); x.rect(0, 0, W, 270); for (const wx of wins) { x.moveTo(wx + 15, 74); x.ellipse(wx, 74, 15, 20, 0, 0, 6.29); } x.fillStyle = lg(0, 200, [[0, '#f6efe3'], [1, '#e6dccb']]); x.fill('evenodd'); x.restore();
+  for (const wx of wins) { x.strokeStyle = '#d8ccb6'; x.lineWidth = 3; x.beginPath(); x.ellipse(wx, 74, 16.5, 21.5, 0, 0, 6.29); x.stroke(); x.strokeStyle = 'rgba(201,162,74,.7)'; x.lineWidth = .6; x.beginPath(); x.ellipse(wx, 74, 18.5, 23.5, 0, 0, 6.29); x.stroke(); }
+  x.fillStyle = lg(0, 26, [[0, '#efe6d6'], [1, '#e2d6c2']]); x.fillRect(0, 0, W, 26); x.fillStyle = 'rgba(255,214,150,.7)'; x.fillRect(0, 25, W, 1.4); x.fillStyle = lg(26, 56, [[0, 'rgba(255,214,150,.25)'], [1, 'rgba(255,214,150,0)']]); x.fillRect(0, 26, W, 30);
+  x.fillStyle = lg(118, 200, [[0, '#6b4329'], [1, '#3f2413']]); x.fillRect(0, 118, W, 82); x.strokeStyle = 'rgba(30,15,5,.22)'; x.lineWidth = .6; for (let i = 0; i < 12; i++) { x.beginPath(); x.moveTo(0, 122 + i * 6.5); x.bezierCurveTo(W * .3, 116 + i * 6.5, W * .6, 128 + i * 6.5, W, 121 + i * 6.5); x.stroke(); } x.fillStyle = '#d9b25a'; x.fillRect(0, 118, W, 1.4);
+  x.fillStyle = lg(200, 270, [[0, '#cbb99c'], [1, '#a99677']]); x.fillRect(0, 200, W, 70);
+  /* the two seats, the people in them, then the seat fronts and armrests over their legs */
+  const k = 1.7, yc = 194, seats = [[W * .3, golferById(save.golfer)], [W * .7, caddieDef()]];
+  for (const [sx] of seats) { rr(sx - 34, 96, 68, 104, 16, lg(96, 200, [[0, '#f3e9d8'], [1, '#d6c6aa']])); x.strokeStyle = 'rgba(150,120,80,.3)'; x.lineWidth = .5; for (let i = 0; i < 5; i++) { x.beginPath(); x.moveTo(sx - 26, 108 + i * 18); x.lineTo(sx + 26, 108 + i * 18); x.stroke(); } rr(sx - 22, 98, 44, 12, 6, '#efe3cf'); }
+  const sipT = (t % 5.5), sip = sipT > 3.4 && sipT < 5 ? Math.sin((sipT - 3.4) / 1.6 * Math.PI) : 0, Ps = [];
+  seats.forEach(([sx, g], i) => { Ps[i] = g ? drawSeated(g, sx, yc, k, t + i * 1.7, i === 0 ? sip : 0) : null; });
+  for (const [sx] of seats) { rr(sx - 38, yc - 2, 76, 66, 12, lg(yc, 262, [[0, '#efe4d0'], [1, '#c9b796']])); x.fillStyle = 'rgba(150,120,80,.3)'; x.fillRect(sx - 30, yc + 8, 60, .6);
+    for (const sd of [-1, 1]) rr(sx + sd * 40 - 9, yc - 18, 18, 30, 8, lg(yc - 18, yc + 12, [[0, '#f3e9d8'], [1, '#d6c6aa']])); x.fillStyle = '#d9b25a'; x.fillRect(sx - 38, 252, 76, 2); }
+  if (Ps[0] && sip > 0) seatedGlass(x, W * .3, yc, k, Ps[0]);
+  /* walnut table between them with champagne, glasses, strawberries and an orchid */
+  const tx = W * .5; x.fillStyle = 'rgba(0,0,0,.2)'; x.beginPath(); x.ellipse(tx, 262, 46, 5, 0, 0, 6.29); x.fill(); x.fillStyle = '#8a6a3a'; x.fillRect(tx - 3, 214, 6, 48);
+  rr(tx - 44, 206, 88, 9, 4, lg(206, 215, [[0, '#7a4a2a'], [1, '#4a2a16']])); x.fillStyle = '#d9b25a'; x.fillRect(tx - 44, 206, 88, 1.2);
+  x.fillStyle = lg(186, 206, [[0, '#e6e9ea'], [1, '#9aa2a6']]); x.beginPath(); x.moveTo(tx - 34, 188); x.lineTo(tx - 18, 188); x.lineTo(tx - 20, 206); x.lineTo(tx - 32, 206); x.fill(); x.fillStyle = '#1d3a2a'; x.fillRect(tx - 29, 170, 6, 20); x.fillStyle = '#d9b25a'; x.fillRect(tx - 29, 165, 6, 6); x.fillStyle = '#f2ead6'; x.fillRect(tx - 28, 177, 4, 5);
+  for (const [gx, lv] of [[tx - 6, .7], [tx + 4, .5]]) { x.fillStyle = 'rgba(230,240,245,.55)'; x.beginPath(); x.moveTo(gx - 2.6, 190); x.lineTo(gx + 2.6, 190); x.lineTo(gx + 1.8, 200); x.lineTo(gx - 1.8, 200); x.fill(); x.fillStyle = '#f2dc8a'; x.fillRect(gx - 2, 200 - 10 * lv, 4, 10 * lv); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(gx - .3, 200, .6, 5); x.fillRect(gx - 2.2, 205, 4.4, .8); x.fillStyle = 'rgba(255,255,255,.8)'; for (let i = 0; i < 3; i++) x.fillRect(gx - .8 + (i % 2), 200 - ((t * 6 + i * 2.7 + gx) % (10 * lv)), .6, .6); }
+  x.fillStyle = '#f4f1ea'; x.beginPath(); x.ellipse(tx + 22, 205, 10, 2.2, 0, 0, 6.29); x.fill(); x.fillStyle = '#c9283a'; for (let i = 0; i < 4; i++) { x.beginPath(); x.ellipse(tx + 16 + i * 3.6, 203 - (i % 2), 1.7, 2, 0, 0, 6.29); x.fill(); }
+  x.fillStyle = '#f2ece2'; x.fillRect(tx + 34, 196, 5, 10); x.strokeStyle = '#4c7a3a'; x.lineWidth = .7; x.beginPath(); x.moveTo(tx + 36.5, 196); x.quadraticCurveTo(tx + 37, 184, tx + 42, 178); x.stroke(); x.fillStyle = '#f6e9f2'; for (const [ox, oy] of [[42, 178], [40.5, 183], [39, 188]]) { x.beginPath(); x.arc(tx + ox, oy, 2, 0, 6.29); x.fill(); }
+  const sp = x.createRadialGradient(tx, 200, 4, tx, 200, 140); sp.addColorStop(0, 'rgba(255,226,170,.16)'); sp.addColorStop(1, 'rgba(255,226,170,0)'); x.fillStyle = sp; x.fillRect(0, 40, W, 230);
+}
+/* Air New Zealand: your row from the front. You by the window, your caddie beside you (or an empty seat), trays down,
+   the rows behind with other passengers, overhead bins and the window. prem = Premium Economy (Koru). */
+function drawEcoCabin(x, W, t, prem) {
+  const lg = (y0, y1, st) => { const g = x.createLinearGradient(0, y0, 0, y1); st.forEach(([o, c]) => g.addColorStop(o, c)); return g; }, P = (pts, c) => { x.fillStyle = c; x.beginPath(); pts.forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.closePath(); x.fill(); }, rr = (a, b, w, h, r, c) => { x.fillStyle = c; x.beginPath(); x.roundRect ? x.roundRect(a, b, w, h, r) : x.rect(a, b, w, h); x.fill(); };
+  x.fillStyle = lg(0, 270, [[0, '#d6d9da'], [1, '#c2c6c8']]); x.fillRect(0, 0, W, 270);
+  x.fillStyle = prem ? 'rgba(150,110,200,.2)' : 'rgba(120,150,200,.14)'; x.fillRect(0, 0, W, 60);
+  /* bins overhead, ceiling lights */
+  P([[0, 8], [W, 8], [W, 40], [0, 40]], '#e9ebea'); P([[0, 40], [W, 40], [W, 46], [0, 46]], '#b9bec0'); x.fillStyle = '#a5abae'; for (let i = 0; i < 6; i++) x.fillRect(30 + i * W / 6, 32, 18, 2); x.fillStyle = 'rgba(255,250,230,.8)'; for (let i = 0; i < 8; i++) x.fillRect(10 + i * W / 8, 4, 22, 1.6);
+  x.fillStyle = '#cfd3d5'; x.fillRect(0, 46, W, 8); x.fillStyle = '#7fd3c7'; for (let i = 0; i < 4; i++) { x.beginPath(); x.arc(W * .2 + i * 10, 50, 1.2, 0, 6.29); x.fill(); } /* service panel lights */
+  /* the row behind yours: seat backs, passengers sitting in them (smaller, further away), their cushions over their legs */
+  const seatC = prem ? '#3a3f46' : '#2f3338', cover = prem ? '#4a7f8c' : '#ecefee', bk = .95, byc = 150, cols = 6;
+  x.fillStyle = lg(176, 270, [[0, prem ? '#5d5866' : '#5c6064'], [1, prem ? '#433f4a' : '#404448']]); x.fillRect(0, 176, W, 94); x.fillStyle = 'rgba(0,0,0,.18)'; x.fillRect(0, 176, W, 3); /* cabin floor */
+  for (let i = 0; i < cols; i++) { const sx = 46 + i * (W - 92) / (cols - 1); rr(sx - 22, 60, 44, 96, 9, lg(60, 156, [[0, shadeHex(seatC, 1.28)], [1, shadeHex(seatC, 1.05)]])); rr(sx - 17, 62, 34, 10, 4, cover); }
+  for (let i = 0; i < cols; i++) { const sx = 46 + i * (W - 92) / (cols - 1), who = [0, 1, -1, 2, 3, 4][i]; if (who >= 0) { DC.globalAlpha = .92; drawSeated(PAX[who], sx, byc, bk, t * .7 + i * 1.9, 0); DC.globalAlpha = 1; } }
+  for (let i = 0; i < cols; i++) { const sx = 46 + i * (W - 92) / (cols - 1); rr(sx - 24, byc - 2, 48, 28, 8, shadeHex(seatC, 1.12)); x.fillStyle = shadeHex(seatC, .7); x.fillRect(sx - 18, byc + 26, 4, 6); x.fillRect(sx + 14, byc + 26, 4, 6); x.fillStyle = 'rgba(0,0,0,.2)'; x.fillRect(sx - 24, byc + 31, 48, 2); }
+  x.fillStyle = 'rgba(200,206,210,.18)'; x.fillRect(0, 56, W, 136); /* a little cabin haze so the back row sits behind yours */
+  /* window on the left wall */
+  P([[0, 54], [44, 58], [44, 220], [0, 240]], '#dfe1e0'); x.save(); x.beginPath(); x.ellipse(22, 118, 13, 18, 0, 0, 6.29); x.clip(); x.fillStyle = lg(100, 136, [[0, '#5d8fc9'], [1, '#d9e8f5']]); x.fillRect(8, 98, 30, 40);
+  for (let i = 0; i < 4; i++) { const cx2 = ((i * 19 - t * 14) % 50 + 50) % 50 + 2; x.fillStyle = 'rgba(255,255,255,.85)'; x.beginPath(); x.ellipse(cx2, 128 + i % 2 * 3, 8, 2.4, 0, 0, 6.29); x.fill(); } x.fillStyle = '#e7e9e8'; x.fillRect(8, 98, 30, 8); x.restore(); x.strokeStyle = '#c3c7c8'; x.lineWidth = 2.6; x.beginPath(); x.ellipse(22, 118, 14.5, 19.5, 0, 0, 6.29); x.stroke();
+  /* your row: seat backs, the two of you, then cushions, armrests and trays over your legs */
+  const k = prem ? 1.7 : 1.62, yc = 198, sw = prem ? 84 : 72, seats = [[W * .5 - sw * .6, golferById(save.golfer)], [W * .5 + sw * .6, caddieDef()]];
+  for (const [sx] of seats) { rr(sx - sw / 2, 86, sw, 120, 14, lg(86, 206, [[0, shadeHex(seatC, 1.25)], [1, shadeHex(seatC, .9)]])); x.fillStyle = 'rgba(255,255,255,.035)'; for (let i = 0; i < sw; i += 3) x.fillRect(sx - sw / 2 + i, 92, 1, 100); rr(sx - sw / 2 + 8, 88, sw - 16, 18, 7, cover); if (!prem) { x.fillStyle = '#4a7f8c'; x.fillRect(sx - sw / 2 + 8, 102, sw - 16, 4); } }
+  { const ax = W * .5 + sw * 1.2 + 6; rr(ax, 86, 60, 184, 14, lg(86, 270, [[0, shadeHex(seatC, 1.15)], [1, shadeHex(seatC, .8)]])); rr(ax + 6, 88, 48, 16, 6, cover); rr(ax + 2, yc + 14, 56, 9, 3, '#cfd2d3'); } /* across the aisle, empty */
+  seats.forEach(([sx, g], i) => { if (g) drawSeated(g, sx, yc, k, t + i * 1.3, 0); });
+  for (const [sx] of seats) { rr(sx - sw / 2, yc - 2, sw, 74, 10, lg(yc, 270, [[0, shadeHex(seatC, 1.12)], [1, shadeHex(seatC, .8)]])); }
+  for (const ax of [W * .5 - sw * 1.1, W * .5, W * .5 + sw * 1.1]) { rr(ax - 6, yc - 16, 12, 30, 5, prem ? '#4a5058' : '#3a3e43'); x.fillStyle = '#9aa1a6'; x.fillRect(ax - 3, yc - 12, 6, 2); }
+  /* trays down with food and drink, one each (none at the empty seat) */
+  seats.forEach(([sx, g]) => { const ty = 214; rr(sx - sw / 2 + 6, ty, sw - 12, 9, 3, '#cfd2d3'); x.fillStyle = '#b5b9bb'; x.fillRect(sx - sw / 2 + 6, ty + 7, sw - 12, 2); if (!g) return;
+    if (prem) { rr(sx - 22, ty - 6, 30, 7, 2, '#f4f4f1'); x.fillStyle = '#7a4a2a'; x.beginPath(); x.ellipse(sx - 11, ty - 4, 8, 2.6, 0, 0, 6.29); x.fill(); x.fillStyle = '#6aa04a'; x.beginPath(); x.ellipse(sx - 1, ty - 4, 4, 2, 0, 0, 6.29); x.fill();
+      const gx = sx + 16; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(gx - 3.4, ty - 18); x.lineTo(gx + 3.4, ty - 18); x.quadraticCurveTo(gx + 3.4, ty - 10, gx, ty - 9); x.quadraticCurveTo(gx - 3.4, ty - 10, gx - 3.4, ty - 18); x.fill(); x.fillStyle = '#7a1e2e'; x.fillRect(gx - 3, ty - 14, 6, 4); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(gx - .4, ty - 9, .8, 8); x.fillRect(gx - 2.6, ty - 1, 5.2, .8); }
+    else { x.fillStyle = '#f4f4f2'; x.fillRect(sx + 8, ty - 10, 9, 10); x.fillStyle = '#8a5a3a'; x.fillRect(sx + 8.8, ty - 9, 7.4, 2); x.fillStyle = '#4a7f8c'; x.fillRect(sx + 8, ty - 5.5, 9, 1.2); rr(sx - 16, ty - 4, 16, 4, 1, '#e9d8b4'); } });
+  if (prem) { x.fillStyle = 'rgba(255,230,200,.08)'; x.fillRect(0, 0, W, 270); }
+}
+function drawFlight() {
+  const F = G.fl, x = ctx, W = VW, t = F.t, T0 = 3.8, T1 = F.eco ? 7.6 : 99; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; x.imageSmoothingEnabled = true;
+  if (t < T0) drawTakeoff(x, W, t, T0, F.eco); else if (F.eco && t < T1) drawEcoCabin(x, W, t - T0, F.cls === 'prem'); else if (F.eco) drawEcoPOV(x, W, t - T1, F.cls === 'prem'); else drawCabinLux(x, W, t);
+  const fade = Math.min(1, t / .4, (F.dur - t) / .4, Math.abs(t - T0) / .3, Math.abs(t - T1) / .3); if (fade < 1) { x.fillStyle = `rgba(0,0,0,${1 - fade})`; x.fillRect(0, 0, W, 270); }
   PXR = 1; x.imageSmoothingEnabled = false;
 }
 
@@ -9003,7 +9476,8 @@ function sponsorAfterRound(r, ev, toPar, st) {
    1 win: Ashworth may offer to pay three-quarters of your Augusta membership plus a bonus per win (you thank him at prize givings), if you thank him at your prize givings.
    2 wins and no Amalfi card: he gives you the card.  3 wins: Red Bull want you (alongside one golf brand). */
 const JONES = { name: 'Kolin Jones', role: 'Founder, Amalfi Jet Club' }, ASHWORTH = { name: 'Grant Ashworth', role: 'Billionaire investor, Augusta member' };
-const OFFER_NAME = { augusta: 'GRANT ASHWORTH', amalfi: 'KOLIN JONES', redbull: 'RED BULL' };
+const OFFER_NAME = { augusta: 'GRANT ASHWORTH', amalfi: 'KOLIN JONES', redbull: 'RED BULL', airnz: 'AIR NEW ZEALAND' };
+const AIRNZ_REP = { name: 'Tama Rangi', role: 'Sponsorships, Air New Zealand' }; /* an invented person */
 function pickOffer() {
   const n = save.stats.intlWins || 0, P = save.patron || (save.patron = {});
   if (n >= 3 && !save.redbull && !P.rb) return 'redbull';
@@ -9015,6 +9489,7 @@ const patronOn = () => !!(save.patron && save.patron.thanks);
 function offerBody(k) {
   const aug = courseById('augusta'), half = Math.round(aug.member / 4);
   if (k === 'augusta') return { who: ASHWORTH, txt: `"Congratulations. I'd like to see you at Augusta. I'll cover three-quarters of your membership, have a word with the committee, and pay you a bonus every time you win. All I ask: thank me at your prize givings."`, deal: `You pay just <b>${priceHTML(half)}</b> (normally ${priceHTML(aug.member)}). Every event you win: a bonus from him (3,000 at club level up to 25,000 for a major). You thank Grant Ashworth at every prize giving.`, yes: `JOIN FOR ${priceHTML(half)}` };
+  if (k === 'airnz') { const h = Math.round(KORU.price / 2); return { who: AIRNZ_REP, txt: `"Congratulations on the win. A Kiwi playing like that should be competing overseas. We'll pay half your Koru card so you can get out there."`, deal: `You pay <b>${priceHTML(h)}</b> (normally ${priceHTML(KORU.price)}). Half-price flights to every overseas course, for good.`, yes: `ACCEPT · PAY ${priceHTML(h)}` }; }
   if (k === 'amalfi') return { who: JONES, txt: `"Two big wins. A player like you should not queue at airports. The card is yours, on me."`, deal: `A free <b>${JET.name}</b> card: free flights, 25% off green fees abroad, the lounge.`, yes: 'ACCEPT THE CARD' };
   const sp = mySponsor();
   return { who: RB.rep, brand: RB.name, txt: `"Three international wins. We want you. A Red Bull cart and all the drinks you can handle. You wear our cap now and then."`, deal: `<b>Red Bull Cart</b> (same as the Maybach), free sports drinks on the course, and the Red Bull cap at casual rounds.${sp ? ` You'll need ${sp.name} to agree too.` : ''}`, yes: sp ? 'TALK TO BOTH' : 'SIGN WITH RED BULL' };
@@ -9041,10 +9516,11 @@ function rbSign(cap, note) {
 }
 Object.assign(ACT, {
   offerOpen: () => { const k = save.offerPending; if (!k) return; showModal(offerHTML(k)); },
-  offerNo: v => { save.patron = save.patron || {}; if (v === 'augusta') save.patron.aug = 'no'; else if (v === 'amalfi') save.patron.amalfi = 'no'; else save.patron.rb = 'no'; save.offerPending = null; persist(); closeModal(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); },
+  offerNo: v => { save.patron = save.patron || {}; if (v === 'augusta') save.patron.aug = 'no'; else if (v === 'amalfi') save.patron.amalfi = 'no'; else if (v === 'airnz') save.patron.airnz = 'no'; else save.patron.rb = 'no'; save.offerPending = null; persist(); closeModal(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); },
   offerYes: v => {
     const P = save.patron = save.patron || {}, fin = () => { save.offerPending = null; persist(); if (G.ch && G.ch.venue) { G.ch.offerDone = true; G.ch.msg = cerVenueDone(G.ch); } rerender(); };
     if (v === 'augusta') { const half = Math.round(courseById('augusta').member / 4); closeModal(); spend(half, () => { if (!save.members.includes('augusta')) save.members.push('augusta'); P.aug = 'yes'; P.thanks = true; SFX.play('trophy'); toast('Welcome to <b>Augusta National</b>. Grant Ashworth covered the rest.'); fin(); }); return; }
+    if (v === 'airnz') { const h = Math.round(KORU.price / 2); closeModal(); if (hasKoru() || hasJet()) { P.airnz = 'yes'; fin(); return; } spend(h, () => { save.koru = { since: Date.now(), gift: 'Air New Zealand' }; P.airnz = 'yes'; SFX.play('trophy'); toast(`<b>${KORU.name}</b> is yours, half paid by Air New Zealand. Flights are half price.`); fin(); }); return; }
     if (v === 'amalfi') { save.jet = { since: Date.now(), gift: JONES.name }; P.amalfi = 'yes'; closeModal(); SFX.play('trophy'); toast(`The <b>${JET.name}</b> card is yours. A gift from Kolin Jones.`); fin(); return; }
     if (mySponsor()) { showModal(rbMeetHTML()); return; }
     rbSign('casual'); fin();
