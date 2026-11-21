@@ -318,6 +318,7 @@ input.nameIn{width:calc(var(--u)*170);font-size:calc(var(--u)*7.68);padding:calc
 .srow:hover{filter:brightness(1.04)}
 .sic{width:calc(var(--u)*22);display:flex;justify-content:center;align-items:flex-end;min-height:calc(var(--u)*14)}
 .sic canvas{max-height:calc(var(--u)*22);width:auto!important}
+.sic canvas[data-spr$="card"]{width:calc(var(--u)*20)!important;height:auto!important;max-height:none;border-radius:calc(var(--u)*1.2);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.45)}
 .snm{font-size:calc(var(--u)*5.3)}.ssub{font-size:calc(var(--u)*4.5);color:#6a5a44;margin-top:calc(var(--u)*1)}
 .sbg{font-size:calc(var(--u)*4.5);white-space:nowrap;padding:calc(var(--u)*1) calc(var(--u)*2);background:#2a2018;color:#f0c860}
 .sbg.on{background:#5b9a4a;color:#f4ecd8}
@@ -811,6 +812,33 @@ button{font-family:inherit}
 .rlwrap .cres{position:static}
 .rlgrid .rc{opacity:1;float:none;margin:0;font-size:calc(var(--u)*6)}.rlgrid .rc.out{font-size:calc(var(--u)*4.6)}.rlgrid .rc.r{background:#b3221f!important}
 .rcfill{background:#0b3a26}
+.bubble.in{background:#f4f1e8!important;color:#1b231f!important}.bubble.in b{color:#0f5c37}.bubble.out{background:#1f8f55!important;color:#fff!important}
+.chscr .hdr .chjoin{pointer-events:auto;margin-left:auto;margin-right:calc(var(--u)*3)}.chscr .hdr .chmem{margin-left:auto;margin-right:calc(var(--u)*3);color:#9be36b;font-weight:700;letter-spacing:.08em;font-size:calc(var(--u)*4.6)}
+/* v35 casino motion: cards deal in, tables sweep clear, views cross-fade */
+.csweep{transition:opacity .34s ease,transform .34s ease!important;opacity:0!important;transform:translateY(calc(var(--u)*-8)) scale(.96)!important}
+#dip{position:fixed;inset:0;background:#05080a;opacity:0;pointer-events:none;z-index:15}
+.spby{font-size:calc(var(--u)*4.4);color:#cfd8d2;letter-spacing:.04em;margin-top:calc(var(--u)*.5)}.spby b{color:#fff}.spoffer{margin-top:calc(var(--u)*2);align-self:flex-start;animation:spPulse 1.8s ease-in-out infinite}@keyframes spPulse{50%{box-shadow:0 0 0 calc(var(--u)*1.6) rgba(245,196,81,.25)}}
+.spcall{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*4);border:1px solid rgba(245,196,81,.5);margin-top:calc(var(--u)*3)}
+.splink{color:#f5c451;cursor:pointer;text-decoration:underline;pointer-events:auto}.spcall.drop{border-color:rgba(229,57,53,.6)}.spcall.warn{border-color:rgba(255,160,0,.6)}.spcall.tick{border-color:rgba(255,255,255,.15)}
+.careerwrap{max-width:calc(var(--u)*300);margin:0 auto;display:flex;flex-direction:column;gap:calc(var(--u)*4);padding-bottom:calc(var(--u)*10)}
+.careerhead{display:flex;justify-content:space-between;align-items:center;gap:calc(var(--u)*6)}.careerhead .big{font-size:calc(var(--u)*11);color:#f5c451}.cnext{text-align:right}
+.cladder{display:flex;flex-direction:column;gap:calc(var(--u)*1.6);position:relative}
+.crung{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*2.6) calc(var(--u)*4);border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);opacity:.62}
+.crung.done{opacity:1}.crung.cur{border-color:rgba(245,196,81,.7);background:rgba(245,196,81,.08);box-shadow:0 0 0 calc(var(--u)*.6) rgba(245,196,81,.12)}
+.cdot{width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);font-weight:700}.crung.done .cdot{background:#2e9a5a;color:#fff}.crung.cur .cdot{background:#f5c451;color:#1a1a1a}
+.crew{font-weight:700;color:#f5c451;white-space:nowrap}.crung.done .crew{color:#7fbf8f}
+.cbetspot.pp{cursor:pointer;pointer-events:auto;border-style:dashed}.ctable.pk .cards{gap:calc(var(--u)*2)}
+#fps{position:fixed;left:8px;top:8px;z-index:70;font:600 12px/1.3 'Barlow',sans-serif;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#9be36b;pointer-events:none;letter-spacing:.02em}#fps.mid{color:#ffd54f}#fps.bad{color:#ff6b5b}
+.onwrap{max-width:calc(var(--u)*330);margin:0 auto;display:flex;flex-direction:column;gap:calc(var(--u)*4);padding-bottom:calc(var(--u)*10)}
+.onf{display:flex;flex-direction:column;gap:calc(var(--u)*1.2)}.onf i{font-style:normal;font-size:calc(var(--u)*4.2);color:#aab8b0}.onf .sin{width:100%}
+.onbar{justify-content:space-between;align-items:center;flex-wrap:wrap;gap:calc(var(--u)*2)}.onseg{flex-wrap:wrap}.onlb td,.onlb th{white-space:nowrap}.onlb tr.me td{color:#f5c451}
+/* v38 home: a wider menu column sitting further right, with the small buttons filling the row under it */
+.title{padding:0 calc(var(--u)*16) 0 calc(var(--u)*30)!important}
+.title .menu{width:calc(var(--u)*196)!important}
+.title .menu .mini{gap:calc(var(--u)*2);justify-content:stretch}
+.title .menu .mini .btn{flex:1 1 0;min-width:0;padding:calc(var(--u)*2.4) calc(var(--u)*1.5)!important;font-size:calc(var(--u)*5)!important;letter-spacing:.04em;white-space:nowrap}
+.onor{display:flex;align-items:center;gap:calc(var(--u)*3);color:#8fa197;font-size:calc(var(--u)*4.2)}.onor::before,.onor::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.12)}
+.gbtn{background:#fff!important;color:#1f1f1f!important;align-self:flex-start;display:flex;gap:calc(var(--u)*3);align-items:center}.gbtn .gg{font-family:Arial,sans-serif;font-weight:700;color:#4285f4}
 </style>
 </head>
 <body>
@@ -1162,6 +1190,15 @@ const G_ = (id, name, nat, req, pow, acc, short, putt, sta, bio, look, c) => ({ 
 const GOLFERS = [
   G_('you', 'You', 'NZL', null, 5, 5, 5, 5, 6, 'A weekend golfer chasing a lower handicap. Bring it down to unlock the tour players.',
     { hat: 'cap', hair: 'short', build: 1 }, { h: '#1a2a44', H: '#5d4037', s: '#f1c27d', S: '#7fb3e0', p: '#5f6b73', k: '#f5f5f5' }),
+  /* members of the home club (invented people), unlocked early */
+  G_('bruce', 'Bruce Mills', 'NZL', null, 5, 6, 6, 5, 6, 'Ngahinapouri stalwart. Fairways and greens, never anything fancy.',
+    { hat: 'bucket', hair: 'short', build: 1.12, old: true, shorts: true, nobib: true }, { h: '#6b7a4a', H: '#c9c9c9', s: '#f0c39a', S: '#c9d8e6', p: '#7a6a52', k: '#5a3b24' }),
+  G_('aroha', 'Aroha Tane', 'NZL', null, 5, 7, 7, 6, 6, 'Three-time ladies club champion with the best short game in the district.',
+    { hat: 'visor', hair: 'pony', build: .9, fem: true, lashes: true, eyeCol: '#3e2a1c', earrings: '#e8c66a' }, { h: '#2e7d5b', H: '#1e1410', s: '#c68a62', S: '#f4f4f0', p: '#2e3440', k: '#f5f5f5' }),
+  G_('kiri', 'Kiri Ngata', 'NZL', null, 7, 5, 6, 6, 7, 'Long off the tee and loves a risky line. The club bar knows all his stories.',
+    { hat: 'none', hair: 'short', build: 1.06, stubble: true, eyeCol: '#2f2016' }, { h: '#111111', H: '#1a1410', s: '#a8714e', S: '#1f6f8b', p: '#3a3d42', k: '#1a1a1a' }),
+  G_('jacob', 'Jacob Beach', 'NZL', null, 7, 7, 7, 7, 7, 'The man to beat at Ngahinapouri. Beat him, and he will play for you.',
+    { hat: 'cap', hair: 'curly', build: .92, sleeve: 'short', nobib: true, stripe: '#f4f4f0' }, { h: '#f4f4f0', H: '#9a7652', s: '#d29a6a', S: '#1d3557', p: '#cfc6b2', k: '#f5f5f5' }),
   G_('fox', 'Ryan Fox', 'NZL', 54, 7, 6, 6, 6, 7, 'Big-hitting Kiwi with wins on the DP World Tour and the PGA Tour.',
     { hat: 'cap', hair: 'short', build: 1.08, beard: true }, { h: '#111111', H: '#5a3b24', s: '#f0c39a', S: '#1b1b1b', p: '#cfd2d4', k: '#1b1b1b' }),
   G_('ko', 'Lydia Ko', 'NZL', 30, 5, 8, 8, 8, 7, 'Olympic champion and LPGA Hall of Famer. Metronomic and fearless.',
@@ -1185,8 +1222,27 @@ const GOLFERS = [
   G_('rory', 'Rory McIlroy', 'NIR', 0, 10, 9, 9, 9, 9, 'Career Grand Slam winner. Effortless speed and towering irons.',
     { hat: 'cap', hair: 'curly', build: 1.02 }, { h: '#111111', H: '#3a2618', s: '#f6cfa8', S: '#0f3b2e', p: '#2b2f33', k: '#ffffff' })];
 /* tour players: best handicap index you have reached, rounds played and events won. Lower index = better golfer */
-const GREQ = { fox: [24, 4, 0], ko: [18, 8, 0], hideki: [14, 12, 0], fleetwood: [11, 16, 0], korda: [8, 20, 1], bryson: [6, 25, 1], aberg: [4, 30, 2], xander: [2, 35, 3], rahm: [0, 40, 4], scheffler: [-1, 50, 5], rory: [-2, 60, 6] };
+/* [handicap needed, rounds played, event wins] (eased in v36: better players come a bit sooner) */
+const GREQ = { bruce: [36, 2, 0], aroha: [30, 4, 0], kiri: [27, 6, 0], jacob: [16, 10, 1], fox: [26, 3, 0], ko: [21, 6, 0], hideki: [17, 9, 0], fleetwood: [14, 12, 0], korda: [11, 15, 0], bryson: [9, 18, 1], aberg: [7, 22, 1], xander: [5, 26, 2], rahm: [3, 30, 2], scheffler: [2, 36, 3], rory: [1, 42, 4] };
 for (const g of GOLFERS) if (GREQ[g.id]) g.req = GREQ[g.id][0];
+/* ---------- equipment sponsors (rare: only for players who are really winning). Brand names are plain text only:
+   no logos, no real offices or staff; the reps are invented ---------- */
+const SPONSORS = [
+  { id: 'titleist', name: 'Titleist', balls: ['velocity', 'prov1', 'prov1x'], ball: 'prov1', wall: '#141414', acc: '#c8102e', kit: { S: '#f7f7f5', h: '#141414', p: '#202124' }, stripe: '#c8102e', kitText: '#141414', capText: '#ffffff', bag: { body: '#f7f7f4', band: '#141414', trim: '#c8102e', text: '#141414' }, bonus: 30000, retainer: 400,
+    rep: { name: 'Tama Reid', role: 'Tour rep', look: { hat: 'none', hair: 'short', build: 1, sleeve: 'long', watch: true, stubble: true, eyeCol: '#3e2a1c' }, c: { h: '#111', H: '#1c1612', s: '#b57f5a', S: '#1b1d22', p: '#2a2d33', k: '#151515' } },
+    pitch: 'We have been watching your scores. We would like you playing our ball, our irons and wearing our gear.' },
+  { id: 'callaway', name: 'Callaway', balls: ['supersoft', 'chrome'], ball: 'chrome', wall: '#1b1b1b', acc: '#f2f2f2', kit: { S: '#1d1f22', h: '#f4f4f2', p: '#3a3d42' }, stripe: '#f4f4f2', kitText: '#f4f4f2', capText: '#1d1f22', bag: { body: '#1b1c1f', band: '#f2f2f0', trim: '#9aa0a6', text: '#f4f4f2' }, bonus: 28000, retainer: 380,
+    rep: { name: 'Lena Varga', role: 'Player relations', look: { hat: 'none', hair: 'bun', build: .9, fem: true, lashes: true, sleeve: 'long', eyeCol: '#4b6a3a', earrings: '#d9d9d9' }, c: { h: '#111', H: '#4a2f1d', s: '#e8c3a0', S: '#f2f2f0', p: '#26282c', k: '#1a1a1a' } },
+    pitch: 'Your numbers stand out. We want our name in your bag and on your chest.' },
+  { id: 'taylormade', name: 'TaylorMade', balls: ['tp5'], ball: 'tp5', wall: '#101318', acc: '#d22630', kit: { S: '#ffffff', h: '#101318', p: '#101318' }, stripe: '#d22630', kitText: '#101318', capText: '#ffffff', bag: { body: '#f7f7f4', band: '#101318', trim: '#d22630', text: '#101318' }, bonus: 30000, retainer: 400,
+    rep: { name: 'Jonah Pike', role: 'Tour operations', look: { hat: 'none', hair: 'swept', build: 1.02, sleeve: 'long', eyeCol: '#2f4a6a' }, c: { h: '#111', H: '#6b4a2b', s: '#f0c9a4', S: '#2c3340', p: '#2c3340', k: '#1a1a1a' } },
+    pitch: 'Players who win get our attention. You have it. Let us talk about a deal.' }];
+const sponsorDef = id => SPONSORS.find(b => b.id === id);
+/* your staff bag when sponsored (null otherwise) */
+const staffBag = () => { const sp = typeof save !== 'undefined' && save.sponsor ? sponsorDef(save.sponsor.id) : null; return sp ? Object.assign({ name: sp.name }, sp.bag) : null; };
+const mySponsor = () => (typeof save !== 'undefined' && save.sponsor) ? sponsorDef(save.sponsor.id) : null;
+/* how your name reads on leaderboards: "King - Titleist" once you are signed */
+const lbName = () => { const sp = mySponsor(); return save.name + (sp ? ' - ' + sp.name : ''); };
 const golferReq = g => GREQ[g.id] || [null, 0, 0];
 const golferUnlocked = (s, g) => { if (g.req === null || (s.golfers || []).includes(g.id)) return true; const [ix, rd, w] = golferReq(g); return s.hcp.low !== null && s.hcp.low <= ix && s.stats.rounds >= rd && (s.stats.eventWins || 0) >= w; };
 const reqText = g => { const [ix, rd, w] = golferReq(g); return `Handicap ${fmtIdx(ix)} or better · ${rd} rounds${w ? ` · ${w} event win${w > 1 ? 's' : ''}` : ''}`; };
@@ -1194,7 +1250,7 @@ const gName = g => g.id === 'you' ? save.name : g.name;
 /* your own edits to a player's outfit (and, for You, hair and skin) sit on top of the default look */
 const LOOK_CACHE = {};
 const golferBase = id => GOLFERS.find(g => g.id === id) || GOLFERS[0];
-const golferById = id => { const b = golferBase(id), o = typeof save !== 'undefined' && save.looks && save.looks[b.id]; if (!o) return b; const key = b.id + JSON.stringify(o); return LOOK_CACHE[key] || (LOOK_CACHE[key] = Object.assign({}, b, { look: Object.assign({}, b.look, o.look || {}), c: Object.assign({}, b.c, o.c || {}) })); };
+const golferById = id => { const b = golferBase(id), o0 = typeof save !== 'undefined' && save.looks && save.looks[b.id], sp = typeof save !== 'undefined' && save.sponsor && save.sponsor.kit !== false ? sponsorDef(save.sponsor.id) : null, o = sp ? { look: Object.assign({}, o0 && o0.look, { stripe: null, brand: sp.name, brandShirt: sp.kitText || sp.wall, brandCap: sp.capText || '#ffffff', brandAcc: sp.acc, hat: ((o0 && o0.look && o0.look.hat) || (b.look && b.look.hat)) === 'none' ? 'none' : 'cap', sleeve: (o0 && o0.look && o0.look.sleeve) || (b.look && b.look.sleeve) }), c: Object.assign({}, o0 && o0.c, sp.kit) } : o0; if (!o) return b; const key = b.id + JSON.stringify(o); return LOOK_CACHE[key] || (LOOK_CACHE[key] = Object.assign({}, b, { look: Object.assign({}, b.look, o.look || {}), c: Object.assign({}, b.c, o.c || {}) })); };
 const OLD_V4_GOLFERS = { mia: 2500, tane: 5000, hiro: 8000, buck: 12000, sofia: 20000, javi: 30000, declan: 60000 };
 
 /* ---------- caddies: earned, never bought ---------- */
@@ -1209,7 +1265,7 @@ const CADDIES = [
     prog: s => [s.stats.parRounds || 0, 5], look: { hat: 'bucket', hair: 'short', build: 1.05, beard: true, shorts: true, nobib: true }, c: { h: '#6b7a4a', H: '#e0e0e0', s: '#f1c27d', S: '#7d9bb8', p: '#c4ab7c', k: '#6d4c35', b: '#7b1f1f' },
     lines: ['Keep it low, laddie. The wind will have it.', 'Respect the bunkers here.', 'Firm pace, inside left.'] },
   { id: 'ella', name: 'Ella Brooks', lvl: 4, role: 'Tour caddie with two majors on the bag. Zero nerves', req: 'Reach handicap 5 or better and win an event', perk: 'Everything above, plus pep talks (+energy each hole), exact aim on putts and +10% coins.',
-    prog: s => [(s.hcp && s.hcp.low !== null && s.hcp.low <= 5 ? 1 : 0) + ((s.stats.eventWins || 0) > 0 ? 1 : 0), 2], look: { hat: 'none', hair: 'flow', build: .9, singlet: true, skirt: true, stripe: '#d4af37', lashes: true, fem: true, eyeCol: '#3d7cc0', lips: '#cf6a72', earrings: '#e8c66a', shadesUp: true, watch: true }, c: { h: '#111111', H: '#f2d27e', s: '#f3cfa8', S: '#fbfbf8', p: '#1a1a1a', k: '#f5f5f5', b: '#111111' },
+    prog: s => [(s.hcp && s.hcp.low !== null && s.hcp.low <= 5 ? 1 : 0) + ((s.stats.eventWins || 0) > 0 ? 1 : 0), 2], look: { hat: 'none', hair: 'flow', build: .8, slim: true, singlet: true, skirt: true, stripe: '#d4af37', lashes: true, fem: true, eyeCol: '#3d7cc0', lips: '#cf6a72', earrings: '#e8c66a', shadesUp: true, watch: true }, c: { h: '#111111', H: '#f2d27e', s: '#f3cfa8', S: '#fbfbf8', p: '#1a1a1a', k: '#f5f5f5', b: '#111111' },
     lines: ['This is your number. Commit to it.', 'Smooth tempo. You have got this.', 'I have seen this putt a hundred times. Left edge.'] }];
 
 /* ---------- carts ---------- */
@@ -1349,9 +1405,9 @@ const SEASON_EV = ['medal', 'rbclassic', 'remarkables', 'kidnappers', 'proam'];
    there) play the Club Championship Final. Winning the final puts your name on the honours board ---------- */
 const CSEASON_EV = [['cs_open', 'Sat 6 Sep'], ['cs_weekday', 'Wed 8 Oct'], ['cs_plate', 'Sat 8 Nov'], ['cs_raffle', 'Sun 30 Nov'], ['cs_masters', 'Sat 17 Jan'], ['cs_final', 'Sun 15 Mar']];
 const CSEASON_PTS = [100, 70, 55, 45, 38, 32, 27, 23, 20, 17, 15, 13, 11, 9, 7, 5];
-function cseasonTable() { const P = save.cseason.pts, rows = Object.keys(P).map(k => ({ name: k === '__me' ? save.name : k, me: k === '__me', pts: P[k] })); if (!P.__me) rows.push({ name: save.name, me: true, pts: 0 }); if (!P['J. Beach']) rows.push({ name: 'J. Beach', pts: 0 }); return rows.sort((a, b) => b.pts - a.pts || (a.me ? -1 : 1)); }
+function cseasonTable() { const P = save.cseason.pts, rows = Object.keys(P).map(k => ({ name: k === '__me' ? lbName() : k, me: k === '__me', pts: P[k] })); if (!P.__me) rows.push({ name: save.name, me: true, pts: 0 }); if (!P['J. Beach']) rows.push({ name: 'J. Beach', pts: 0 }); return rows.sort((a, b) => b.pts - a.pts || (a.me ? -1 : 1)); }
 const SEASON_PTS = [500, 300, 190, 135, 110, 100, 90, 85, 80, 75, 70, 65, 60, 57, 54, 51, 48, 45, 42, 40];
-function seasonTable() { const P = save.season.pts, rows = Object.keys(P).map(k => ({ name: k === '__me' ? save.name : k, me: k === '__me', pts: P[k] })); if (!P.__me) rows.push({ name: save.name, me: true, pts: 0 }); rows.sort((a, b) => b.pts - a.pts || (a.me ? -1 : 1)); return rows; }
+function seasonTable() { const P = save.season.pts, rows = Object.keys(P).map(k => ({ name: k === '__me' ? lbName() : k, me: k === '__me', pts: P[k] })); if (!P.__me) rows.push({ name: save.name, me: true, pts: 0 }); rows.sort((a, b) => b.pts - a.pts || (a.me ? -1 : 1)); return rows; }
 const feeFor = (c, n) => Math.round(c.fee * ({ 1: .15, 3: .3, 6: .45, 9: .6, 18: 1 }[n] || n / 18) / 5) * 5;
 const isMember = id => save.members.includes(id);
 
@@ -1487,7 +1543,7 @@ function tournTable(T) {
   const E = EVENTS.find(e => e.id === T.id), c = courseById(E.course), par = c.pars.slice(0, E.n).reduce((a, b) => a + b, 0), key = E.fmt === 'net' ? 'net' : 'gross', nr = T.me.r.length;
   const rows = T.field.filter(b => b.r.length >= nr || b.out).map(b => { const rr = b.r.slice(0, nr), g = rr.reduce((a, v) => a + v, 0) - par * rr.length; return { name: b.name, idx: b.idx, gross: g, net: g - b.ch * rr.length, out: !!b.out, rounds: rr }; });
   const mg = T.me.r.reduce((a, v) => a + v, 0) - par * nr, mn = T.me.n.reduce((a, v) => a + v, 0) - par * nr;
-  rows.push({ name: save.name, me: true, gross: mg, net: mn, out: !!T.me.out, rounds: T.me.r.slice() });
+  rows.push({ name: lbName(), me: true, gross: mg, net: mn, out: !!T.me.out, rounds: T.me.r.slice() });
   rows.sort((a, b) => (a.out - b.out) || a[key] - b[key] || (a.me ? -1 : b.me ? 1 : 0));
   const meRow = rows.find(r => r.me), pos = rows.filter(r => !r.out && r[key] < meRow[key]).length + 1, tie = rows.filter(r => !r.out && r[key] === meRow[key]).length > 1;
   return { rows, key, pos, tie, n: rows.length, E, par };
@@ -1508,7 +1564,7 @@ function evStandings(r, E) {
   const thru = r.scores.length, key = E.fmt === 'net' ? 'net' : 'gross', parT = r.scores.reduce((a, _, i) => a + courseById(r.courseId).pars[r.start + i], 0);
   const pr = r.prior || {}, P = n => pr[n] || { gross: 0, net: 0 };
   const rows = (r.field || []).map(f => { const g = f.h.slice(0, thru).reduce((a, b) => a + b, 0) - parT; return { name: f.name, idx: f.idx, gross: g + P(f.name).gross, net: g - Math.round(f.ch * thru / r.n) + P(f.name).net }; });
-  const meG = r.scores.reduce((a, b) => a + b, 0) - parT, me = { name: save.name, me: true, gross: meG + P('__me').gross, net: meG - (r.alloc || []).slice(0, thru).reduce((a, b) => a + b, 0) + P('__me').net };
+  const meG = r.scores.reduce((a, b) => a + b, 0) - parT, me = { name: lbName(), me: true, gross: meG + P('__me').gross, net: meG - (r.alloc || []).slice(0, thru).reduce((a, b) => a + b, 0) + P('__me').net };
   const all = rows.concat([me]).sort((a, b) => a[key] - b[key] || (a.me ? -1 : b.me ? 1 : 0));
   const pos = all.filter(x => x[key] < me[key]).length + 1, tie = all.filter(x => x[key] === me[key]).length > 1;
   return { all, pos, tie, me, key, thru, n: all.length };
@@ -1517,6 +1573,20 @@ const FIELD_NAMES = ['J. Walker', 'T. Nguyen', 'A. Patel', 'R. Fraser', 'M. Kowa
 
 /* ---------- achievements / trophy cabinet ---------- */
 const TIER = { bronze: { coins: 150, col: '#c98a4b', name: 'Bronze' }, silver: { coins: 500, col: '#c9d3d8', name: 'Silver' }, gold: { coins: 1500, col: '#ffd54f', name: 'Gold' }, plat: { coins: 5000, col: '#9ff0ff', name: 'Platinum' } };
+/* ---------- career: a ladder from weekend golfer to legend; each rung pays once ---------- */
+const evWonTier = (s, tier) => EVENTS.some(e => e.tier === tier && (s.wins[e.id] || 0) > 0);
+const CAREER = [
+  { id: 'start', name: 'Weekend golfer', how: 'Where everyone starts', ok: () => true, coins: 0 },
+  { id: 'member', name: 'Club regular', how: 'Play 5 rounds and get a handicap', ok: s => s.stats.rounds >= 5 && s.hcp.index !== null, coins: 500 },
+  { id: 'clubwin', name: 'Club winner', how: 'Win any club event', ok: s => evWonTier(s, 'CLUB'), coins: 1500 },
+  { id: 'champ', name: 'Club champion', how: 'Win the Ngahinapouri club championship', ok: s => (s.wins.clubchamp || 0) > 0 || !!(s.champs && s.champs.ngahinapouri), coins: 4000 },
+  { id: 'regional', name: 'Regional winner', how: 'Win a regional event', ok: s => evWonTier(s, 'REGIONAL'), coins: 6000 },
+  { id: 'national', name: 'National amateur star', how: 'Win a national event', ok: s => evWonTier(s, 'NATIONAL'), coins: 12000 },
+  { id: 'pro', name: 'Sponsored player', how: 'Sign with an equipment sponsor', ok: s => !!(s.sponsor || s.everSponsored), coins: 15000 },
+  { id: 'intl', name: 'International winner', how: 'Win an international event', ok: s => evWonTier(s, 'INTERNATIONAL'), coins: 30000 },
+  { id: 'major', name: 'Major champion', how: 'Win a major', ok: s => evWonTier(s, 'MAJOR'), coins: 60000 },
+  { id: 'legend', name: 'Legend', how: 'Win both majors and reach a plus handicap', ok: s => EVENTS.filter(e => e.tier === 'MAJOR').every(e => (s.wins[e.id] || 0) > 0) && s.hcp.low !== null && s.hcp.low < 0, coins: 100000 }];
+const careerStage = s => { let i = 0; CAREER.forEach((st, k) => { if (k && (s.career || {})[st.id]) i = k; }); return i; }; /* your title is the highest rung you have reached */
 const ACH_CATS = [['scoring', 'SCORING'], ['skill', 'SKILLS'], ['career', 'CAREER'], ['courses', 'COURSES'], ['collect', 'COLLECTION']];
 /* trophies you get by spending (carts, clubs, memberships, celebrations) only pay a token amount, so they are not free money */
 const BUY_ACH = ['member1', 'member4', 'memberall', 'cart', 'gt', 'shop10', 'maxclub', 'fullbag', 'showboat'];
@@ -1524,6 +1594,15 @@ const A = (id, name, desc, cat, tier, t, p, shape) => ({ id, name, desc, cat, ti
 const under = s => s.stats.birdies + s.stats.eagles + s.stats.albatross + s.stats.aces;
 const holeOk = (s, cid, idxs, d) => idxs.every(i => hb(s, cid, i) && hb(s, cid, i) <= courseById(cid).pars[i] + (d || 0));
 const ACH = [
+  A('poolshark', 'Pool Shark', 'Win 5 frames of pool', 'skill', 'silver', s => (s.stats.poolW || 0) >= 5, s => [s.stats.poolW || 0, 5], 'cup'),
+  A('oneeighty', 'Oche Regular', 'Win 3 games of darts', 'skill', 'silver', s => (s.stats.dartsW || 0) >= 3, s => [s.stats.dartsW || 0, 3], 'cup'),
+  A('highroller', 'High Roller', 'Win 5,000 coins on one hand or spin at the casino', 'skill', 'gold', s => (s.stats.casBig || 0) >= 5000, s => [s.stats.casBig || 0, 5000], 'cup'),
+  A('pokerface', 'Poker Face', 'Win a poker hand with a straight or better', 'skill', 'silver', s => (s.stats.pokerBig || 0) >= 1, null, 'cup'),
+  A('signed', 'On the Payroll', 'Sign with an equipment sponsor', 'career', 'gold', s => !!(s.sponsor || s.everSponsored), null, 'cup'),
+  A('renewed', 'Re-signed', 'Get your sponsorship renewed', 'career', 'gold', s => !!(s.sponsor && s.sponsor.renewals > 0), null, 'cup'),
+  A('localhero', 'Local Hero', 'Play a round as a member of the home club', 'career', 'bronze', s => (s.stats.localRounds || 0) >= 1, null, 'cup'),
+  A('careerhalf', 'Going Places', 'Reach National amateur star on your career', 'career', 'gold', s => !!(s.career || {}).national, null, 'cup'),
+
   A('birdie', 'First Birdie', 'Make a birdie', 'scoring', 'bronze', s => under(s) >= 1, s => [under(s), 1], 'cup'),
   A('birdies25', 'Birdie Machine', 'Make 25 birdies or better', 'scoring', 'silver', s => under(s) >= 25, s => [under(s), 25], 'cup'),
   A('birdies100', 'Birdie Factory', 'Make 100 birdies or better', 'scoring', 'gold', s => under(s) >= 100, s => [under(s), 100], 'cup'),
@@ -1586,7 +1665,7 @@ function defaultSave() {
     name: 'PLAYER', coins: 500,
     clubs: { dr: 0, '3w': 0, '5i': 0, '6i': 0, '7i': 0, '8i': 0, '9i': 0, pw: 0, sw: 0, pt: 0 },
     golfers: ['you'], golfer: 'you', members: ['ngahinapouri'], carts: ['walk'], cart: 'walk',
-    balls: ['std'], ballStock: { std: 999 }, ball: 'std', gear: {}, celebs: ['pump', 'cap', 'arms', 'point', 'bow', 'uppercut'], celebEq: ['pump', 'cap', 'arms', 'point'], looks: {}, holeBest: {}, caddies: [], caddie: null,
+    balls: ['std'], ballStock: { std: 999 }, ball: 'std', sponsor: null, sponsorOffer: null, everSponsored: false, career: {}, perfHint: false, gear: {}, celebs: ['pump', 'cap', 'arms', 'point', 'bow', 'uppercut'], celebEq: ['pump', 'cap', 'arms', 'point'], looks: {}, holeBest: {}, caddies: [], caddie: null,
     items: { mull: 2, bar: 1, gimme: 1, gum: 1, drink: 1 }, wins: {},
     ach: {}, ups: 0, played: {}, board: {}, rec: { ctp: 999, ld: 0 }, hcp: { rounds: [], index: null, low: null, hist: [] }, shout: null, drinks: 0,
     stats: { rounds: 0, rounds18: 0, holes: 0, strokes: 0, aces: 0, albatross: 0, eagles: 0, birdies: 0, pars: 0, bogeys: 0, worse: 0, longest: 0, water: 0, trees: 0, chipins: 0, sandOuts: 0, longPutt: 0, underRounds: 0, parRounds: 0, bogeyFree: 0, coinsEarned: 0, fir: 0, firP: 0, gir: 0, putts: 0, tourRounds: 0, pure: 0, best18: 99, eventsPlayed: 0, eventWins: 0, eventCash: 0, feesPaid: 0, plusWins: 0 },
@@ -2310,7 +2389,7 @@ function treeMapCol(t, c) { return t.type === 'hill' ? shadeHex(c.pal.rough[1], 
 
 /* ---------- billboard sprites: mip levels so on-screen texel size matches the golfer (about 1 sprite px per screen px) ---------- */
 const PPY = 4, SPR_LV = [1, 2, 4, 8, 16, 24, 40];
-const billCache = {};
+const billCache = {}, billAny = {};
 function shadeHex(hex, f) {
   const k = hex + f; if (shadeHex.c[k]) return shadeHex.c[k];
   const [r, g, b] = hexRGB(hex), m = v => clamp(Math.round(f >= 1 ? v + (255 - v) * (f - 1) : v * f), 0, 255);
@@ -2332,6 +2411,10 @@ function billSprite(tr, course, lvl) {
   const r = Math.max(.5, tr.r > 2.5 ? Math.round(tr.r) : Math.round(tr.r * 2) / 2), hh = Math.max(.5, tr.h < 2 ? Math.round(tr.h * 4) / 4 : tr.h < 9 ? Math.round(tr.h) : Math.round(tr.h / 2) * 2), v = tr.v % 3, S = lvl || 4;
   const key = course.id + tr.type + r + '_' + hh + '_' + v + '@' + S + (HD ? 'h' : '');
   if (billCache[key]) return billCache[key];
+  /* only a few new tree sprites are built per frame; until then a nearby size stands in, so a new view never stutters */
+  const baseK = course.id + tr.type + r + '_' + hh + '_' + v + (HD ? 'h' : '');
+  if ((billSprite.budget = (billSprite.budget === undefined ? 6 : billSprite.budget)) <= 0 && billAny[baseK]) return billAny[baseK];
+  billSprite.budget--;
   const base0 = tr.type === 'dogwood' || tr.type === 'wild' ? course.pal.leaf : tr.type === 'gorse' ? ['#2f4420', '#45602c', '#62803c'] : TPAL[tr.type] ? TPAL[tr.type][tr.v % TPAL[tr.type].length] : course.pal.leaf;
   /* four foliage tones: shadow, mid, lit, highlight. No black outline: the darkest tone is still green */
   const LV = [shadeHex(base0[1], .74), base0[1], base0[2], shadeHex(base0[2], 1.22)], trunk = course.pal.trunk;
@@ -2454,7 +2537,7 @@ function billSprite(tr, course, lvl) {
   x.putImageData(img, 0, 0);
   /* flat silhouette used to fade the tree into the haze with distance */
   const sil = mkCanvas(w, Hh), sx = sil.getContext('2d'); sx.drawImage(cv, 0, 0); sx.globalCompositeOperation = 'source-in'; sx.fillStyle = '#fff'; sx.fillRect(0, 0, w, Hh);
-  return (billCache[key] = { cv, sil, ax: cx, ay: base, S, w, h: Hh });
+  const out = (billCache[key] = { cv, sil, ax: cx, ay: base, S, w, h: Hh }); if (!billAny[baseK] || billAny[baseK].S < S) billAny[baseK] = out; return out;
 }
 function spriteLevel(pxPerYd, cap) { cap = cap || 24; pxPerYd *= PXR; for (const l of SPR_LV) if (l >= pxPerYd || l >= cap) return Math.min(l, cap); return cap; }
 /* tinted copies of the silhouette per haze colour */
@@ -2702,10 +2785,16 @@ function pxDisc(x, y, r) { for (let yy = -r; yy <= r; yy++) { const w = Math.sqr
    between levels, so mowing stripes and texture don't shimmer as the camera moves; near rows get world-anchored
    edge noise (it moves with the ground, not the screen, so it never crawls). */
 let GR = 2, gCv = null, gCtx = null, gImg = null, gBuf = null;
+/* one buffer per ground resolution, kept, so dropping detail while the camera moves costs nothing to switch */
+const GBUFS = {};
 function groundBuf() {
-  const want = (save && save.settings && save.settings.sharp === false) || G.autoLow ? 1 : G.scr === 'game' ? Math.min(2, RES, G.gq || 2) : Math.min(RES, G.gqMenu || 1.5);
+  let want = (save && save.settings && (save.settings.sharp === false || (save.settings.perf && G.scr === 'game'))) || G.autoLow ? 1 : G.scr === 'game' ? Math.min(2, RES, G.gq || 2) : Math.min(RES, G.gqMenu || 1.5);
+  /* in play, a moving camera (ball in the air, walking, flyover) draws the ground at 3/4 detail: motion hides it, and it is the
+     heaviest part of a frame. Full detail comes back a moment after the camera settles */
+  if (G.scr === 'game' && want > 1 && (G.camMoveT || 0) > 0) want = Math.max(1, Math.round(want * .75 * 4) / 4);
   if (gCv && GR === want && gCv.width === VW * GR) return;
-  GR = want; gCv = mkCanvas(VW * GR, VH * GR); gCtx = gCv.getContext('2d'); gImg = gCtx.createImageData(VW * GR, VH * GR); gBuf = new Uint32Array(gImg.data.buffer);
+  const key = want + 'x' + VW; let B = GBUFS[key]; if (!B) { for (const k in GBUFS) if (!k.endsWith('x' + VW)) delete GBUFS[k]; const cv = mkCanvas(VW * want, VH * want), cx = cv.getContext('2d'), img = cx.createImageData(VW * want, VH * want); B = GBUFS[key] = { cv, cx, img, buf: new Uint32Array(img.data.buffer) }; }
+  GR = want; gCv = B.cv; gCtx = B.cx; gImg = B.img; gBuf = B.buf;
 }
 function groundMips(h) {
   if (h.mips && h.mips.src === h.px) return h.mips;
@@ -2838,8 +2927,8 @@ function drawGround(h, c) {
   /* when the camera is still (lining up a shot, menus paused) the ground only changes through water sparkle and grass sway,
      so redraw it at 20 fps and reuse the last image in between: the raycast is the most expensive part of a frame */
   const L = drawGround.last, still = L && L.h === h && L.gr === GR && L.vw === VW && L.cv === gCv && Math.abs(L.x - c.x) < 2e-3 && Math.abs(L.y - c.y) < 2e-3 && Math.abs(L.z - c.z) < 2e-3 && Math.abs(L.yaw - c.yaw) < 2e-4 && Math.abs(L.pitch - c.pitch) < 2e-4;
-  if (still && G.t - L.t < 1 / 20 && G.t >= L.t) { ctx.imageSmoothingEnabled = GR !== RES; ctx.drawImage(gCv, 0, 0, VW, VH); ctx.imageSmoothingEnabled = false; return; }
-  drawGround.last = { h, gr: GR, vw: VW, cv: gCv, x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch, t: G.t };
+  if (still && G.t - L.t < (G.t - (L.still0 || G.t) > 1 ? 1 / 10 : 1 / 20) && G.t >= L.t) { ctx.imageSmoothingEnabled = GR !== RES; ctx.drawImage(gCv, 0, 0, VW, VH); ctx.imageSmoothingEnabled = false; return; }
+  drawGround.last = { h, gr: GR, vw: VW, cv: gCv, x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch, t: G.t, still0: still ? (L.still0 || G.t) : 0 };
   const W = h.W, H = h.H, grid = h.grid, buf = gBuf, t = G.t, GW = VW * GR, GH = VH * GR, M = groundMips(h);
   buf.fill(0);
   const F0 = c.F[0], F1 = c.F[1], F2 = c.F[2], U0 = c.U[0], U1 = c.U[1], U2 = c.U[2], R0 = c.R[0], R1 = c.R[1];
@@ -3206,11 +3295,21 @@ function drawGolferSide_(g, X, Y, k, P, club) {
   /* torso */
   const u0 = P.sh[0] - P.hip[0], u1 = P.sh[1] - P.hip[1], ul = Math.hypot(u0, u1), ux = u0 / ul, uy = u1 / ul, vx = -uy, vy = ux;
   const hw = 5.6 * bw, cw = 6.6 * bw;
-  const torso = [[P.hip[0] + vx * hw, P.hip[1] + vy * hw], [P.sh[0] + vx * cw + ux * .5, P.sh[1] + vy * cw + uy * .5], [P.sh[0] + ux * 2.4, P.sh[1] + uy * 2.4], [P.sh[0] - vx * cw * .9, P.sh[1] - vy * cw * .9], [P.hip[0] - vx * hw, P.hip[1] - vy * hw]];
+  /* torso in body space (a = up from the hips, b = across, back positive): curved back, sloping shoulders that sit below
+     the jaw, a rounded chest, a slight waist. Points are smoothed into a soft outline */
+  const TB = (a, b) => [P.hip[0] + ux * a + vx * b, P.hip[1] + uy * a + vy * b], L0 = ul;
+  const tPts = [[-.2, hw * .96], [L0 * .42, hw * .9], [L0 * .78, cw * .98], [L0 - .9, cw * .86], [L0 - .1, cw * .45], [L0 + .25, .4], [L0 - .1, -1.4], [L0 - 1.1, -cw * .78], [L0 * .74, -cw * .98], [L0 * .44, -hw * .92], [-.2, -hw * .96]];
+  const smooth = pts => { const o = []; for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; o.push([a[0] * .75 + b[0] * .25, a[1] * .75 + b[1] * .25], [a[0] * .25 + b[0] * .75, a[1] * .25 + b[1] * .75]); } return o; };
+  const torso = smooth(tPts.map(([a, b]) => TB(a, b)));
   back.push([SP(torso), c.S]);
   back.push([SP([[P.hip[0] + vx * (hw + .4), P.hip[1] + vy * (hw + .4)], [P.hip[0] + vx * hw + ux * 5, P.hip[1] + vy * hw + uy * 5], [P.hip[0] - vx * hw + ux * 5, P.hip[1] - vy * hw + uy * 5], [P.hip[0] - vx * (hw + .4), P.hip[1] - vy * (hw + .4)]]), c.p]);
-  if (lk.skirt) back.push([SP([[P.hip[0] + vx * (hw + 1.2), P.hip[1] + vy * (hw + 1.2) + uy * 3], [P.hip[0] - vx * (hw + 1.2), P.hip[1] - vy * (hw + 1.2) + uy * 3], [P.hip[0] - vx * (hw + 3.4) - ux * 10, P.hip[1] - vy * (hw + 3.4) - uy * 10], [P.hip[0] + vx * (hw + 3.4) - ux * 10, P.hip[1] + vy * (hw + 3.4) - uy * 10]]), c.p]);
   leg(P.hip, P.kF, P.fF, c.p, back);
+  if (lk.skirt) { /* a short A-line skort over both thighs, swinging a little with the stride */
+    const sw = ((P.kF[0] - P.kB[0]) || 0) * .12, Q = (a, b) => [P.hip[0] + vx * a - ux * b, P.hip[1] + vy * a - uy * b];
+    const top = [Q(hw + .3, -3), Q(-hw - .3, -3)], hem = [Q(-hw - 1.6 + sw, 9.5), Q(hw + 1.9 + sw, 9.8)];
+    back.push([SP([top[0], top[1], hem[0], hem[1]]), c.p]);
+    back.push([SP([Q(-hw - .3, -3), Q(-hw * .2, -3), Q(-hw * .2 + sw, 9.6), Q(-hw - 1.6 + sw, 9.5)]), shadeHex(c.p, .82)]);
+    for (const f of [-.55, .05, .6]) back.push([SP([Q(hw * f, 1), Q(hw * f + .35, 1), Q(hw * f * 1.2 + .45 + sw, 9.6), Q(hw * f * 1.2 + sw, 9.6)]), shadeHex(c.p, f > 0 ? 1.25 : .7)]); }
   /* far arm */
   const HF = P.handsF || P.hands, eF = ik(P.sh[0] - 1, P.sh[1] - 1, HF[0], HF[1], 13, 13, -1);
   const arm = (sh, el, hd, shade, arr) => {
@@ -3228,8 +3327,9 @@ function drawGolferSide_(g, X, Y, k, P, club) {
   /* outline pass then fill pass for the body */
   for (const [poly, col] of back) pPoly(poly, col);
   /* shading on torso + stripe + belt */
-  { const lit = [[P.hip[0] + vx * hw * .1, P.hip[1] + vy * hw * .1], [P.sh[0] + vx * cw * .1, P.sh[1] + vy * cw * .1], [P.sh[0] - vx * cw * .8, P.sh[1] - vy * cw * .8], [P.hip[0] - vx * hw * .85, P.hip[1] - vy * hw * .85]]; pPoly(SP(lit), lt(c.S)); }
-  if (lk.stripe) { const a = lerpP(P.hip, P.sh, .62); pPoly(SP(quadU([a[0] + vx * cw, a[1] + vy * cw], [a[0] - vx * cw, a[1] - vy * cw], 2.2, 2.2)), lk.stripe); }
+  { const lit = smooth([[-.1, hw * .1], [L0 * .5, cw * .15], [L0 - .6, cw * .05], [L0 - 1.2, -cw * .7], [L0 * .74, -cw * .9], [L0 * .44, -hw * .84], [-.1, -hw * .88]].map(([a, b]) => TB(a, b))); pPoly(SP(lit), lt(c.S));
+    pPoly(SP(smooth([[L0 * .35, hw * .9], [L0 * .78, cw * .96], [L0 - .9, cw * .84], [L0 - 1.4, cw * .55], [L0 * .6, hw * .55]].map(([a, b]) => TB(a, b)))), shadeHex(c.S, .9)); }
+  /* (the shirt stripe only reads from the front) */
   { const a = [P.hip[0] + ux * 5, P.hip[1] + uy * 5]; pPoly(SP(quadU([a[0] + vx * hw, a[1] + vy * hw], [a[0] - vx * hw, a[1] - vy * hw], 1.6, 1.6)), '#26211c'); }
   if (HD) { /* fine detail: shirt folds, collar, belt loop and buckle, back pocket */
     const T = (a, b) => [P.hip[0] + ux * a + vx * b, P.hip[1] + uy * a + vy * b], ln2 = (p, q, w, col) => { const A = S(p), B = S(q); pLine(A[0], A[1], B[0], B[1], Math.max(.5 / PXR, w * k), col); };
@@ -3241,7 +3341,11 @@ function drawGolferSide_(g, X, Y, k, P, club) {
     for (const ft of [P.fF, P.fB]) { const near = ft === P.fF; for (let j = 0; j < 3; j++) pDisc(...S([ft[0] + 1.2 + j * 1.05, ft[1] + 1.95 - j * .28]), Math.max(.4 / PXR, .32 * k), near ? '#f2f2ec' : '#c8c8c0'); }
   }
   /* head */
-  drawHeadSide(g, ...S(P.head), 5.7 * k, k);
+  { /* neck from the collar to the back of the skull, following the lean of the body (the head's own neck is skipped) */
+    const hd = P.head, base = [P.sh[0] + 1.2, P.sh[1] + .8], top = [hd[0] - 1.2, hd[1] - 2.2], sk = shadeHex(g.c.s, .84);
+    pPoly(SP(quadU(base, top, 3.6, 3.3)), sk); pPoly(SP(halfShade(base, top, 3.6, 3.3)), shadeHex(g.c.s, .74));
+    if (!lk.singlet) pPoly(SP(quadU([base[0] - .6, base[1] - .3], [base[0] + .9, base[1] + 1.2], 2.6, 2.6)), lt(c.S)); }
+  SIDE_NECK = false; try { drawHeadSide(g, ...S(P.head), 5.7 * k, k); } finally { SIDE_NECK = true; }
   if (P.noClub) { const eN0 = ik(P.sh[0] + 1, P.sh[1], P.hands[0], P.hands[1], 13, 13, -1); arm([P.sh[0] + 1, P.sh[1]], eN0, P.hands, false, front); for (const [poly, col] of front) pPoly(poly, col); for (const hp of [P.hands, HF]) pDisc(...S(hp), 1.7 * k, hp === HF ? dk(c.s) : c.s); return; }
   /* club */
   const [hx, hy] = S(P.hands), [cx2, cy2] = S(P.club), gx = hx + (cx2 - hx) * .16, gy = hy + (cy2 - hy) * .16;
@@ -3257,7 +3361,7 @@ function drawGolferSide_(g, X, Y, k, P, club) {
     pPoly([q(-2.2, -2), q(1.6, -2.1), q(1.9, 1.9), q(-2.2, 2)], '#c8ced2'); pPoly([q(-1.9, -1.6), q(1.3, -1.7), q(1.5, 1.5), q(-1.9, 1.6)], '#f6f6f2'); pPoly([q(-1.9, -1.6), q(-1.1, -1.6), q(-1.1, 1.6), q(-1.9, 1.6)], '#d9dee0');
     pPoly([q(1.4, -2), q(4.3, -1.8), q(4.4, 1.7), q(1.4, 1.9)], shadeHex(c.s, .78)); pPoly([q(1.6, -1.6), q(4, -1.5), q(4.1, 1.3), q(1.6, 1.5)], c.s); }
 }
-let HEADFLIP = false;
+let HEADFLIP = false, SIDE_NECK = true;
 function drawHeadSide(g, x, y, r, k) {
   if (HEADFLIP) { HEADFLIP = false; DC.save(); DC.translate(x, 0); DC.scale(-1, 1); DC.translate(-x, 0); try { drawHeadSide(g, x, y, r, k); } finally { DC.restore(); HEADFLIP = true; } return; }
   const c = g.c, lk = g.look || {}, out = '#17110c';
@@ -3266,6 +3370,7 @@ function drawHeadSide(g, x, y, r, k) {
     pRect(x - r * .1, y - r * .5, r * 1.1, r * .55, '#0d47a1'); pRect(x + r * .3, y - r * .4, r * .4, r * .3, (G.t * 3 | 0) % 2 ? '#40c4ff' : '#80d8ff');
     pLine(x - r * .3, y - r, x - r * .5, y - r * 1.8, k, '#78909c'); pDisc(x - r * .5, y - r * 1.9, k * 1.1, '#ff5252'); return;
   }
+  if (HD && r >= 4.5 && !lk.robot) { drawHeadSideHD(g, x, y, r, k); return; }
   if (lk.hair === 'long' || lk.hair === 'pony') pPoly([[x - r * .6, y - r * .5], [x - r * .2, y - r * .1], [x - r * 1.1, y + r * (lk.hair === 'long' ? 1.8 : 1.3)], [x - r * 1.5, y + r * (lk.hair === 'long' ? 1.5 : 1.1)]], c.H);
   if (lk.hair === 'bun') pDisc(x - r * .95, y - r * .55, r * .55, c.H);
   /* neck */
@@ -3299,6 +3404,64 @@ function drawHeadSide(g, x, y, r, k) {
   else if (lk.hat === 'bucket') { pDisc(x, y - r * .45, r * .98, hc); pPoly([[x - r * 1.5, y - r * .25], [x + r * 1.5, y - r * .25], [x + r * 1.3, y + r * .05], [x - r * 1.3, y + r * .05]], shadeHex(hc, .8)); }
 }
 
+
+/* side-on head, drawn as a real profile: skull, forehead, brow, nose, lips, chin and jaw in one outline, an ear,
+   a hairline that follows the skull, and long hair that falls behind the neck */
+function drawHeadSideHD(g, x, y, r, k) {
+  const c = g.c, lk = g.look || {}, hs = lk.hair || 'short', sk = c.s, skD = shadeHex(sk, .82), skDD = shadeHex(sk, .7), H = c.H, HD2 = shadeHex(H, .78), HL = shadeHex(H, 1.18);
+  const P = pts => pts.map(([u, v]) => [x + u * r, y + v * r]), ell = (cx, cy, rx, ry, a0 = 0, a1 = Math.PI * 2, n = 18) => { const o = []; for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; o.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]); } return o; };
+  const lw = w => Math.max(.35 / PXR, k * w), fem = !!lk.fem, longH = hs === 'long' || hs === 'flow' || hs === 'pony';
+  /* neck: short, set under the back of the skull, so it never pokes out in front of the collar */
+  if (SIDE_NECK) { pPoly(P([[-.44, .4], [.1, .5], [.14, 1.28], [-.46, 1.32]]), skD); pPoly(P([[-.44, .5], [.08, .62], [.1, .74], [-.44, .66]]), 'rgba(0,0,0,.08)'); }
+  if (hs === 'bun') { pDisc(x - r * .92, y - r * .6, r * .5, HD2); pDisc(x - r * .9, y - r * .63, r * .42, H); }
+  /* long hair falls behind the head, over the neck and down onto the shoulders and back */
+  if (longH) { const L = hs === 'pony' ? 2.0 : 2.5, sway = Math.sin(G.t * 2.2) * .05;
+    pPoly(P([[-.05, -.98], [-.75, -.75], [-1.08, -.2], [-1.1, .6], [-1.06 + sway, L * .78], [-.88 + sway, L], [-.3 + sway, L * .96], [-.05 + sway * .5, L * .7], [.05, 1.0], [.02, .3]]), HD2);
+    pPoly(P([[-.1, -.92], [-.7, -.7], [-.98, -.2], [-.98, .6], [-.94 + sway, L * .76], [-.78 + sway, L * .94], [-.36 + sway, L * .9], [-.14 + sway * .5, L * .68], [-.06, .95], [-.06, .3]]), H);
+    for (let i = 0; i < 4; i++) pLine(x + r * (-.85 + i * .2), y + r * .1, x + r * (-.82 + i * .2 + sway), y + r * L * (.72 + (i % 2) * .12), lw(.16), i % 2 ? HL : HD2); }
+  /* skull and face in one profile outline */
+  pPoly(ell(x - r * .06, y - r * .08, r * .96, r * .94, Math.PI * .6, Math.PI * 1.75, 16).concat(P([[.6, -.78], [.8, -.5], [.86, -.3], [.8, -.15], [.92, -.02], [1.12, .2], [1.1, .27], [.92, .32], [.95, .42], [.88, .5], [.92, .6], [.82, .73], [.86, .86], [.78, .98], [.5, 1.03], [.2, .92], [-.22, .66], [-.48, .38]])), sk);
+  /* jaw and cheek modelling */
+  pPoly(P([[-.2, .42], [.18, .7], [.42, .92], [.2, .86], [-.1, .6]]), 'rgba(0,0,0,.05)');
+  pDisc(x + r * .45, y + r * .32, r * .2, 'rgba(214,96,86,.13)');
+  /* ear */
+  pPoly(ell(x - r * .2, y + r * .12, r * .17, r * .27, 0, Math.PI * 2, 12), skD); pPoly(ell(x - r * .19, y + r * .12, r * .1, r * .18, 0, Math.PI * 2, 10), skDD); pPoly(ell(x - r * .15, y + r * .14, r * .05, r * .09, 0, Math.PI * 2, 8), skD);
+  /* eye, brow, lashes */
+  const ex = x + r * .66, ey = y - r * .1;
+  pPoly([[ex - r * .17, ey], [ex - r * .02, ey - r * .085], [ex + r * .1, ey - r * .03], [ex + r * .08, ey + r * .05], [ex - r * .05, ey + r * .06]], '#f3eee6');
+  pDisc(ex + r * .02, ey - r * .005, r * .055, lk.eyeCol || '#4e3626'); pDisc(ex + r * .03, ey - r * .005, r * .028, '#0d0907'); pDisc(ex, ey - r * .03, r * .014, '#fff');
+  pLine(ex - r * .17, ey - r * .01, ex + r * .1, ey - r * .07, lw(fem ? .42 : .3), fem ? '#1a1310' : shadeHex(sk, .55));
+  if (fem) pLine(ex + r * .09, ey - r * .06, ex + r * .17, ey - r * .1, lw(.28), '#1a1310');
+  pPoly([[ex - r * .2, ey - r * .2], [ex + r * .02, ey - r * .27], [ex + r * .16, ey - r * .2], [ex + r * .02, ey - r * .2]], shadeHex(H === '#ffffff' ? '#8a7a6a' : H, fem ? .75 : .62));
+  /* nose shading, nostril, mouth */
+  pLine(x + r * .9, y - r * .02, x + r * 1.06, y + r * .2, lw(.2), skD); pLine(x + r * .98, y + r * .27, x + r * .9, y + r * .27, lw(.28), skDD);
+  pLine(x + r * .92, y + r * .5, x + r * .72, y + r * .5, lw(.3), shadeHex(sk, .58));
+  if (lk.lips) pPoly(P([[.93, .43], [.88, .5], [.92, .58], [.8, .52]]), lk.lips);
+  if (lk.stubble) pPoly(P([[-.25, .5], [.1, .72], [.55, 1.0], [.84, .9], [.88, .62], [.7, .55], [.3, .62], [-.1, .42]]), 'rgba(60,45,35,.18)');
+  if (lk.beard) { pPoly(P([[-.3, .3], [.05, .66], [.5, 1.08], [.86, .98], [.9, .66], [.74, .58], [.4, .66], [.05, .46], [-.1, .2]]), H); pLine(x + r * .92, y + r * .5, x + r * .7, y + r * .5, lw(.3), shadeHex(H, .6)); }
+  /* hair: a cap that follows the skull, hairline at the temple, sideburn in front of the ear */
+  if (hs !== 'none') {
+    const top = hs === 'swept' ? -1.12 : hs === 'curly' ? -1.1 : -1.03, front = hs === 'swept' ? .72 : .58;
+    const cap = P([[-.02, .22], [.04, -.25], [.34, -.4], [front, -.6], [front + .04, -.8], [.45, top + .05], [.0, top], [-.5, top + .12], [-.88, -.62], [-1.02, -.15], [-.92, .35], [-.62, .52], [-.42, .2], [-.3, -.05], [-.12, -.12]]);
+    pPoly(cap, H);
+    pPoly(P([[-.05, -.3], [.3, -.48], [front - .05, -.72], [.42, top + .14], [0, top + .1], [-.5, top + .22], [-.78, -.6], [-.62, -.5], [-.25, -.55]]), HL);
+    if (hs === 'swept') pPoly(P([[.2, top + .05], [.82, -.95], [.86, -.78], [.55, -.72]]), H);
+    if (longH) { pPoly(P([[.0, -.6], [.25, -.35], [.12, .35], [-.12, .7], [-.3, .5], [-.25, -.1]]), H); pLine(x + r * .05, y - r * .3, x - r * .1, y + r * .6, lw(.16), HD2); }
+    if (hs === 'curly') for (const [u, v] of [[-.75, -.7], [-.35, -1.0], [.1, -1.05], [.45, -.9], [-.95, -.2], [-.85, .25]]) pDisc(x + u * r, y + v * r, r * .26, H);
+    for (let i = 0; i < 4; i++) pLine(x + r * (-.7 + i * .25), y + r * (-.6 - i * .08), x + r * (-.45 + i * .25), y + r * (-.95 + (i > 1 ? .04 : 0)), lw(.18), HD2);
+  }
+  if (lk.glasses) { pLine(x + r * .5, y - r * .12, x + r * .82, y - r * .12, lw(.55), '#263238'); pLine(x + r * .5, y - r * .12, x - r * .1, y - r * .05, lw(.4), '#263238'); }
+  if (lk.shadesUp) { pPoly(P([[.25, -.78], [.72, -.82], [.74, -.68], [.28, -.66]]), '#1d2328'); pLine(x + r * .3, y - r * .76, x + r * .7, y - r * .78, lw(.2), 'rgba(255,255,255,.4)'); }
+  if (lk.earrings && !longH) pDisc(x - r * .17, y + r * .45, r * .07, lk.earrings);
+  const hc = c.h; if (!hc || lk.hat === 'none') return;
+  if (lk.hat === 'cap' || lk.hat === 'back') { const fw = lk.hat === 'cap' ? 1 : -1;
+    pPoly(ell(x - r * .04, y - r * .32, r * 1.0, r * .82, Math.PI, Math.PI * 2, 16).concat([[x + r * .98, y - r * .28], [x - r * 1.04, y - r * .28]]), hc);
+    pPoly([[x + fw * r * .55, y - r * .42], [x + fw * r * 1.95, y - r * .34], [x + fw * r * 1.9, y - r * .16], [x + fw * r * .55, y - r * .22]], shadeHex(hc, .76));
+    pLine(x - r * .05, y - r * 1.13, x + r * .55, y - r * .32, lw(.2), shadeHex(hc, .72)); pDisc(x - r * .05, y - r * 1.13, r * .08, shadeHex(hc, .7));
+    if (lk.hat === 'cap') { if (lk.brand) brandText(lk.brand, x + r * .25, y - r * .62, r * .3, lk.brandCap); else pPoly([[x + r * .55, y - r * .8], [x + r * .86, y - r * .72], [x + r * .84, y - r * .52], [x + r * .53, y - r * .58]], hc === '#ffffff' ? '#1d2a44' : shadeHex(hc, 1.6)); } }
+  else if (lk.hat === 'visor') { pPoly(P([[-.95, -.82], [.6, -.86], [.62, -.56], [-.95, -.52]]), hc); pPoly([[x + r * .45, y - r * .7], [x + r * 1.9, y - r * .55], [x + r * 1.85, y - r * .36], [x + r * .45, y - r * .46]], shadeHex(hc, .8)); }
+  else if (lk.hat === 'bucket') { pPoly(ell(x, y - r * .42, r * .95, r * .9, Math.PI, Math.PI * 2, 14), hc); pPoly([[x - r * 1.5, y - r * .38], [x + r * 1.5, y - r * .38], [x + r * 1.3, y - r * .08], [x - r * 1.3, y - r * .08]], shadeHex(hc, .8)); pLine(x - r * .95, y - r * .52, x + r * .95, y - r * .52, lw(.4), shadeHex(hc, .65)); }
+}
 /* ---------- golfer: front view (celebrations, portraits, caddies) ---------- */
 /* hand-keyframed emotes: each frame sets hands, body and face; frames are eased into each other */
 const KF = {
@@ -3409,8 +3572,8 @@ function frontPose(id, t) {
     case 'cbook': { const fl = Math.sin(t * 3) > .95 ? 1 : 0; P.club = 'none'; P.lh = [-4, 40]; P.rh = [4, 41 + fl]; P.book = 1; P.bow = 2.5; P.jump = breathe * .3; break; }
     /* clubhouse: bar service, eating and drinking, cheers, walking toward the camera */
     case 'cbend': { const a = win(0, .35); P.club = 'none'; P.crouch = 16 * a; P.bow = 5 * a; P.lh = [-9, lerp(27, 14, a)]; P.rh = [9, lerp(27, 12, a)]; break; }
-    case 'cbottle': { const a = win(0, .3); P.club = 'none'; P.rh = [lerp(8, 12, a), lerp(20, 44, a)]; P.lh = [-8, 34]; P.bow = 1; P.bottle = 1; break; }
-    case 'cpour': { const a = win(0, .3); P.club = 'none'; P.rh = [lerp(12, 4, a), lerp(44, 48, a)]; P.lh = [-9, 38]; P.bow = 2; P.bottle = 1; P.pour = a; break; }
+    case 'cbottle': { const a = win(0, .3); P.club = 'none'; P.lh = [lerp(-8, -15, a), lerp(20, 46, a)]; P.rh = [9, 32]; P.bow = 1; P.bottle = 1; break; }
+    case 'cpour': { const a = win(0, .3); P.club = 'none'; P.lh = [lerp(-15, -17, a), lerp(46, 55, a)]; P.rh = [-4, 37]; P.bow = 2.2 * a; P.lean = -.5 * a; P.bottle = 1; P.pour = a; break; }
     case 'coffer': { const a = win(0, .35); P.club = 'none'; P.rh = [lerp(-4, -22, a), lerp(40, 41, a)]; P.lh = [-8, 34]; P.lean = -1.2 * a; P.smile = 1; P.hold = a; break; }
     case 'creach': { const a = win(0, .35); P.club = 'none'; P.rh = [lerp(10.8, 17, a), lerp(27.6, 38, a)]; P.lh = [-11, 27.6]; P.lean = .6 * a; P.smile = 1; break; }
     case 'cdrink': { const c2 = t % 3, up = win(0, .4) * (c2 < 1.7 ? E(c2 / .45) : 1 - E((c2 - 1.7) / .5)); P.club = 'none'; P.rh = [lerp(6.5, 2.6, up), lerp(39, 57.5, up)]; P.lh = [-11, 27.6]; P.bow = -1.2 * up; P.tilt = up; P.hold = 1; P.jump = breathe * .2; P.lean = -.3 * up; break; }
@@ -3466,7 +3629,11 @@ function frontPose(id, t) {
 }
 /* selective outline: each part is outlined in a darker shade of its own colour, not black */
 const OL = col => shadeHex(col, .42);
-function drawBagFront(S, SP, k, col, flip) {
+/* brand lettering (plain condensed type, not a logo) drawn along a line; skipped when too small to read */
+function brandText(txt, x, y, size, col, rot, align) {
+  if (size * PXR < 4.5 || !txt) return; const d = DC; d.save(); d.translate(x, y); if (rot) d.rotate(rot); d.font = `italic 800 ${size}px "Barlow Condensed", sans-serif`; d.textAlign = align || 'center'; d.textBaseline = 'middle'; d.fillStyle = col; d.fillText(txt.toUpperCase(), 0, 0); d.restore();
+}
+function drawBagFront(S, SP, k, col, flip, brand) {
   const f = flip ? -1 : 1, P = pts => pts.map(([u, v]) => [u * f, v]);
   const body = SP(P([[10, 2], [19.5, 2], [20.5, 33], [19, 36], [10.8, 36], [9.5, 33]]));
   /* clubs first so the bag covers the shafts */
@@ -3478,7 +3645,11 @@ function drawBagFront(S, SP, k, col, flip) {
   pPoly(SP(P([[11.5, 8], [15, 8], [15, 19], [11.5, 19]])), shadeHex(col, .78));
   pPoly(SP(P([[10.4, 33], [20.2, 33], [20.6, 36], [10.6, 36]])), shadeHex(col, .55));
   pPoly(SP(P([[19.4, 30], [21.4, 30], [21.2, 21], [19.6, 21]])), '#f5f5f0');
-  pPoly(SP(P([[12, 6], [13.2, 6], [19.5, 31], [18.3, 31]])), shadeHex(col, .6));
+  if (brand) { /* staff bag: brand band at the top, trim line, and the name running down the main panel */
+    pPoly(SP(P([[9.8, 29], [20.5, 29], [20.5, 33], [9.8, 33]])), brand.band); pPoly(SP(P([[9.8, 28.2], [20.4, 28.2], [20.4, 29], [9.8, 29]])), brand.trim);
+    pPoly(SP(P([[10.2, 5], [20, 5], [20.1, 6.2], [10.2, 6.2]])), brand.trim);
+    const a = S([14.8 * f, 17]), b2 = S([14.8 * f, 16]); brandText(brand.name, a[0], a[1], 3.4 * k, brand.text, -Math.PI / 2 * (b2[1] < a[1] ? 1 : -1)); }
+  else pPoly(SP(P([[12, 6], [13.2, 6], [19.5, 31], [18.3, 31]])), shadeHex(col, .6));
 }
 /* the shadow half of a limb, lit from the upper left: a quad offset toward screen-right */
 function halfShade(a, b, w0, w1) { const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1; let nx = -dy / L, ny = dx / L; if (nx < 0) { nx = -nx; ny = -ny; } return quadU([a[0] + nx * w0 * .27, a[1] + ny * w0 * .27], [b[0] + nx * w1 * .27, b[1] + ny * w1 * .27], w0 * .46, w1 * .46); }
@@ -3501,7 +3672,7 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
   const c = g.c, lk = g.look || { hat: 'cap', hair: 'short' }, bw = lk.build || 1, dk = col => shadeHex(col, .76), lt = col => shadeHex(col, 1.15);
   const cr = P.crouch || 0, jy = (P.jump || 0) - cr, bow = P.bow || 0, ln = P.lean || 0;
   const S = p => [X + p[0] * k, Y - (p[1] + jy) * k], SP = poly => poly.map(S);
-  if (opt.bag) drawBagFront(([u, v]) => [X + u * k, Y - v * k], poly => poly.map(([u, v]) => [X + u * k, Y - v * k]), k, opt.bag);
+  if (opt.bag) drawBagFront(([u, v]) => [X + u * k, Y - v * k], poly => poly.map(([u, v]) => [X + u * k, Y - v * k]), k, opt.bagBrand ? opt.bagBrand.body : opt.bag, false, opt.bagBrand);
   XF = P.rot ? { cx: X, cy: Y - (36 + jy) * k, a: P.rot } : null;
   const parts = [];
   const hipL = [-3.7 * bw + ln * .3, 33], hipR = [3.7 * bw + ln * .3, 33];
@@ -3553,6 +3724,7 @@ function drawGolferFront_(g, X, Y, k, P, opt) {
   pPoly(SP([[-5.4 * bw + ln * .3, 36], [-6.6 * bw + ln * .7, 44], [-7.8 * bw + ln, shY - .2], [-1.2 + ln, shY + 1], [-1.2 + ln * .4, 36]]), lt(c.S));
   pPoly(SP([[5.4 * bw + ln * .3, 36], [7 * bw + ln * .7, 45], [8 * bw + ln, shY - .5], [6.4 * bw + ln, shY - .5], [4.4 * bw + ln * .3, 36]]), dk(c.S));
   if (lk.stripe) pPoly(SP([[-7.3 * bw + ln * .6, 43.5], [7.3 * bw + ln * .6, 43.5], [7.5 * bw + ln * .65, 45.6], [-7.5 * bw + ln * .65, 45.6]]), lk.stripe);
+  if (lk.brand && !(opt.bag && !lk.nobib && !lk.singlet)) { const a = S([2.9 * bw + ln * .6, 47.2]); brandText(lk.brand, a[0], a[1], 1.7 * k, lk.brandShirt); }
   if (opt.bag && !lk.nobib && !lk.singlet) { /* caddie bib with side panels and a number */
     pPoly(SP([[-5.4 * bw + ln * .3, 35], [-6.8 * bw + ln * .7, 47], [-4 + ln, shY + 1.5], [4 + ln, shY + 1.5], [6.8 * bw + ln * .7, 47], [5.4 * bw + ln * .3, 35]]), lk.stripe ? '#1d1d1d' : '#f7f7f2');
     const sc2 = lk.stripe || opt.bag; pPoly(SP([[-5.6 * bw + ln * .3, 35], [-4.4 * bw + ln * .3, 35], [-5.2 * bw + ln * .7, 47], [-6.6 * bw + ln * .7, 47]]), sc2); pPoly(SP([[5.6 * bw + ln * .3, 35], [4.4 * bw + ln * .3, 35], [5.2 * bw + ln * .7, 47], [6.6 * bw + ln * .7, 47]]), sc2);
@@ -3691,7 +3863,8 @@ function drawHeadFront(g, x, y, r, k, P, lk) {
     const crown = [[x - r * 1.06, y - r * .28 - lift], [x - r * .9, y - r * 1.0 - lift], [x - r * .3, y - r * 1.3 - lift], [x + r * .3, y - r * 1.3 - lift], [x + r * .9, y - r * 1.0 - lift], [x + r * 1.06, y - r * .28 - lift]];
     pPoly(crown, hc);
     pPoly([[x - r * .55, y - r * .32 - lift], [x - r * .5, y - r * 1.1 - lift], [x + r * .5, y - r * 1.1 - lift], [x + r * .55, y - r * .32 - lift]], shadeHex(hc, 1.12));
-    pRect(x - r * .14, y - r * .82 - lift, r * .28, r * .2, lk.stripe || shadeHex(hc, hc === '#ffffff' ? .55 : 1.6));
+    if (lk.brand && r * PXR * .34 >= 4) brandText(lk.brand, x, y - r * .72 - lift, r * .34, lk.brandCap);
+    else pRect(x - r * .14, y - r * .82 - lift, r * .28, r * .2, lk.brand ? lk.brandCap : lk.stripe || shadeHex(hc, hc === '#ffffff' ? .55 : 1.6));
     if (lk.hat === 'cap') { const br = [[x - r * 1.1, y - r * .34 - lift], [x + r * 1.1, y - r * .34 - lift], [x + r * .92, y - r * .06 - lift], [x - r * .92, y - r * .06 - lift]]; pPoly(br, shadeHex(hc, .78)); }
     pRect(x - k * .6, y - r * 1.35 - lift, Math.max(1, k * 1.2), Math.max(1, k), shadeHex(hc, .7));
   } else if (lk.hat === 'visor') {
@@ -3889,7 +4062,8 @@ function drawTrolley(X, Y, k) {
   const S = (u, v) => [X + u * k, Y - v * k];
   for (const wx of [-6, 6]) { const [a, b] = S(wx, 4); pDisc(a, b, 4.5 * k, '#15110d'); pDisc(a, b, 3.5 * k, '#333'); }
   { const [a1, b1] = S(-6, 4), [a2, b2] = S(4, 30), [a3, b3] = S(10, 44); pLine(a1, b1, a2, b2, Math.max(1, 1.2 * k), '#90a4ae'); pLine(a2, b2, a3, b3, Math.max(1, 1.2 * k), '#90a4ae'); }
-  const bag = [[-3, 8], [5, 8], [7, 36], [-1, 36]].map(([u, v]) => S(u, v)); pOutline(bag); pPoly(bag, '#263238');
+  const sb = staffBag(), bag = [[-3, 8], [5, 8], [7, 36], [-1, 36]].map(([u, v]) => S(u, v)); pOutline(bag); pPoly(bag, sb ? sb.body : '#263238');
+  if (sb) { pPoly([[-1.4, 31], [6.4, 31], [6.8, 36], [-1, 36]].map(([u, v]) => S(u, v)), sb.band); pPoly([[-1.6, 30.2], [6.3, 30.2], [6.4, 31], [-1.4, 31]].map(([u, v]) => S(u, v)), sb.trim); const [tx, ty] = S(2.5, 19); brandText(sb.name, tx, ty, 3.2 * k, sb.text, -Math.PI / 2 - .07); }
   for (let i = 0; i < 4; i++) { const [a, b] = S(i * 1.8, 36), [c2, d2] = S(i * 1.8 - .5, 42 + (i % 2) * 2); pLine(a, b, c2, d2, Math.max(1, .7 * k), '#b0bec5'); pDisc(c2, d2, 1.3 * k, '#90a4ae'); }
 }
 
@@ -3960,6 +4134,23 @@ function drawBallHero(b, W, H) {
   pPoly([[cx - 3, cy + r - 1], [cx + 3, cy + r - 1], [cx + 1.5, cy + r + 4], [cx + 1, H * .78], [cx - 1, H * .78], [cx - 1.5, cy + r + 4]], '#f4e3b8');
   pPoly([[cx - 1, cy + r + 4], [cx + 1, cy + r + 4], [cx + 1, H * .78], [cx - 1, H * .78]], '#d9c08a');
   drawBallIcon(b, cx, cy, r);
+}
+/* smooth vector ball for menus and the shop: shaded sphere, a soft dimple pattern, the alignment line and a highlight */
+function drawBallSmooth(b, cx, cy, r) {
+  const x = DC, col = b.col || '#ffffff', matte = b.id === 'supersoft';
+  x.save(); x.globalAlpha = .28; x.fillStyle = '#000'; x.beginPath(); x.ellipse(cx + r * .18, cy + r * .95, r * .9, r * .2, 0, 0, 6.29); x.fill(); x.globalAlpha = 1;
+  let g = x.createRadialGradient(cx - r * .38, cy - r * .42, r * .08, cx, cy, r * 1.05); g.addColorStop(0, shadeHex(col, 1.12)); g.addColorStop(.55, col); g.addColorStop(1, shadeHex(col, .62)); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.fill();
+  x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.clip();
+  x.fillStyle = 'rgba(0,0,0,.07)'; const st = r * .19; for (let yy = -r; yy <= r; yy += st * .87) for (let xx = -r + ((Math.round(yy / (st * .87)) & 1) ? st / 2 : 0); xx <= r; xx += st) { const d = Math.hypot(xx, yy) / r; if (d > .98) continue; const k = 1 - d * d * .55; x.beginPath(); x.ellipse(cx + xx, cy + yy, st * .3 * k, st * .3, Math.atan2(yy, xx), 0, 6.29); x.fill(); }
+  x.strokeStyle = b.band || b.mark || 'rgba(30,30,30,.7)'; x.lineWidth = Math.max(.6, r * .07); x.beginPath(); x.ellipse(cx + r * .05, cy + r * .08, r * .82, r * .22, -.25, Math.PI * .05, Math.PI * .95); x.stroke();
+  g = x.createRadialGradient(cx - r * .4, cy - r * .45, 0, cx - r * .4, cy - r * .45, r * .5); g.addColorStop(0, matte ? 'rgba(255,255,255,.35)' : 'rgba(255,255,255,.85)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(cx - r, cy - r, r * 2, r * 2);
+  x.restore(); x.strokeStyle = 'rgba(0,0,0,.25)'; x.lineWidth = Math.max(.4, r * .03); x.beginPath(); x.arc(cx, cy, r, 0, 6.29); x.stroke();
+}
+function drawBallHeroSmooth(b, W, H) {
+  const x = DC, g = x.createRadialGradient(W / 2, H * .4, 4, W / 2, H * .5, W * .62); g.addColorStop(0, '#3b4a40'); g.addColorStop(1, '#141a16'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const lg = x.createLinearGradient(0, 0, 0, H); lg.addColorStop(0, 'rgba(255,248,225,.14)'); lg.addColorStop(1, 'rgba(255,248,225,0)'); x.fillStyle = lg; x.beginPath(); x.moveTo(W * .38, 0); x.lineTo(W * .62, 0); x.lineTo(W * .72, H); x.lineTo(W * .28, H); x.closePath(); x.fill();
+  const cx = W / 2, cy = H * .46, r = H * .28; x.fillStyle = '#efe2bd'; x.beginPath(); x.moveTo(cx - 4, cy + r - 1); x.lineTo(cx + 4, cy + r - 1); x.lineTo(cx + 1.6, H * .82); x.lineTo(cx - 1.6, H * .82); x.closePath(); x.fill();
+  drawBallSmooth(b, cx, cy, r);
 }
 /* trophy-cabinet pieces. shape picks the silhouette, tier picks the metal */
 function drawTrophy(shape, tier, locked, t) {
@@ -4106,8 +4297,10 @@ const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
    (or if the device is struggling). The ground itself is always rendered at 2x and scaled smoothly */
 /* canvas resolution: enough device pixels that people and text stay sharp on the screen you have (the ground is
    capped separately, so this mostly costs fill rate) */
+/* indoor 2D scenes are cheap to fill, so they get the full screen resolution (people stay crisp) */
+const SHARP_SCR = { clubhouse: 1, pool: 1, darts: 1, casino: 1, office: 1, flight: 1, spoffice: 1 };
 function applyRes(force) {
-  const dpr = devicePixelRatio || 1, px = Math.min(innerWidth, innerHeight * VW / VH) * dpr, need = Math.ceil(px / VW - .15), want = force || (G && G.autoLow ? 2 : clamp(need, 2, dpr > 1.4 ? 4 : 3));
+  const dpr = devicePixelRatio || 1, px = Math.min(innerWidth, innerHeight * VW / VH) * dpr, need = Math.ceil(px / VW - .15), scene = G && SHARP_SCR[G.scr], perf = typeof save !== 'undefined' && save.settings && save.settings.perf, want = force || (G && G.autoLow ? 2 : clamp(need, 2, scene ? (dpr > 1.4 ? 6 : 4) : perf ? 2 : (dpr > 1.4 ? 4 : 3)));
   if (G && G.autoLow) G.autoLow = false;
   if (!force && !(G && G.autoLow)) G.resWant = want;
   if (want === RES && cv.width === VW * want) return; RES = want; cv.width = VW * RES; cv.height = VH * RES; drawGrade.c = null;
@@ -4124,7 +4317,10 @@ const G = {
 const golfer = () => golferById(G.r ? G.r.golfer : save.golfer);
 const ballDef = () => BALLS.find(b => b.id === save.ball) || BALLS[0];
 const cartDef = () => CARTS.find(c => c.id === save.cart) || CARTS[0];
-const caddieDef = () => CADDIES.find(c => c.id === save.caddie) || null;
+/* your caddie, in the sponsor's kit when you are sponsored: brand colours and lettering, their own hair and build kept */
+const CAD_KIT = {};
+const caddieDef = () => { const c = CADDIES.find(q => q.id === save.caddie) || null, sp = c && mySponsor(); if (!sp) return c; const key = c.id + '|' + sp.id;
+  return CAD_KIT[key] || (CAD_KIT[key] = Object.assign({}, c, { look: Object.assign({}, c.look, { stripe: null, nobib: true, brand: sp.name, brandShirt: sp.kitText || sp.wall, brandCap: sp.capText || '#ffffff', hat: c.look.hat === 'none' ? 'none' : 'cap' }), c: Object.assign({}, c.c, { S: sp.kit.S, h: sp.kit.h, p: c.look.skirt || c.look.shorts ? sp.kit.p : sp.kit.p, b: sp.bag.body }) })); };
 const cadLvl = () => { const c = caddieDef(); return c ? c.lvl : 0; };
 const ownedClubs = () => CLUBS.filter(c => save.clubs[c.id] !== undefined);
 const energy = () => G.r ? G.r.energy : 100;
@@ -4309,11 +4505,11 @@ function stepBall(b, h, dt, wind, fx) {
   const pt = b.putt ? 1.6 : 1;
   if (d < CUP_R * 2.2 && d > 1e-4 && sp < 2.1 * pt) { /* the ground falls away into the cup: a slow ball on the edge gets drawn in */
     const pull = (1 - d / (CUP_R * 2.2)) * 3.2 * pt * dt; b.vx += (h.pin.x - b.x) / d * pull; b.vy += (h.pin.y - b.y) / d * pull;
-    if (d < CUP_R * 1.7 && sp < CAP_V * .65 * pt) { b.st = 'holed'; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = 0; return; }
+    if (d < CUP_R * 1.7 && sp < CAP_V * .65 * pt) { if (fx) G.sink = { x: b.x, y: b.y, vx: b.vx, vy: b.vy, t0: G.t }; b.st = 'holed'; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = 0; return; }
   }
   if (d < CUP_R) {
     const luck = golfer().perk === 'luck' ? 1.35 : 1;
-    if (sp < CAP_V * luck * pt) { b.st = 'holed'; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = 0; return; }
+    if (sp < CAP_V * luck * pt) { if (fx) G.sink = { x: b.x, y: b.y, vx: b.vx, vy: b.vy, t0: G.t }; b.st = 'holed'; b.x = h.pin.x; b.y = h.pin.y; b.vx = b.vy = 0; return; }
     if (sp < LIP_V && !b.lipped) {
       const a = Math.atan2(b.vy, b.vx) + (fx ? (PRNG() < .5 ? -1 : 1) * (.5 + PRNG() * .7) : .8);
       b.vx = Math.cos(a) * sp * .5; b.vy = Math.sin(a) * sp * .5; b.lipped = true;
@@ -4368,7 +4564,7 @@ function landBall(b, h, fx) {
   const S = SURF[t];
   let keep = Math.min(.97, S.keep * .885 * (b.rollK || 1));
   if (t === T.FAIR || t === T.FRINGE || t === T.TEE) keep = 1 - (1 - keep) / c.rollMult * (G.wetR || 1);
-  let nh = b.bounces === 0 ? hs * keep - b.spin * S.sb * Math.abs(b.vz) : hs * Math.max(keep, t === T.GREEN ? .64 : .735);
+  let nh = b.bounces === 0 ? hs * keep - b.spin * S.sb * (t === T.GREEN ? 1.25 : 1) * Math.abs(b.vz) : /* backspin bites a little harder on the green */ hs * Math.max(keep, t === T.GREEN ? .64 : .735);
   if (b.treed) nh = Math.min(nh, 1.5);
   let nz = -b.vz * S.bounce;
   b.bounces++; b.spin *= .35; b.side = 0;
@@ -4677,7 +4873,7 @@ function swingDown() {
   G.routine = null;
   if (G.view !== 'golfer') { G.view = 'golfer'; }
   G.mods = shotMods(G.club, G.lie);
-  G.band = G.bandAim || targetBand(); G.phase = 'swing'; G.sw = { t: 0, p: 0, hold: 0 }; G.mullOK = false; SFX.play('tick'); updateHUD();
+  G.band = G.bandAim || targetBand(); G.phase = 'swing'; G.sw = { t: 0, p: 0, hold: 0 }; SFX.play('tick'); updateHUD();
 }
 function swingUp() {
   if (G.phase === 'flight') { G.ff = false; return; }
@@ -4719,6 +4915,7 @@ function updateSwing(dt) {
 }
 function doShot(power, k) {
   const b = G.b, club = G.club, m = G.mods;
+  G.mullOK = false; /* only a struck ball uses up the chance to mulligan the previous one */
   G.snap = { x: b.x, y: b.y, strokes: G.strokes, lie: G.lie, club, pinD: dist2pin(), putt: club.putter && G.lie === T.GREEN, aim: G.aim };
   G.gpos = golferSpot(b.x, b.y, G.aim, club); G.gyaw = G.aim;
   G.strokes++;
@@ -4730,7 +4927,7 @@ function doShot(power, k) {
   if (G.gum && !club.putter) { G.gum = false; }
   G.phase = 'flight'; G.ff = false; G.trail = []; G.roll = []; G.followT = 0; G.flT = 0; G.flYaw = G.aim; G.view = 'golfer';
   G.wind.g = true; G.wind.p1 = Math.random() * 6; G.wind.p2 = Math.random() * 6;
-  if (G.mode === 'round') { const seed = (Math.random() * 1e9) >>> 0; G.rng = mulberry32(seed); G.lastShot = { ball: JSON.parse(JSON.stringify(G.b)), wind: Object.assign({}, G.wind), snap: Object.assign({}, G.snap, { club: club.id }), club: club.id, seed, hi: G.r.start + G.r.cur, tee: G.r.tee, course: G.r.courseId, gpos: Object.assign({}, G.gpos), gyaw: G.gyaw, golfer: save.golfer }; }
+  if (G.mode === 'round') { const seed = (Math.random() * 1e9) >>> 0; G.rng = mulberry32(seed); G.lastShot = { ball: JSON.parse(JSON.stringify(G.b)), wind: Object.assign({}, G.wind), snap: Object.assign({}, G.snap, { club: club.id }), club: club.id, seed, hi: G.r.start + G.r.cur, tee: G.r.tee, course: G.r.courseId, gpos: Object.assign({}, G.gpos), gyaw: G.gyaw, golfer: save.golfer, path: [] }; }
   if (club.putter) SFX.play('putt');
   else { SFX.play('swoosh'); if (strike.kind === 'pure' || strike.kind === 'good') SFX.play(club.id === 'dr' || club.id === '3w' ? 'drive' : club.kind === 'wedge' && power < .7 ? 'chip' : 'pure'); else SFX.play(strike.kind === 'chunk' ? 'chunk' : strike.kind === 'shank' ? 'shank' : 'thin'); }
   if (strike.divot) { const c = G.h.course; burst(b.x, b.y, 14, [c.pal.fair[1], '#6b4f32', '#5a3f28'], 4, 6, .9); }
@@ -4930,9 +5127,11 @@ function useDrink() {
   save.items.drink--; G.r.energy = Math.min(100, G.r.energy + 20); SFX.play('gulp');
   banner('ENERGY +20', '', '#7cd957', 1); persist(); if (G.phase === 'aim') { G.mods = shotMods(G.club, G.lie); refreshAim(); } updateHUD();
 }
+/* a mulligan works from the moment the ball stops until the next swing (also while walking up to it) */
+function mullPhase() { return G.phase === 'aim' || G.phase === 'travel' || (G.b && G.b.st === 'rest' && !!G.wait && G.phase !== 'holed'); }
 function useMull() {
-  if (G.phase !== 'aim' || !G.snap || !G.mullOK || save.items.mull <= 0 || G.mode !== 'round') return;
-  save.items.mull--; G.mullOK = false;
+  if (!mullPhase() || !G.snap || !G.mullOK || save.items.mull <= 0 || G.mode !== 'round') return;
+  save.items.mull--; G.mullOK = false; G.wait = null; G.travel = null; G.guest = null;
   if (G.snap.putt) G.r.st.putts--;
   G.strokes = G.snap.strokes; G.b.x = G.snap.x; G.b.y = G.snap.y;
   G.snap = null; SFX.play('coin'); banner('MULLIGAN!', 'take it again', '#ffd54f', 1.1);
@@ -4948,20 +5147,48 @@ function scoreName(s, par) {
   const d = s - par;
   return d <= -4 ? 'CONDOR!' : d === -3 ? 'ALBATROSS!' : d === -2 ? 'EAGLE!' : d === -1 ? 'BIRDIE!' : d === 0 ? 'PAR' : d === 1 ? 'BOGEY' : d === 2 ? 'DOUBLE BOGEY' : d === 3 ? 'TRIPLE BOGEY' : '+' + d;
 }
-const coinMult = () => courseById(G.r.courseId).mult * TEES[G.r.tee].mult * diff().mult * (cadLvl() >= 4 ? 1.1 : 1) * (cartDef().coin || 1) * wxCoinMult(G.r && G.r.wx);
+const spGear = () => { const sp = mySponsor(); return sp && sp.balls.includes(save.ball) ? 1.2 : 1; }; /* sponsored and playing their ball: +20% a hole */
+const coinMult = () => courseById(G.r.courseId).mult * TEES[G.r.tee].mult * diff().mult * (cadLvl() >= 4 ? 1.1 : 1) * (cartDef().coin || 1) * wxCoinMult(G.r && G.r.wx) * spGear();
 function holeCoins(score, par) {
   const d = score - par;
   const base = score === 1 ? 2500 : d <= -3 ? 1500 : d === -2 ? 600 : d === -1 ? 180 : d === 0 ? 70 : d === 1 ? 30 : d === 2 ? 12 : 5;
   const c = courseById(G.r.courseId), tot = Math.round(base * coinMult());
-  G.coinBreak = { base, parts: [['COURSE', c.mult], ['TEES', TEES[G.r.tee].mult], [diff().name.toUpperCase(), diff().mult]].concat(cadLvl() >= 4 ? [['CADDIE', 1.1]] : []).concat((cartDef().coin || 1) > 1 ? [['CART', cartDef().coin]] : []).concat(wxCoinMult(G.r.wx) > 1 ? [['RAIN', wxCoinMult(G.r.wx)]] : []), tot };
+  G.coinBreak = { base, parts: [['COURSE', c.mult], ['TEES', TEES[G.r.tee].mult], [diff().name.toUpperCase(), diff().mult]].concat(cadLvl() >= 4 ? [['CADDIE', 1.1]] : []).concat((cartDef().coin || 1) > 1 ? [['CART', cartDef().coin]] : []).concat(spGear() > 1 ? [[mySponsor().name.toUpperCase(), 1.2]] : []).concat(wxCoinMult(G.r.wx) > 1 ? [['RAIN', wxCoinMult(G.r.wx)]] : []), tot };
   return tot;
 }
 
 /* ---------- hole complete + celebration flow: drop -> pick -> play -> card ---------- */
+/* live tournament moments: after each of your holes, the big things the field just did (eagles, a leader's birdie or blow-up) */
+function evTicker(r) {
+  if (!G.r || G.r !== r || G.scr !== 'game') return; const E = EVENTS.find(e => e.id === r.event); if (!E) return;
+  const thru = r.scores.length, i = thru - 1, par = courseById(r.courseId).pars[r.start + i], st = evStandings(r, E), key = st.key, top = st.all.slice(0, 10);
+  const posOf = x => { const p = st.all.filter(y => y[key] < x[key]).length + 1, tie = st.all.filter(y => y[key] === x[key]).length > 1; return (tie ? 'T' : '') + p; };
+  const fp = n => n === 0 ? 'E' : n > 0 ? '+' + n : String(n), cands = [];
+  for (const f of r.field) { const row = st.all.find(x => x.name === f.name); if (!row) continue; const d = f.h[i] - par, inTop = top.includes(row), beach = /Beach/.test(f.name);
+    const w = d <= -2 ? 10 : d === -1 ? (inTop ? (posOf(row) === '1' ? 6 : 3) : 0) + (beach ? 3 : 0) : d >= 2 && inTop ? 5 + (posOf(row) === '1' ? 3 : 0) : 0;
+    if (w) cands.push({ w: w + Math.random(), f, d, row }); }
+  if (!cands.length || Math.random() < .35) return;
+  cands.sort((a, b) => b.w - a.w); const c = cands[0], what = c.d <= -3 ? 'makes an albatross on' : c.d === -2 ? (c.f.h[i] === 1 ? 'makes a HOLE IN ONE on' : 'eagles') : c.d === -1 ? 'birdies' : c.d === 2 ? 'double-bogeys' : 'makes a big number on';
+  toast(`<b style="color:#f5c451">LIVE</b> · ${esc(c.f.name)} ${what} the ${i + r.start + 1}${ordinal(i + r.start + 1)}<br><span class="dimtxt">Now ${fp(c.row[key])} · ${posOf(c.row)}</span>`);
+}
+/* weather moves through during a round: some days it closes in, some days it clears. Checked once per hole */
+function wxShift(r) {
+  r.wxSeen = r.wxSeen || {}; if (r.wxSeen[r.cur]) return; r.wxSeen[r.cur] = 1;
+  if (r.wxTrend === undefined) r.wxTrend = Math.random() < .35 ? (Math.random() < .55 ? 1 : -1) : 0;
+  const w = r.wx, mk = (rain, cloud) => { const kind = rain ? 2 + rain : cloud >= .65 ? 2 : cloud > 0 ? 1 : 0; return Object.assign({}, w, { rain, cloud, kind, name: WXN[kind], ico: WXI[kind] }); };
+  let msg = null;
+  if (r.wxTrend && Math.random() < .22) {
+    if (r.wxTrend > 0 && w.rain < 2) { r.wx = w.cloud < .65 && !w.rain ? mk(0, .65) : mk(w.rain + 1, 1); r.wx.wind = Math.round(w.wind * 1.15 + 1); msg = r.wx.rain ? (w.rain ? ['RAIN GETTING HEAVIER', 'and the wind is up'] : ['RAIN HAS ARRIVED', 'wetter greens, less roll']) : ['CLOUD ROLLING IN', 'rain may not be far away']; }
+    else if (r.wxTrend < 0 && (w.rain || w.cloud)) { r.wx = w.rain ? mk(w.rain - 1, w.rain > 1 ? 1 : .65) : mk(0, w.cloud > .5 ? .3 : 0); r.wx.wind = Math.max(2, Math.round(w.wind * .85)); msg = w.rain && !r.wx.rain ? ['RAIN HAS STOPPED', 'greens will firm up'] : w.rain ? ['RAIN EASING', 'lighter now'] : ['SKIES CLEARING', 'sun is coming out']; }
+    else if (Math.random() < .5) { r.wx = Object.assign({}, w, { wind: Math.max(2, Math.round(w.wind + (Math.random() < .5 ? -4 : 5))) }); msg = r.wx.wind > w.wind ? ['WIND PICKING UP', r.wx.wind + ' mph gusts'] : ['WIND DROPPING', 'calmer out here']; }
+  }
+  if (msg) setTimeout(() => { if (G.r === r && G.scr === 'game') banner(msg[0], msg[1], '#cfe6f4', 1.8); }, 1400);
+}
 function holeComplete(picked) {
   const h = G.h, r = G.r, s = save.stats, snap = G.snap;
   const score = picked ? h.par + 5 : G.strokes, d = score - h.par;
   r.scores[r.cur] = score; s.holes++; s.strokes += score;
+  if (r.event && r.field && r.field.length) setTimeout(() => evTicker(r), 2200);
   const key = r.courseId + '_' + (r.start + r.cur);
   if (!picked) {
     if (score === 1) { s.aces++; if (G.mode === 'round') save.shout = { cid: r.courseId, n: 4 + Math.floor(Math.random() * 5) }; } /* tradition: the ace buys the bar a drink */
@@ -5030,7 +5257,7 @@ function finishRound() {
   const total = r.scores.reduce((a, b) => a + b, 0);
   let par = 0; for (let i = 0; i < r.n; i++) par += c.pars[r.start + i];
   const toPar = total - par, counts = r.n >= 9;
-  s.putts += r.st.putts; s.rounds++; if (r.n === 18) { s.rounds18++; s.best18 = Math.min(s.best18, toPar); }
+  s.putts += r.st.putts; s.rounds++; if (['bruce', 'aroha', 'kiri', 'jacob'].includes(r.golfer)) s.localRounds = (s.localRounds || 0) + 1; if (r.n === 18) { s.rounds18++; s.best18 = Math.min(s.best18, toPar); }
   if (counts && toPar < 0) s.underRounds++; if (counts && toPar <= 0) s.parRounds++;
   if (r.diff === 'tour') s.tourRounds++;
   if (counts && r.scores.every((v, i) => v <= c.pars[r.start + i])) s.bogeyFree++;
@@ -5092,7 +5319,7 @@ function finishRound() {
       } else { all = tb.rows.filter(x => !x.out).map(x => ({ name: x.name, gross: x.gross + tb.par * NR, net: x.net + tb.par * NR, me: x.me, toPar: x[key] })); save.tourn = null; }
     } else {
       field = r.field ? r.field.map(f => ({ name: f.name, gross: f.gross, net: f.net, idx: f.idx })) : simField(E, r.rt, r.diff);
-      all = [...field, { name: save.name, gross: total, net: myNet, me: true }].sort((a, b) => a[key] - b[key] || (a.me ? -1 : b.me ? 1 : 0));
+      all = [...field, { name: lbName(), gross: total, net: myNet, me: true }].sort((a, b) => a[key] - b[key] || (a.me ? -1 : b.me ? 1 : 0));
     }
     if (last) {
       all.sort((a, b) => a[key] - b[key] || (a.me ? -1 : b.me ? 1 : 0));
@@ -5122,12 +5349,18 @@ function finishRound() {
       }
     }
   }
+  /* sponsorship: rare, and only when you are really winning (or post a huge round) */
+  let spOffer = null;
+  if (!save.sponsor && !save.sponsorOffer && r.mode !== 'practice') { const hcpOK = idx0 !== null && idx0 <= 6, won = ev && !ev.mid && ev.pos === 1 && ev.ties === 1 && (ev.E.purse || 0) >= 20000, huge = r.n >= 18 && toPar <= -5;
+    if ((won && hcpOK && (s.eventWins || 0) >= 2 && Math.random() < .45) || (huge && hcpOK && Math.random() < .25)) { spOffer = SPONSORS[Math.floor(Math.random() * SPONSORS.length)].id; save.sponsorOffer = { id: spOffer, at: Date.now() }; } }
+  let spNews = null; if (save.sponsor) spNews = sponsorAfterRound(r, ev, toPar, s);
   const key = c.id + '_' + r.n, board = save.board[key] = save.board[key] || [];
   const entry = { name: save.name, golfer: r.golfer, strokes: total, toPar, net, tee: r.tee, start: r.start, diff: r.diff, date: Date.now() };
+  if (typeof onlinePost === 'function' && !G.trial) onlinePost({ player_name: save.name.slice(0, 40), course_id: c.id, holes: r.n, start_hole: r.start || 0, tee: r.tee, difficulty: r.diff, strokes: total, to_par: toPar, net: net === null ? null : Math.round(net), golfer: r.golfer, sponsor: mySponsor() ? mySponsor().name : null, event_id: r.event || null });
   board.push(entry); board.sort((a, b) => a.toPar - b.toPar || a.strokes - b.strokes || a.date - b.date);
   const rank = board.indexOf(entry); board.length = Math.min(board.length, 10);
   const ach0 = save.stats.coinsEarned;
-  G.summary = { best: r.best || null, r: JSON.parse(JSON.stringify(r)), c, total, par, toPar, net, bonus, beat, hc, ev, rank: rank < 10 ? rank : -1, ach0, collect: true, trophy: 0, trial: !!G.trial }; G.trial = false;
+  G.summary = { spOffer, spNews, best: r.best || null, r: JSON.parse(JSON.stringify(r)), c, total, par, toPar, net, bonus, beat, hc, ev, rank: rank < 10 ? rank : -1, ach0, collect: true, trophy: 0, trial: !!G.trial }; G.trial = false;
   save.round = null; persist();
   exitGame(); checkAch(); G.summary.collect = false; showScreen('summary'); if (G.moment) setTimeout(showMoment, 900);
   SFX.play(toPar <= 0 || (ev && ev.pos <= 3) ? 'cheer' : 'good');
@@ -5264,6 +5497,7 @@ function startReplay(rec) {
   G.wx = null; G.wetF = 1; G.wetR = 1;
   G.rp = rec; G.b = JSON.parse(JSON.stringify(rec.ball)); G.wind = Object.assign({}, rec.wind); G.club = clubById(rec.club);
   G.snap = Object.assign({}, rec.snap, { club: clubById(rec.club) }); G.gpos = Object.assign({}, rec.gpos); G.gyaw = rec.gyaw; G.rng = mulberry32(rec.seed);
+  G.rpI = 0; G.sink = null;
   G.phase = 'flight'; G.flT = 0; G.followT = 0; G.trail = []; G.roll = []; G.ff = false; G.view = 'golfer'; G.twirlOK = false; G.flYaw = rec.snap.aim; SFX.play('pure'); updateHUD();
 }
 function startChallenge(type, courseId) {
@@ -5331,8 +5565,10 @@ function setupHole(h) {
     for (const sg of [-1, 1]) { const x = best.x + nx * sg * (h.fwHalf + 1.5), y = best.y + ny * sg * (h.fwHalf + 1.5); if (terrainAt(h, x, y) !== T.WATER) h.posts.push({ x, y, col, d }); }
   }
   G.h = h; G.b = { x: h.tee.x, y: h.tee.y, z: groundZ(h, h.tee.x, h.tee.y), st: 'rest' }; G.strokes = 0; G.parts = []; G.sparts = []; G.trail = [];
+  G.sink = null;
   G.snap = null; G.mullOK = false; G.girDone = false; G.view = 'golfer'; G.wait = null; G.prev = null; G.adv = null; G.cele = null; G.info = null; G.ripples = []; G.travel = null; G.drop = null; G.gum = false;
   const c = h.course, D = diff();
+  if (G.mode === 'round' && G.r && G.r.wx && G.r.cur > 0) wxShift(G.r);
   G.wx = (G.r && G.r.wx) || (G.mode !== 'round' ? weatherOn(c.id, save.day) : null); if (G.wx && G.wx.rain === 3) G.wx = Object.assign({}, G.wx, { rain: 2 });
   const wet = G.wx ? G.wx.rain : 0; G.wetF = 1 + .14 * wet; G.wetR = 1 + .35 * wet;
   const mph = Math.round((G.wx ? G.wx.wind * (.8 + Math.random() * .4) : c.wind[0] + Math.random() * (c.wind[1] - c.wind[0])) * D.wind);
@@ -5456,7 +5692,12 @@ function update(dt) {
   if (G.phase === 'flight') {
     const n = Math.min(80, Math.round(dt / DT * (G.ff ? 3.5 : 1)));
     for (let i = 0; i < n; i++) {
-      stepBall(G.b, h, DT, G.wind, physFx);
+      if (G.mode === 'replay' && G.rp && G.rp.path && G.rp.path.length) { /* replays play back the recorded ball, step for step */
+        const P = G.rp.path, k = G.rpI || 0, B = G.b; G.rpI = k + 1;
+        if (k * 4 >= P.length) { const fin = G.rp.fin || { st: 'rest' }; if (fin.st === 'holed' && B.st !== 'holed') G.sink = { x: B.x, y: B.y, t0: G.t }; Object.assign(B, fin, { vx: 0, vy: 0, vz: 0 }); if (fin.st === 'holed') { B.x = h.pin.x; B.y = h.pin.y; } }
+        else { B.x = P[k * 4]; B.y = P[k * 4 + 1]; B.z = P[k * 4 + 2]; B.st = ['air', 'roll'][P[k * 4 + 3]] || 'roll'; }
+      } else stepBall(G.b, h, DT, G.wind, physFx);
+      if (G.mode === 'round' && G.lastShot && G.lastShot.path && G.lastShot.path.length < 24000) { const B = G.b; G.lastShot.path.push(+B.x.toFixed(3), +B.y.toFixed(3), +(B.z || 0).toFixed(3), B.st === 'air' ? 0 : 1); if (B.st !== 'air' && B.st !== 'roll') G.lastShot.fin = { st: B.st, x: B.x, y: B.y, z: B.z, sunk: B.sunk }; }
       if (i % 2 === 0) { const rz = G.b.z - groundZ(h, G.b.x, G.b.y); if (rz > .15) { G.trail.push(G.b.x, G.b.y, rz); if (G.trail.length > 3000) G.trail.splice(0, 3); } else if (G.b.st === 'roll' && i % 6 === 0 && dist2pin() < 40) { G.roll.push(G.b.x, G.b.y); if (G.roll.length > 600) G.roll.splice(0, 2); } }
       if (G.h.range && G.mode === 'practice') { const B = G.b, rz = B.z - groundZ(h, B.x, B.y); for (const bk of G.h.range.buckets) if (B.vz <= 0 && rz < 1.3 && rz > -.2 && Math.hypot(B.x - bk.x, B.y - bk.y) < 1.7 && !G.inBucket) { G.inBucket = bk; bk.hits++; bk.flash = 1; B.x = bk.x; B.y = bk.y; B.vx = B.vy = B.vz = 0; B.st = 'rest'; save.coins += 10; save.stats.coinsEarned += 10; SFX.play('rattle'); SFX.play('coin'); banner('IN THE BUCKET!', '+10 COINS', '#ffd54f', 1.6); updCoins(); persist(); break; } }
       if (G.b.st !== 'air' && G.b.st !== 'roll') break;
@@ -5492,7 +5733,23 @@ function updateFlow(dt) {
 function drawItemsCached(items, ingame) {
   const C = drawItemsCached, c = CAM, L = C.cam, still = L && Math.abs(L.x - c.x) < 2e-3 && Math.abs(L.y - c.y) < 2e-3 && Math.abs(L.z - c.z) < 2e-3 && Math.abs(L.yaw - c.yaw) < 2e-4 && Math.abs(L.pitch - c.pitch) < 2e-4;
   C.cam = { x: c.x, y: c.y, z: c.z, yaw: c.yaw, pitch: c.pitch }; C.stillN = still ? (C.stillN || 0) + 1 : 0;
-  if (!ingame || C.stillN < 3 || save.settings.cacheOff) { C.layer = null; for (const it of items) it.f(); return; }
+  if (!ingame || save.settings.cacheOff) { C.layer = null; C.far = null; for (const it of items) it.f(); return; }
+  if (C.stillN < 3) { C.layer = null;
+    /* camera moving: distant scenery barely changes between frames, so draw it into a layer and reuse it for the next two
+       frames, shifted to follow the camera. Anything near, and everything dynamic, is drawn live every frame */
+    const FAR = 190, far = it => it.sc && !it.fl && it.d > FAR, cvW = cv.width, cvH = cv.height, keyF = [G.h && G.h.seed, G.r && G.r.cur, VW, RES, HD].join('|');
+    let F = C.far, ref = F && proj(c, F.rx, F.ry, F.rz);
+    const ok = F && F.key === keyF && F.cv.width === cvW && F.cv.height === cvH && G.frameN - F.n < 3 && ref && Math.hypot(c.x - F.cx, c.y - F.cy) < 1.4 && Math.abs(c.z - F.cz) < .6 && Math.abs(c.yaw - F.yaw) < .05;
+    if (!ok) { const lc = F && F.cv.width === cvW && F.cv.height === cvH ? F.cv : mkCanvas(cvW, cvH), lx = lc.getContext('2d');
+      lx.setTransform(1, 0, 0, 1, 0, 0); lx.clearRect(0, 0, cvW, cvH); lx.setTransform(RES, 0, 0, RES, 0, 0); lx.imageSmoothingEnabled = false;
+      const keepDC = DC; DC = lx; try { for (const it of items) if (far(it)) it.f(); } finally { DC = keepDC; }
+      const rx = c.x + Math.cos(c.yaw) * 300, ry = c.y + Math.sin(c.yaw) * 300, rz = c.z, r0 = proj(c, rx, ry, rz);
+      F = C.far = { cv: lc, key: keyF, n: G.frameN, cx: c.x, cy: c.y, cz: c.z, yaw: c.yaw, rx, ry, rz, p0: r0 ? [r0.x, r0.y] : [0, 0] }; ref = r0; }
+    const dx = ref ? Math.round((ref.x - F.p0[0]) * RES) : 0, dy = ref ? Math.round((ref.y - F.p0[1]) * RES) : 0;
+    const sm = ctx.imageSmoothingEnabled; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(F.cv, dx, dy); ctx.restore(); ctx.imageSmoothingEnabled = sm;
+    for (const it of items) if (!far(it)) it.f();
+    return; }
+  C.far = null;
   let dMax = 0; for (const it of items) if (!it.sc) dMax = Math.max(dMax, it.d);
   const cut = dMax + .5, key = [G.h && G.h.seed, G.r && G.r.cur, G.view, G.phase === 'aim' || G.phase === 'swing' || G.phase === 'strike' || G.phase === 'down', Math.round(cut * 2), VW, RES, HD].join('|');
   const cached = it => it.sc && !it.fl && it.d > cut;
@@ -5506,8 +5763,8 @@ function drawItemsCached(items, ingame) {
   for (const it of items) if (!cached(it)) it.f();
 }
 /* menu background: a slow, high glide down one of a few scenic holes. When a pass ends it cuts straight to the next
-   hole (generated once, then cached) and fades in from black. */
-const BG_PICKS = [['ngahinapouri', 0], ['jacks', 4], ['pebble', 7]];
+   hole (generated once, then cached). The camera keeps gliding while it fades to black, then fades in on the next. */
+const BG_PICKS = [['ngahinapouri', 0], ['jacks', 4], ['cape', 14], ['pebble', 7], ['tieke', 0]];
 const bgHoles = {};
 function bgHole(i) { const [cid, hi] = BG_PICKS[i], k = cid + ':' + hi; if (!bgHoles[k]) { const c = courseById(cid), h = genHole(c, Math.min(hi, c.holes.length - 1), 'champ'); renderHole(h); bgHoles[k] = h; } return bgHoles[k]; }
 function bgCamFor(h, s) {
@@ -5520,10 +5777,23 @@ function updateBg(dt) {
   const h = G.bgH, end = Math.max(60, h.len - 40);
   if (G.bgS === undefined || G.bgS > end) {
     if (G.bgS !== undefined && !G.bgCid) { G.bgI = ((G.bgI || 0) + 1) % BG_PICKS.length; G.bgH = bgHole(G.bgI); }
-    G.bgS = 0; G.bgFade = 1; setCam(bgCamFor(G.bgH, 0), 99, dt); return;
+    G.bgS = 0; G.bgFade = 1; G.bgIn = 1; setCam(bgCamFor(G.bgH, 0), 99, dt); return;
   }
-  G.bgS += dt * 13; if (G.bgFade > 0) G.bgFade = Math.max(0, G.bgFade - dt / .45);
+  G.bgS += dt * 13; G.bgIn = Math.max(0, (G.bgIn || 0) - dt / .7);
+  const out = clamp((G.bgS - (end - 16)) / 16, 0, 1); /* last ~1.2 s of the glide: ease to black while still moving */
+  G.bgFade = Math.max(G.bgIn * G.bgIn * (3 - 2 * G.bgIn), out * out * (3 - 2 * out));
   setCam(bgCamFor(h, G.bgS), 3, dt);
+}
+/* optional frame-rate readout (Settings): frames per second, the slowest frame and the ground detail level */
+function fpsMeter() {
+  const F = fpsMeter.s || (fpsMeter.s = { n: 0, t0: performance.now(), last: performance.now(), worst: 0, el: null }), now = performance.now(), dt = now - F.last; F.last = now; F.n++; if (dt > F.worst && dt < 1000) F.worst = dt;
+  if (now - F.t0 < 500) return;
+  { /* sustained low frame rate in play: suggest Performance mode once */
+    const fpsNow = F.n * 1000 / (now - F.t0); if (G.scr === 'game' && !save.settings.perf && !save.perfHint && document.visibilityState === 'visible') { F.slow = fpsNow < 28 ? (F.slow || 0) + 1 : Math.max(0, (F.slow || 0) - 1); if (F.slow >= 24) { save.perfHint = true; persist(); toast('<b>Running slowly?</b><br>Turn on <b>Performance mode</b> in Settings for a smoother game.'); } } }
+  const on = save.settings && save.settings.fps; if (!on) { if (F.el) { F.el.remove(); F.el = null; } F.n = 0; F.t0 = now; F.worst = 0; return; }
+  if (!F.el) { F.el = document.createElement('div'); F.el.id = 'fps'; document.body.appendChild(F.el); }
+  const fps = Math.round(F.n * 1000 / (now - F.t0)); F.el.textContent = `${fps} FPS · worst ${Math.round(F.worst)} ms · ground ${GR}x · ${G.scr}`; F.el.className = fps >= 50 ? 'ok' : fps >= 30 ? 'mid' : 'bad';
+  F.n = 0; F.t0 = now; F.worst = 0;
 }
 /* mirrored copies of sprites, made once */
 const FLIPS = new WeakMap();
@@ -5598,6 +5868,18 @@ function drawGrade(h) {
 }
 const fogAt = d => d < 60 ? 0 : Math.min(.72, Math.pow((d - 60) / 520, .85) * .8);
 function render() {
+  /* waiting to swing with the camera settled: draw every other frame (half the work, no visible difference) */
+  G.frameN = (G.frameN || 0) + 1; if (G.scr === 'game' && G.phase === 'aim' && (drawItemsCached.stillN || 0) > 20 && !G.drag && !G.keys.l && !G.keys.r && (G.frameN & 1) && !G.aimMoved) return;
+  /* slow scenes draw at 30 fps: the menu flythrough behind the buttons, and the clubhouse when you are standing still */
+  if ((G.frameN & 1) && !G.mustDraw) { if ((G.scr !== 'game' && G.scr !== 'snap' && !SHARP_SCR[G.scr] && !(G.bgFade > .02)) || (G.scr === 'clubhouse' && G.ch && !G.ch.moving && Math.abs(G.ch.x - G.ch.tgt) < .5)) { G.aimMoved = false; return; } }
+  G.mustDraw = false;
+  G.aimMoved = false; billSprite.budget = save.settings.perf ? 2 : (G.camMoveT || 0) > 0 && G.scr === 'game' ? 3 : 6; /* fewer new tree sizes built per frame while the camera is moving */
+  { /* how much the camera moved since last frame: drives the lower-detail ground while moving */
+    const pc = render.pc || (render.pc = {}), mv = Math.abs(CAM.x - (pc.x || 0)) + Math.abs(CAM.y - (pc.y || 0)) + Math.abs(CAM.z - (pc.z || 0)) * 2 + Math.abs(CAM.yaw - (pc.yaw || 0)) * 40 + Math.abs(CAM.pitch - (pc.pitch || 0)) * 40;
+    pc.x = CAM.x; pc.y = CAM.y; pc.z = CAM.z; pc.yaw = CAM.yaw; pc.pitch = CAM.pitch; const now = performance.now();
+    if (mv > .06) G.camMoveT = .35; else if (G.camMoveT > 0) G.camMoveT -= Math.min(.1, (now - (pc.t || now)) / 1000); pc.t = now; }
+  fpsMeter();
+  if (G.scr !== 'snap' && !!SHARP_SCR[G.scr] !== !!G.sharpOn) { G.sharpOn = !!SHARP_SCR[G.scr]; applyRes(); }
   if (G.shake > 0) G.shake -= 1 / 60;
   ctx.setTransform(RES, 0, 0, RES, G.shake > 0 ? Math.round((Math.random() - .5) * 6 * G.shake) * RES : 0, G.shake > 0 ? Math.round((Math.random() - .5) * 6 * G.shake) * RES : 0); ctx.imageSmoothingEnabled = false; DC = ctx; PXR = RES;
   HD = save.settings.hd !== false;
@@ -5606,6 +5888,7 @@ function render() {
   if (G.scr === 'pool' && G.pool) { try { drawPool(); } finally { PXR = 1; } return; }
   if (G.scr === 'darts' && G.darts) { try { drawDarts(); } finally { PXR = 1; } return; }
   if (G.scr === 'casino' && G.cas) { try { drawCasinoBg(); } finally { PXR = 1; } return; }
+  if (G.scr === 'spoffice' && G.sp) { try { drawSponsorOffice(); } finally { PXR = 1; } return; }
   if ((G.scr === 'office' && G.of) || (G.scr === 'flight' && G.fl)) { try { if (G.scr === 'office') drawOffice(); else drawFlight(); } finally { PXR = 1; } return; }
   try { renderFrame(); } finally { PXR = 1; }
   /* if this device struggles, quietly drop the ground back to 1x (characters stay sharp) */
@@ -5617,8 +5900,10 @@ function render() {
      already blurred. */
   const ms = performance.now() - t0, now = performance.now();
   if (G.scr === 'game' && !G.noAutoLow) { G.rms = (G.rms || ms) * .93 + ms * .07; G.gqT = G.gqT || now;
-    if (G.rms > 24 && now - G.gqT > 1500) { G.gqT = now; G.rms = 16; if (!G.fxOff) G.fxOff = true; else if ((G.gq || 2) > 1) G.gq = (G.gq || 2) === 2 ? 1.5 : 1; else if (G.rms > 0 && ms > 40 && RES > 2) applyRes(2); }
-    else if (G.rms < 14 && now - G.gqT > 4000) { G.gqT = now; if (RES < G.resWant) applyRes(); else if ((G.gq || 2) < 2) G.gq = G.gq === 1 ? 1.5 : 2; else if (G.fxOff && G.rms < 10) G.fxOff = false; } }
+    /* only the ground detail steps (2 -> 1.5 -> 1), and slowly back up; the colour grade and canvas size never switch
+       mid-round, because each switch shows as a flash */
+    if (G.rms > 24 && now - G.gqT > 2000 && (G.gq || 2) > 1) { G.gqT = now; G.rms = 16; G.gq = (G.gq || 2) === 2 ? 1.5 : 1; }
+    else if (G.rms < 11 && now - G.gqT > 12000 && (G.gq || 2) < 2) { G.gqT = now; G.gq = G.gq === 1 ? 1.5 : 2; } }
   else if (G.scr !== 'game') { G.mms = (G.mms || ms) * .93 + ms * .07; G.mqT = G.mqT || now;
     if (G.mms > 26 && now - G.mqT > 1500) { G.mqT = now; G.gqMenu = 1; } else if (G.mms < 12 && now - G.mqT > 5000) { G.mqT = now; G.gqMenu = 1.5; } }
 }
@@ -5642,12 +5927,13 @@ function renderFrame_() {
     const wpx = (tr.r * 2 + 2) * p.s; if (p.x < -wpx || p.x > VW + wpx || fa <= 0 || tr.h * p.s * PXR < 2.5) continue;
     if (tr.type === 'hill' && G.b && ingame && Math.hypot(tr.x - G.b.x, tr.y - G.b.y) < tr.r + 2) continue; /* never draw a hummock over your own ball */
     /* far away in dense woods, every second (then third) tree is enough: they overlap anyway, and it halves the draw calls */
-    if (dense && p.d > 150 && tr.type !== "hill") { /* far away in dense woods draw a thinning share; each tree has a fixed rank so the set is nested and they fade, not pop */
+    const thinD = save.settings.perf ? 95 : 150;
+    if ((dense || save.settings.perf) && p.d > thinD && tr.type !== "hill") { /* far away in dense woods draw a thinning share; each tree has a fixed rank so the set is nested and they fade, not pop */
       if (tr.rk === undefined) { const v = Math.sin(tr.x * 12.9898 + tr.y * 78.233) * 43758.5453; tr.rk = v - Math.floor(v); }
-      const keep = 150 / p.d - tr.rk; if (keep < -.07) continue; if (keep < 0) fa *= 1 + keep / .07; }
+      const keep = thinD / p.d - tr.rk; if (keep < -.07) continue; if (keep < 0) fa *= 1 + keep / .07; }
     items.push({ d: p.d, f: () => {
       /* edges are rounded independently so the sprite never jitters a pixel wider or narrower as the camera glides */
-      const lv = spriteLevel(p.s, tr.h < 3 ? 40 : 24), sp = billSprite(tr, h.course, lv), sc = p.s / lv, x0 = RN(p.x - sp.ax * sc), y0 = RN(p.y - sp.ay * sc), dw = Math.max(1 / PXR, RN(p.x + (sp.w - sp.ax) * sc) - x0), dh = Math.max(1 / PXR, RN(p.y + (sp.h - sp.ay) * sc) - y0);
+      const lv = spriteLevel(p.s, tr.h < 3 ? 40 : 24), sp = billSprite(tr, h.course, lv), sc = p.s / sp.S, x0 = RN(p.x - sp.ax * sc), y0 = RN(p.y - sp.ay * sc), dw = Math.max(1 / PXR, RN(p.x + (sp.w - sp.ax) * sc) - x0), dh = Math.max(1 / PXR, RN(p.y + (sp.h - sp.ay) * sc) - y0);
       /* contact shadow at the base */
       if (p.d < 130) { const rx = Math.max(1, tr.r * .55 * p.s), ry = Math.max(1, rx * .28); DC.globalAlpha = (tr.h < 1 ? .18 : .32) * fa; pDisc(p.x, p.y, 1, '#000'); if (HD) { DC.imageSmoothingEnabled = true; DC.drawImage(shadowBlob(), p.x - rx * 1.25, p.y - ry * 1.25, rx * 2.5, ry * 2.5); } else { DC.fillStyle = '#0b1408'; for (let yy = -ry; yy <= ry; yy++) { const ww = rx * Math.sqrt(1 - (yy / ry) ** 2); DC.fillRect(RN(p.x - ww), RN(p.y + yy), RN(ww * 2), 1); } } DC.globalAlpha = 1; }
       const block = aimish && G.view === 'golfer' && p.d < golfD + 1.5 && tr.h > 2.5 && x0 < CX + 70 && x0 + dw > CX - 70;
@@ -5655,7 +5941,7 @@ function renderFrame_() {
       const wf = ingame ? Math.min(1.5, (G.wind.mph || 0) / 16) : 0, amp = p.s * (tr.h / 10) * (.06 + .42 * wf) * (.75 + .25 * Math.sin(G.t * .45 + tr.x * .07)), sway = amp * Math.sin(G.t * (1.1 + wf * 1.3) + tr.x * .31 + tr.y * .17) + amp * wf * .6 * (G.wind.x * CAM.R[0] + G.wind.y * CAM.R[1] >= 0 ? 1 : -1);
       /* light from the other side: use a mirrored copy of the sprite (cached) rather than flipping the canvas per tree */
       const fog = fogAt(p.d), fogIn = fog > .05 && !block, img2 = fogIn ? fogSprite(sp, haze, fog) : img, X0 = flipT ? 2 * RN(p.x) - x0 - dw : x0, im2 = flipT ? flipped(img2) : img2;
-      if (ingame && tr.h > 1.5 && Math.abs(sway) >= .25 && dh > 24 && p.d < 120) {
+      if (ingame && !(G.camMoveT > 0) && tr.h > 1.5 && Math.abs(sway) >= .25 && dh > 24 && p.d < 120) { /* bending sway is sliced into strips; skipped while the camera moves (you cannot see it then) */
         const N = Math.min(4, Math.max(3, Math.round(dh / 12 * PXR))), sh = sp.cv.height / N;
         for (let i = 0; i < N; i++) { const f = 1 - (i + .5) / N, off = RN(sway * f * f), yy = RN(y0 + dh * i / N), hh = RN(y0 + dh * (i + 1) / N) - yy; DC.drawImage(im2, 0, sh * i, sp.cv.width, sh, X0 + off, yy, dw, hh); }
       } else DC.drawImage(im2, X0, y0, dw, dh);
@@ -5692,6 +5978,11 @@ function renderFrame_() {
       const s = p.s; pRect(p.x - s * .05, p.y - s * 1.1, Math.max(.6, s * .1), s * 1.1, '#5b4130'); pRect(p.x - s * .42, p.y - s * 1.35, s * .84, s * .42, '#2f4a35'); pRect(p.x - s * .36, p.y - s * 1.3, s * .72, s * .32, '#3d6b48'); if (s > 6) { DC.fillStyle = '#f2ead2'; DC.font = `700 ${Math.round(s * .38)}px "Barlow Condensed"`; DC.textAlign = 'center'; DC.fillText(String(h.idx + 1), p.x, p.y - s * 1.06); DC.textAlign = 'left'; } } }); }
     G.nStatic = items.length; addPeople(items);
     const b = G.b;
+    /* rolled in: the ball trickles over the last bit of lip to the middle of the cup, then drops out of sight */
+    if (b && b.st === 'holed' && G.sink && G.t - G.sink.t0 < .6) { const S = G.sink, u = (G.t - S.t0) / .6, roll = Math.min(1, u / .5), e = 1 - (1 - roll) * (1 - roll), drop = clamp((u - .38) / .62, 0, 1);
+      const bx = S.x + (h.pin.x - S.x) * e, by = S.y + (h.pin.y - S.y) * e, p = proj(CAM, bx, by, 0), pc = proj(CAM, h.pin.x, h.pin.y, 0);
+      if (p && pc) items.push({ d: p.d - .02, f: () => { const r = Math.max(1, .045 * p.s), lip = pc.y + Math.max(.6, CUP_R * pc.s * .32); DC.save(); DC.beginPath(); DC.rect(p.x - r * 3, p.y - r * 5, r * 6, lip - (p.y - r * 5)); DC.clip();
+        const yy = p.y - r + drop * drop * r * 2.4; pDisc(p.x, yy, r + .7, '#1b1b1b'); pDisc(p.x, yy, r, ballDef().col); if (r > 2) pDisc(p.x - r * .35, yy - r * .35, r * .3, '#ffffff'); DC.restore(); } }); }
     if (b && b.st !== 'holed' && G.phase !== 'holed' && !b.sunk && G.phase !== 'travel') {
       const rz = (b.z || 0) - groundZ(h, b.x, b.y), p = proj(CAM, b.x, b.y, rz);
       if (p) items.push({ d: p.d - .01, f: () => { const r = Math.max(1, .045 * p.s); pDisc(p.x, p.y - r, r + .7, '#1b1b1b'); pDisc(p.x, p.y - r, r, ballDef().col); if (r > 2) pDisc(p.x - r * .35, p.y - r * 1.35, r * .3, '#ffffff'); } });
@@ -5710,7 +6001,7 @@ function renderFrame_() {
   }
   if (pinOut && G.phase !== 'flight') { const p = proj(CAM, h.pin.x, h.pin.y, 0); if (p && p.y > 30) { const ft = dFt(dist2pin()) + ' ' + uFT(); DC.font = '700 12px "Barlow Condensed"'; DC.textAlign = 'center'; DC.fillStyle = '#15110d'; DC.fillText(ft, Math.round(p.x) + 1, Math.round(p.y) - 7); DC.fillStyle = '#ffffff'; DC.fillText(ft, Math.round(p.x), Math.round(p.y) - 8); DC.textAlign = 'left'; } }
   if (ingame) { drawTracer(); for (const p of G.parts) { const q = proj(CAM, p.x, p.y, p.z); if (q) pRect(q.x, q.y, Math.max(1, q.s * .08), Math.max(1, q.s * .08), p.c); } }
-  for (const p of G.sparts) { ctx.fillStyle = p.c; ctx.fillRect(Math.round(p.x), Math.round(p.y), 2, 1 + (Math.sin(G.t * 9 + p.w) > 0 ? 1 : 0)); }
+  if (ingame) for (const p of G.sparts) { ctx.fillStyle = p.c; ctx.fillRect(Math.round(p.x), Math.round(p.y), 2, 1 + (Math.sin(G.t * 9 + p.w) > 0 ? 1 : 0)); }
   if (ingame) drawWeather(h);
   drawGrade(h);
   if (ingame && G.phase === 'travel' && G.travel) { /* cinema bars for the cart ride, with the caddie's chat as a caption */
@@ -5755,7 +6046,7 @@ function addPeople(items) {
     if (q && tr.walk) { /* no cart: you walk to your ball pushing the trolley, your caddie (if you have one) beside you with the bag */
       const fwd = Math.cos(tr.a) * CAM.R[0] + Math.sin(tr.a) * CAM.R[1], kk = q.s * 1.8 / 66, sg = fwd < 0 ? -1 : 1, cad = caddieDef(), wt = tr.t;
       const walker = (g2, X2, Y2, k2, ph, bag) => charFx(X2, Y2, k2, () => { DC.save(); if (sg < 0) { DC.translate(X2, 0); DC.scale(-1, 1); DC.translate(-X2, 0); }
-        if (bag) { const S2 = (u, v) => [X2 + u * k2, Y2 - v * k2]; const [a1, b1] = S2(-6, 22), [a2, b2] = S2(-1, 58); pLine(a1, b1, a2, b2, 7 * k2, shadeHex(bag, .8)); pLine(a1, b1, a2, b2, 5.6 * k2, bag); for (let i = 0; i < 3; i++) { const [c1, d1] = S2(-1 + i * 1.6, 58), [c2, d2] = S2(-.5 + i * 1.8, 64); pLine(c1, d1, c2, d2, .8 * k2, '#b0bec5'); pDisc(c2, d2, 1.3 * k2, '#263238'); } }
+        if (bag) { const S2 = (u, v) => [X2 + u * k2, Y2 - v * k2], sb = staffBag(), bc = sb ? sb.body : bag; const [a1, b1] = S2(-6, 22), [a2, b2] = S2(-1, 58); pLine(a1, b1, a2, b2, 7 * k2, shadeHex(bc, .8)); pLine(a1, b1, a2, b2, 5.6 * k2, bc); if (sb) { const [m1, n1] = S2(-1.8, 51), [m2, n2] = S2(-1.2, 55.5); pLine(m1, n1, m2, n2, 5.8 * k2, sb.band); const [t1, u1] = S2(-3.6, 38); brandText(sb.name, t1, u1, 3 * k2, sb.text, Math.atan2(b2 - b1, a2 - a1) + Math.PI); } for (let i = 0; i < 3; i++) { const [c1, d1] = S2(-1 + i * 1.6, 58), [c2, d2] = S2(-.5 + i * 1.8, 64); pLine(c1, d1, c2, d2, .8 * k2, '#b0bec5'); pDisc(c2, d2, 1.3 * k2, '#263238'); } }
         else { const S2 = (u, v) => [X2 + u * k2, Y2 - v * k2], [tx2, ty2] = S2(14, 0); drawTrolley(tx2, ty2, k2); }
         drawGolferSide(g2, X2, Y2, k2, Object.assign(walkPose(wt + ph, 5.6), bag ? {} : { hands: [11, 33], handsF: [11.5, 33.5] }), {}); DC.restore(); });
       items.push({ d: q.d, f: () => walker(golfer(), q.x, q.y, kk, 0, null) });
@@ -5777,7 +6068,7 @@ function addPeople(items) {
       const pose = c.stage === 'play' && c.id ? frontPose(team ? c.id + '_g' : c.id, c.t) : c.stage === 'card' ? frontPose(c.d > 1 ? 'cardBad' : c.d === 1 ? 'cardMeh' : 'cardGood', c.t) : (c.d > 1 ? frontPose('sad', c.t) : c.d === 1 ? frontPose('meh', c.t) : frontPose('idle', G.t));
       const R0 = CAM.R, gap = cd ? (team ? .74 : 1.15) : 0, gpS = proj(CAM, G.gpos.x - R0[0] * gap, G.gpos.y - R0[1] * gap, 0) || p;
       items.push({ d: p.d, f: () => { const fx2 = () => drawGolferFront(g, gpS.x + (pose.mx || 0) * k, gpS.y, k, pose); if (pose.shot || pose.twinkle || pose.flash || pose.rot) fx2(); else charFx(gpS.x + (pose.mx || 0) * k, gpS.y, k, fx2); } });
-      if (cd) { const q2 = proj(CAM, G.gpos.x + R0[0] * gap, G.gpos.y + R0[1] * gap, 0); if (q2) { const cp = team ? frontPose(c.id + '_c', c.t) : c.d > 1 ? frontPose('cconsole', G.t) : c.d === 1 ? frontPose('bag', G.t) : c.stage === 'play' && c.t < 1.3 ? frontPose('cclap', c.t) : frontPose('bag', G.t); items.push({ d: q2.d + (cp.front ? -.6 : .02), f: () => charFx(q2.x + (cp.mx || 0) * k, q2.y, k * .97, () => drawGolferFront(cd, q2.x + (cp.mx || 0) * k, q2.y, k * .97, cp, team || c.stage !== 'card' ? {} : { bag: cd.c.b })) }); } }
+      if (cd) { const q2 = proj(CAM, G.gpos.x + R0[0] * gap, G.gpos.y + R0[1] * gap, 0); if (q2) { const cp = team ? frontPose(c.id + '_c', c.t) : c.d > 1 ? frontPose('cconsole', G.t) : c.d === 1 ? frontPose('bag', G.t) : c.stage === 'play' && c.t < 1.3 ? frontPose('cclap', c.t) : frontPose('bag', G.t); items.push({ d: q2.d + (cp.front ? -.6 : .02), f: () => charFx(q2.x + (cp.mx || 0) * k, q2.y, k * .97, () => drawGolferFront(cd, q2.x + (cp.mx || 0) * k, q2.y, k * .97, cp, team || c.stage !== 'card' ? {} : { bag: cd.c.b, bagBrand: staffBag() })) }); } }
     }
     else {
       const st = { putt: club.putter, ballU: spot.off * 36.7, len: club.len, back: 0, down: 0, follow: 0, t: G.t };
@@ -5815,7 +6106,7 @@ function addPeople(items) {
   const cad = caddieDef(), lie = terrainAt(G.h, E0.x, E0.y);
   if (cad && !(ph === 'holed' && G.cele && G.cele.stage !== 'drop')) {
     const cs = entSpot(E0, 'cad', [[-3.2, 1.9], [-3.6, 0], [-2.6, 3.2], [3.4, 1.6], [-4.4, -1.5], [3.8, -1]], false), q = proj(CAM, cs.x, cs.y, 0);
-    if (q) { items.push({ d: q.d + .05, f: () => ell(q.x + q.s * .12, q.y, Math.max(2, q.s * .5), Math.max(1, q.s * .5 * clamp(CAM.z / q.d, .2, .5)), '#060b05', .3) }); items.push({ d: q.d, f: () => charFx(q.x, q.y, q.s * 1.75 / 66, () => drawGolferFront(cad, q.x, q.y, q.s * 1.75 / 66, cadPose(), { bag: cad.c.b })) }); }
+    if (q) { items.push({ d: q.d + .05, f: () => ell(q.x + q.s * .12, q.y, Math.max(2, q.s * .5), Math.max(1, q.s * .5 * clamp(CAM.z / q.d, .2, .5)), '#060b05', .3) }); items.push({ d: q.d, f: () => charFx(q.x, q.y, q.s * 1.75 / 66, () => drawGolferFront(cad, q.x, q.y, q.s * 1.75 / 66, cadPose(), { bag: cad.c.b, bagBrand: staffBag() })) }); }
   }
   if (ph === 'guest' && G.guest) { const g = G.guest, club = g.put ? CLUBS.find(c => c.putter) : clubById(g.shot.kind === 'tee' && G.h.par > 3 ? 'dr' : g.L < 90 ? 'pw' : '7i'), sp = golferSpot(g.ball.x, g.ball.y, g.aim, club), p = proj(CAM, sp.x, sp.y, 0), t = g.t;
     if (p) { const k = p.s * 1.8 / 66, sm = x => x * x * (3 - 2 * x), t0 = g.t0;
@@ -5996,25 +6287,21 @@ function rangeBuild(items) {
    the mist thickens toward the horizon, and rain falls in three depth layers of thin slanted streaks with ring splashes */
 function drawWeather(h) {
   const w = G.wx; if (!w || !w.cloud) return;
-  ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = mixHex('#ffffff', w.rain ? '#c3cad1' : '#d3d8dc', Math.min(1, w.cloud)); ctx.fillRect(0, 0, VW, VH); ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = `rgba(${w.rain ? '90,100,112' : '120,128,136'},${(Math.min(1, w.cloud) * (w.rain ? .2 : .13)).toFixed(3)})`; ctx.fillRect(0, 0, VW, VH); /* overcast: a plain see-through wash (cheaper than a multiply blend) */
   if (!w.rain) return;
   const hy = CY - Math.tan(CAM.pitch) * FOC, dt = G.rainDt || 0;
   { const g = ctx.createLinearGradient(0, Math.max(0, hy - 60), 0, VH); g.addColorStop(0, `rgba(205,214,222,${.16 + .06 * w.rain})`); g.addColorStop(.35, `rgba(205,214,222,${.07 + .03 * w.rain})`); g.addColorStop(1, 'rgba(205,214,222,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH); }
-  const want = [0, 180, 380, 560][w.rain], R = G.rainP = G.rainP || [], side = (G.wind.x * CAM.R[0] + G.wind.y * CAM.R[1]) / 30;
-  while (R.length < want) R.push({ x: Math.random() * VW, y: Math.random() * VH, z: Math.random() });
-  R.length = want;
-  const layers = [[], [], []];
-  for (const d of R) {
-    const sp = (300 + 600 * d.z) * dt; d.y += sp; d.x += side * sp;
-    if (d.y > VH + 10) { d.y = -12 - Math.random() * 40; d.x = Math.random() * (VW + 60) - 30; d.z = Math.random(); if (Math.random() < .45 && G.splash) G.splash.push({ x: Math.random() * VW, y: hy + 6 + Math.random() * (VH - hy - 6), t: 0 }); }
-    layers[d.z < .4 ? 0 : d.z < .8 ? 1 : 2].push(d);
-  }
-  ctx.lineCap = 'round';
-  layers.forEach((L, li) => { const len = [5, 9, 15][li]; ctx.strokeStyle = `rgba(226,234,240,${[.16, .26, .36][li]})`; ctx.lineWidth = [.45, .6, .8][li]; ctx.beginPath();
-    for (const d of L) { ctx.moveTo(d.x, d.y); ctx.lineTo(d.x + side * len, d.y + len); } ctx.stroke(); });
+  /* rain: three pre-drawn layers of slanted streaks, scrolled down the screen at different speeds (a dozen image
+     copies a frame instead of hundreds of separate strokes) */
+  const side = clamp((G.wind.x * CAM.R[0] + G.wind.y * CAM.R[1]) / 30, -.5, .5), sk = Math.round(side * 10) / 10, key = VW + 'x' + RES + '|' + sk + '|' + w.rain;
+  if (!drawWeather.L || drawWeather.k !== key) { drawWeather.k = key; drawWeather.L = [0, 1, 2].map(li => { const c = mkCanvas(Math.ceil(VW * RES), Math.ceil(VH * RES)), x = c.getContext('2d'); x.scale(RES, RES); const n = [0, 70, 130, 190][w.rain] * [1, .8, .55][li], len = [5, 9, 15][li];
+    x.strokeStyle = `rgba(226,234,240,${[.16, .26, .36][li]})`; x.lineWidth = [.45, .6, .8][li]; x.beginPath(); for (let i = 0; i < n; i++) { const px = Math.random() * VW, py = Math.random() * VH; x.moveTo(px, py); x.lineTo(px + sk * len, py + len); } x.stroke(); return c; }); }
+  G.rainY = (G.rainY || [0, 0, 0]).map((y, li) => (y + (300 + 300 * li) * dt) % VH);
+  drawWeather.L.forEach((c, li) => { const y = G.rainY[li], xo = ((sk * y) % VW + VW) % VW; for (const dx of [xo - VW, xo]) for (const dy of [y - VH, y]) ctx.drawImage(c, dx, dy, VW, VH); });
+  if (G.splash && Math.random() < .35 * w.rain) G.splash.push({ x: Math.random() * VW, y: hy + 6 + Math.random() * (VH - hy - 6), t: 0 });
   G.splash = (G.splash || []).filter(s2 => (s2.t += dt) < .25);
   ctx.lineWidth = .5;
-  for (const s2 of G.splash) { const k2 = s2.t / .25, r = 1 + k2 * 4 * (s2.y - hy) / (VH - hy + 1); ctx.strokeStyle = `rgba(232,238,243,${.45 * (1 - k2)})`; ctx.beginPath(); ctx.ellipse(s2.x, s2.y, r, r * .3, 0, 0, 6.2832); ctx.stroke(); }
+  if (!save.settings.perf) for (const s2 of G.splash) { const k2 = s2.t / .25, r = Math.max(.3, 1 + k2 * 4 * (s2.y - hy) / (VH - hy + 1)); if (k2 >= 1) continue; ctx.strokeStyle = `rgba(232,238,243,${.45 * (1 - k2)})`; ctx.beginPath(); ctx.ellipse(s2.x, s2.y, r, r * .3, 0, 0, 6.2832); ctx.stroke(); }
   ctx.globalAlpha = 1;
 }
 function rrect(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
@@ -6064,6 +6351,7 @@ function drawMap(h) {
 /* ---------- input ---------- */
 function canvasPt(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * VW, y: (e.clientY - r.top) / r.height * VH }; }
 function aimAt(e) {
+  G.aimMoved = true;
   const s = canvasPt(e); let p;
   if (G.view === 'map') { const m = mapRect(G.h); p = { x: (s.x - m.x) / m.sc, y: (s.y - m.y) / m.sc }; }
   else p = screenToGround(CAM, s.x, Math.max(s.y, CY - Math.tan(CAM.pitch) * FOC + 3));
@@ -6140,19 +6428,23 @@ function hydrate(root) {
   root.querySelectorAll('canvas[data-spr]').forEach(c => {
     const kind = c.dataset.spr, id = c.dataset.id, x = c.getContext('2d');
     DC = x; x.imageSmoothingEnabled = false;
-    const hi = kind === 'golfer' || kind === 'celeb' || kind === 'caddie' || kind === 'cart', up = (w, h) => { c.width = w * 4; c.height = h * 4; x.setTransform(4, 0, 0, 4, 0, 0); x.imageSmoothingEnabled = true; PXR = 4; HD = true; c.style.imageRendering = 'auto'; };
+    /* every sprite is drawn at the size it actually shows on screen (times the screen's pixel ratio), so nothing is
+       stretched: no blur, no blocky pixels */
+    const fit = baseW => { const r = c.getBoundingClientRect(), px = (r.width || baseW) * (devicePixelRatio || 1); return clamp(Math.ceil(px / baseW), 2, 8); };
+    const sharp = (w, h) => { const k = fit(w); c.width = Math.round(w * k); c.height = Math.round(h * k); x.setTransform(k, 0, 0, k, 0, 0); x.imageSmoothingEnabled = true; PXR = k; HD = true; c.style.imageRendering = 'auto'; return k; };
+    const hi = true, up = (w, h) => sharp(w, h);
     if (kind === 'golfer') { up(44, 84); drawGolferFront(golferById(id), 22, 81, 1, frontPose('idle', 0)); }
     else if (kind === 'celeb') { up(60, 110); const g = golferById(save.golfer), P = frontPose(id, CELEB_T[id] || .4); drawGolferFront(g, 30, id === 'flip' ? 76 : 106, 1, P); }
-    else if (kind === 'caddie') { up(60, 100); const cd = CADDIES.find(k => k.id === id); drawGolferFront(cd, 24, 97, 1, frontPose('bag', 0), { bag: cd.c.b }); }
+    else if (kind === 'caddie') { up(60, 100); const cd = CADDIES.find(k => k.id === id); drawGolferFront(cd, 24, 97, 1, frontPose('bag', 0), { bag: cd.c.b, bagBrand: save.caddie === cd.id ? staffBag() : null }); }
     else if (kind === 'cart') { up(104, 76); const ct = CARTS.find(k => k.id === id); if (ct.style === 'walk') { drawTrolley(68, 70, 1); drawGolferFront(golferById(save.golfer), 36, 73, .85, frontPose('idle', 0)); } else drawCart(ct, 52, 70, ct.style === 'maybach' ? .86 : 1.05, false, { driver: golferById(save.golfer) }); }
-    else if (kind === 'ball') { c.width = 30; c.height = 30; drawBallIcon(BALLS.find(k => k.id === id), 14, 14, 11); }
-    else if (kind === 'ballbig') { c.width = 160; c.height = 100; drawBallHero(BALLS.find(k => k.id === id), 160, 100); }
-    else if (kind === 'club') { c.width = 48; c.height = 48; drawClubIcon(clubById(id), +(c.dataset.lvl || 0)); }
-    else if (kind === 'icon') { c.width = 64; c.height = 64; x.imageSmoothingEnabled = true; drawItemIcon(id); }
-    else if (kind === 'jetcard') { const W2 = id === 'b' ? 340 : 52, H2 = Math.round(W2 * .63); c.width = W2; c.height = H2; x.imageSmoothingEnabled = true; drawJetCard(x, W2, H2); }
-    else if (kind === 'korucard') { const W2 = id === 'b' ? 340 : 52, H2 = Math.round(W2 * .63); c.width = W2; c.height = H2; x.imageSmoothingEnabled = true; drawKoruCard(x, W2, H2); }
-    else if (kind === 'food') { c.width = 64; c.height = 64; const [cid, i] = id.split(':'); drawFoodIcon(chStyle(cid).menu[+i]); }
-    else if (kind === 'trophy') { c.width = 288; c.height = 348; x.setTransform(3, 0, 0, 3, 0, 0); x.imageSmoothingEnabled = true; c.style.imageRendering = 'auto'; const a = ACH.find(k => k.id === id); drawTrophy(a.shape, a.tier, !save.ach[id]); x.setTransform(1, 0, 0, 1, 0, 0); }
+    else if (kind === 'ball') { sharp(30, 30); drawBallSmooth(BALLS.find(k => k.id === id), 15, 14.5, 11.5); }
+    else if (kind === 'ballbig') { sharp(160, 100); drawBallHeroSmooth(BALLS.find(k => k.id === id), 160, 100); }
+    else if (kind === 'club') { sharp(48, 48); drawClubIcon(clubById(id), +(c.dataset.lvl || 0)); }
+    else if (kind === 'icon') { sharp(64, 64); drawItemIcon(id); }
+    else if (kind === 'jetcard') { const W2 = id === 'b' ? 340 : 52, H2 = Math.round(W2 * .63); const k = fit(W2); c.width = W2 * k; c.height = H2 * k; x.setTransform(1, 0, 0, 1, 0, 0); x.imageSmoothingEnabled = true; c.style.imageRendering = 'auto'; drawJetCard(x, W2 * k, H2 * k); }
+    else if (kind === 'korucard') { const W2 = id === 'b' ? 340 : 52, H2 = Math.round(W2 * .63); const k = fit(W2); c.width = W2 * k; c.height = H2 * k; x.setTransform(1, 0, 0, 1, 0, 0); x.imageSmoothingEnabled = true; c.style.imageRendering = 'auto'; drawKoruCard(x, W2 * k, H2 * k); }
+    else if (kind === 'food') { sharp(64, 64); const [cid, i] = id.split(':'); drawFoodIcon(chStyle(cid).menu[+i]); }
+    else if (kind === 'trophy') { const k3 = Math.max(3, fit(96)); c.width = 96 * k3; c.height = 116 * k3; x.setTransform(k3, 0, 0, k3, 0, 0); x.imageSmoothingEnabled = true; c.style.imageRendering = 'auto'; const a = ACH.find(k => k.id === id); drawTrophy(a.shape, a.tier, !save.ach[id]); x.setTransform(1, 0, 0, 1, 0, 0); }
     DC = ctx; PXR = 1; if (hi) x.setTransform(1, 0, 0, 1, 0, 0);
     c.style.height = 'auto';
   });
@@ -6178,6 +6470,8 @@ function pumpToast() {
 }
 function updCoins() { document.querySelectorAll('.coinsVal').forEach(e => e.textContent = fmt(save.coins)); }
 function checkAch() {
+  save.career = save.career || {}; for (let i = 1; i < CAREER.length; i++) { const st = CAREER[i]; if (save.career[st.id] || !st.ok(save)) continue; save.career[st.id] = Date.now(); save.coins += st.coins; save.stats.coinsEarned += st.coins; if (G.summary && G.summary.collect) G.summary.trophy = (G.summary.trophy || 0) + st.coins;
+    toast(`<b style="color:#f5c451">CAREER</b><br>You are now a <b>${st.name}</b> <span class="coin"></span>+${fmt(st.coins)}`); SFX.play('trophy'); }
   for (const a of ACH) {
     if (save.ach[a.id] || !a.t(save)) continue;
     save.ach[a.id] = Date.now(); save.coins += a.coins; save.stats.coinsEarned += a.coins; if (G.summary && G.summary.collect) G.summary.trophy = (G.summary.trophy || 0) + a.coins;
@@ -6326,7 +6620,7 @@ function pauseMenu() {
   </div>`);
 }
 function itemUses() {
-  if (!G.r || G.phase !== 'aim') return ITEMS.map(it => ({ it, ok: false, why: 'Only before a shot' }));
+  if (!G.r || G.phase !== 'aim') return ITEMS.map(it => { const m = it.id === 'mull' && mullPhase() && G.snap && G.mullOK && G.mode === 'round', w = m ? ((save.items.mull || 0) <= 0 ? 'None left (buy in the Pro Shop)' : '') : 'Only before a shot'; return { it, ok: !w, why: w }; });
   const why = { mull: !G.snap ? 'No shot to replay yet' : !G.mullOK ? 'Only right after a shot' : '', gum: G.club.putter ? 'Not for putts' : G.gum ? 'Already chewing' : '', gimme: G.lie !== T.GREEN || dist2pin() * 3 > 6 ? 'Only inside 6 ft on the green' : '', bar: G.r.energy >= 100 ? 'Energy is full' : '', drink: G.r.energy >= 100 ? 'Energy is full' : '' };
   return ITEMS.map(it => { const w = (save.items[it.id] || 0) <= 0 ? 'None left (buy in the Pro Shop)' : why[it.id]; return { it, ok: !w, why: w }; });
 }
@@ -6592,7 +6886,7 @@ function hideBanner() { const b = $('banner'); if (b) b.style.display = 'none'; 
 
 /* ---------- game enter / exit ---------- */
 function enterGame() { G.scr = 'game'; UI.innerHTML = ''; HUD.classList.remove('hidden'); closeModal(); }
-function exitGame() { SFX.ambStop(); HUD.classList.add('hidden'); HUD.innerHTML = ''; G.h = null; G.b = null; G.phase = 'idle'; G.scr = 'menu'; G.travel = null; newBg(); }
+function exitGame() { SFX.ambStop(); HUD.classList.add('hidden'); HUD.innerHTML = ''; G.h = null; G.b = null; G.parts = []; G.sparts = []; G.trail = []; G.phase = 'idle'; G.scr = 'menu'; G.travel = null; newBg(); }
 function startRound(cfg) {
   cfg.n = Math.min(cfg.n, nHoles(courseById(cfg.courseId))); cfg.start = Math.max(0, Math.min(cfg.start || 0, nHoles(courseById(cfg.courseId)) - cfg.n));
   const dif = cfg.diff || save.settings.diff, rt = rating(cfg.courseId, cfg.tee, dif, cfg.start, cfg.n), ch = courseHcp(save.hcp.index, rt, cfg.n);
@@ -6654,7 +6948,7 @@ SCR.title = () => {
       <div><span class="tag">GOLF TOUR · EST. 2026</span></div>
       <div class="dark pcard">
         <div class="pava">${sprTag('golfer', g.id, 26)}</div>
-        <div class="col" style="gap:calc(var(--u)*2.5)"><div><div class="pn">${esc(save.name)}</div><div class="u1 dimtxt">Playing as ${gName(g)}${cad ? ' · ' + cad.name.split(' ')[0] + ' on the bag' : ''}</div></div>
+        <div class="col" style="gap:calc(var(--u)*2.5)"><div><div class="pn">${esc(save.name)}</div>${mySponsor() ? `<div class="spby">Sponsored by <b>${mySponsor().name}</b> · <a class="splink" data-a="spOpen" data-v="${mySponsor().id}">office</a></div>` : ''}<div class="u1 dimtxt"><a class="splink" data-a="go" data-v="career">${CAREER[careerStage(save)].name}</a> · Playing as ${gName(g)}${cad ? ' · ' + cad.name.split(' ')[0] + ' on the bag' : ''}</div></div>${save.sponsorOffer && (!save.sponsor || save.sponsorOffer.id !== save.sponsor.id) ? `<button class="btn sm y spoffer" data-a="spOpen" data-v="${save.sponsorOffer.id}">${sponsorDef(save.sponsorOffer.id).name.toUpperCase()} WANTS TO SPONSOR YOU</button>` : ''}
           <div class="statchips"><div class="chip"><i>HANDICAP</i><b class="g">${fmtIdx(idx)}</b></div>${idx === null ? `<div class="chip"><i>TO GET ONE</i><b>${save.hcp.rounds.length}/3</b></div>` : ''}<div class="chip"><i>CLUBS</i><b>${save.members.length}</b></div><div class="chip"><i>TROPHIES</i><b>${nA}</b></div></div>
           <button class="btn sm b" data-a="go" data-v="hcpapp" style="align-self:flex-start">GOLF NZ APP${save.inbox.some(m => !m.read) ? ' <span class="dotn"></span>' : ''}</button></div>
       </div>
@@ -6665,7 +6959,7 @@ SCR.title = () => {
         <button class="btn ${r ? '' : 'y'}" data-a="go" data-v="setup">PLAY A ROUND</button>
         <div class="row"><button class="btn grow" data-a="go" data-v="events">EVENTS${save.tourn ? ' <span class="dotn"></span>' : ''}</button><button class="btn grow" data-a="go" data-v="practice">PRACTICE</button></div>
         <div class="row"><button class="btn b grow" data-a="go" data-v="shop">PRO SHOP</button><button class="btn b grow" data-a="go" data-v="board">PLAYER</button></div>
-        <div class="mini"><button class="btn g cas" data-a="openCasino">CASINO</button><button class="btn g" data-a="go" data-v="trophies">TROPHIES</button><button class="btn g" data-a="go" data-v="howto">HOW TO</button><button class="btn g" data-a="go" data-v="settings">SETTINGS</button></div>
+        <div class="mini"><button class="btn g cas" data-a="openCasino">CASINO</button><button class="btn g" data-a="go" data-v="career">CAREER</button><button class="btn g" data-a="openOnline">ONLINE</button><button class="btn g" data-a="go" data-v="trophies">TROPHIES</button><button class="btn g" data-a="go" data-v="howto">HOW TO</button><button class="btn g" data-a="go" data-v="settings">SETTINGS</button></div>
       </div>
     </div></div></div>`;
 };
@@ -6698,7 +6992,7 @@ SCR.hcpapp = () => {
     body = `<div class="appcard"><div class="apph">COURSE HANDICAP</div><div class="appmute">Strokes you get on each course, full round, Amateur difficulty.</div><table class="apptab"><tr><th>COURSE</th><th>CHAMP</th><th>MEMBER</th><th>FWD</th></tr>${rowsC}</table></div>`;
   }
   return `<div class="scr solid">${hdr('GOLF NZ APP')}<div class="grow" style="display:flex;justify-content:center;align-items:center"><div class="phone"><i class="pbtn pb1"></i><i class="pbtn pb2"></i><i class="pbtn pb3"></i><div class="pscreen"><div class="pstat"><span>${new Date().toLocaleTimeString('en-NZ', { timeZone: 'Pacific/Auckland', hour: 'numeric', minute: '2-digit', hour12: false })}</span><span class="island"></span><span>5G ▮▮▮</span></div>
-    <div class="ptop"><div class="papp">GOLF NZ</div><div class="pname">${esc(save.name)}</div><div class="psub">Member · ${save.members.length} club${save.members.length > 1 ? 's' : ''}</div></div>
+    <div class="ptop"><div class="papp">GOLF NZ</div><div class="pname">${esc(save.name)}</div>${mySponsor() ? `<div class="spby">Sponsored by <b>${mySponsor().name}</b></div>` : ''}<div class="psub">Member · ${save.members.length} club${save.members.length > 1 ? 's' : ''}</div></div>
     <div class="pbody">${body}</div>
     <div class="ptabs">${[['home', 'HOME'], ['scores', 'SCORES'], ['calc', 'COURSES'], ['inbox', 'INBOX' + (save.inbox.some(m => !m.read) ? ' ●' : '')]].map(([id, l]) => `<button class="${tab === id ? 'on' : ''}" data-a="appTab" data-v="${id}">${l}</button>`).join('')}</div><div class="phome"></div></div></div></div></div>`;
 };
@@ -6920,6 +7214,10 @@ SCR.board = () => {
   }
   return `<div class="scr solid">${hdr('PLAYER CARD · ' + esc(save.name))}<div class="tabs">${tabs}</div><div class="grow scroll">${body}</div></div>`;
 };
+SCR.career = () => { const cur = careerStage(save), nx = CAREER.find((st, k) => k && !(save.career || {})[st.id]);
+  return `<div class="scr solid">${hdr('CAREER')}<div class="grow scroll"><div class="careerwrap">
+    <div class="panel careerhead"><div><div class="u1 dimtxt">YOU ARE A</div><div class="u2 big">${CAREER[cur].name.toUpperCase()}</div></div>${nx ? `<div class="cnext"><div class="u1 dimtxt">NEXT</div><b>${nx.name}</b><div class="u1">${nx.how} · <span class="coin"></span>${fmt(nx.coins)}</div></div>` : '<div class="cnext"><b>Top of the game.</b></div>'}</div>
+    <div class="cladder">${CAREER.map((st, i) => { const done = i === 0 || !!(save.career || {})[st.id]; return `<div class="crung ${done ? 'done' : ''} ${i === cur ? 'cur' : ''}"><div class="cdot">${done ? '✓' : i + 1}</div><div class="grow"><b>${st.name}</b><div class="u1 dimtxt">${st.how}</div></div>${st.coins ? `<div class="crew">${done ? 'PAID' : `<span class="coin"></span>${fmt(st.coins)}`}</div>` : ''}</div>`; }).join('')}</div></div></div></div>`; };
 SCR.trophies = () => {
   const cat = SEL.trophyTab, list = ACH.filter(a => a.cat === cat);
   const count = t => ACH.filter(a => a.tier === t && save.ach[a.id]).length + '/' + ACH.filter(a => a.tier === t).length;
@@ -7005,7 +7303,7 @@ SCR.settings = () => {
     </div>
     <div class="col sgcol">
       <section class="sgrp"><h3>Sound</h3>${sw('sound', 'Sound effects')}${sw('music', 'Music')}</section>
-      <section class="sgrp"><h3>Display</h3>${sw('hd', 'Smooth graphics')}${sw('sharp', 'Sharp ground', 'Turn off if the game feels slow')}${sw('flyover', 'Hole flyovers')}
+      <section class="sgrp"><h3>Display</h3>${sw('hd', 'Smooth graphics')}${sw('sharp', 'Sharp ground', 'Turn off if the game feels slow')}${sw('flyover', 'Hole flyovers')}${sw('perf', 'Performance mode', 'Smoother on slower devices: a bit less detail on courses')}${sw('fps', 'Show frame rate', 'Shows FPS and the slowest frame, for checking lag')}
         ${seg('Shot tracer', [['red', 'Red', '#e5533d'], ['yellow', 'Yellow', '#f2cf3a'], ['white', 'White', '#f4f4f0'], ['blue', 'Blue', '#4a90e2']], st.tracer || 'red', 'tracer')}</section>
       <section class="sgrp"><h3>Save data</h3>
         <div class="strow"><div class="slab"><b>Move your progress</b><i>Saved in this browser${memOnly ? ' (storage is blocked, so only for this session)' : ''}</i></div><div class="sctl"><button class="sbtn" data-a="export">Export</button><button class="sbtn" data-a="import">Import</button></div></div>
@@ -7033,7 +7331,9 @@ SCR.summary = () => {
     <div class="panel" style="margin-bottom:calc(var(--u)*4)">${scorecardHTML(r, false)}</div>
     <div class="row" style="align-items:stretch">${cell('GROSS', S.total + ' (' + fmtPar(S.toPar) + ')', S.toPar < 0 ? 'red' : 'gold')}${S.net !== null ? cell('NET', S.net + ' (' + fmtPar(S.net - S.par) + ')', S.net < S.par ? 'red' : 'gold') : ''}${cell('FAIRWAYS', st.fir + '/' + st.firP)}${cell('GIR', st.gir + '/' + r.n)}${cell('PUTTS', st.putts)}${cell('COINS', '+' + fmt(r.coins))}</div>
     <div class="u1" style="margin-top:calc(var(--u)*3);line-height:1.7">${hc ? `HANDICAP: this round's differential <b>${hc.diff.toFixed(1)}</b> · index ${fmtIdx(hc.before)} → <b class="gold">${fmtIdx(hc.after)}</b>${hc.after === null ? ` (${save.hcp.rounds.length}/3 rounds)` : ''}` : 'Rounds of 1, 3 or 6 holes do not count for handicap.'}</div>
-    <div class="panel coinsum"><div class="u2">COINS EARNED</div>${(() => { const L = r.coinLog || {}, row = (l, v, why) => v ? `<tr><td>${l}</td><td class="dimtxt">${why}</td><td><b>+${fmt(v)}</b></td></tr>` : ''; return `<table class="lb">${row('HOLE SCORES', L.holes, 'pars, birdies and better pay most')}${row('HOLES PLAYED', L.played, '12 per hole, x course, tees and difficulty')}${row('BEAT YOUR ' + (S.net !== null ? 'HANDICAP' : 'PAR'), L.beat, S.beat ? 'by ' + S.beat + ' stroke' + (S.beat > 1 ? 's' : '') : '')}${row('PRIZE MONEY', L.prize, ev ? ev.E.name : '')}${row('TROPHIES', S.trophy, 'unlocked this round')}<tr><td><b>TOTAL</b></td><td></td><td><b class="gold">+${fmt((r.coins || 0) + (S.trophy || 0))}</b></td></tr></table>`; })()}</div></div>
+    <div class="panel coinsum"><div class="u2">COINS EARNED</div>${(() => { const L = r.coinLog || {}, row = (l, v, why) => v ? `<tr><td>${l}</td><td class="dimtxt">${why}</td><td><b>+${fmt(v)}</b></td></tr>` : ''; return `<table class="lb">${row('HOLE SCORES', L.holes, 'pars, birdies and better pay most')}${row('HOLES PLAYED', L.played, '12 per hole, x course, tees and difficulty')}${row('BEAT YOUR ' + (S.net !== null ? 'HANDICAP' : 'PAR'), L.beat, S.beat ? 'by ' + S.beat + ' stroke' + (S.beat > 1 ? 's' : '') : '')}${row('PRIZE MONEY', L.prize, ev ? ev.E.name : '')}${row('SPONSOR', L.sponsor, mySponsor() ? mySponsor().name + ' retainer' : 'retainer')}${row('TROPHIES', S.trophy, 'unlocked this round')}<tr><td><b>TOTAL</b></td><td></td><td><b class="gold">+${fmt((r.coins || 0) + (S.trophy || 0))}</b></td></tr></table>`; })()}</div></div>
+    ${S.spNews ? `<div class="panel spcall ${S.spNews.kind}"><div><div class="u2">${S.spNews.kind === 'drop' ? 'SPONSOR LOST' : S.spNews.kind === 'warn' ? 'SPONSOR WARNING' : S.spNews.kind === 'renew' ? 'DEAL RENEWED' : 'SPONSOR'}</div><div class="u1">${S.spNews.txt}</div></div>${S.spNews.poach ? `<button class="btn y" data-a="spOpen" data-v="${S.spNews.poach}">${sponsorDef(S.spNews.poach).name.toUpperCase()} WANTS YOU</button>` : ''}</div>` : ''}
+    ${S.spOffer && save.sponsorOffer && !save.sponsor ? `<div class="panel spcall"><div><div class="u2">📞 ${sponsorDef(S.spOffer).name.toUpperCase()} CALLED</div><div class="u1">They want to sponsor you. Visit their office to sign.</div></div><button class="btn y" data-a="spOpen">VISIT ${sponsorDef(S.spOffer).name.toUpperCase()}</button></div>` : ''}
     <div class="row" style="justify-content:flex-end;flex-wrap:wrap;margin-top:calc(var(--u)*3)">${S.best ? `<button class="btn y replayb" data-a="replay">▶ WATCH REPLAY<span class="u1">SHOT OF THE ROUND: ${esc(S.best.label.toUpperCase())}</span></button>` : ''}<button class="btn ${S.trial || ev || (save.shout && save.shout.cid === S.c.id) ? 'y' : 'b'}" data-a="toClub">${S.trial ? 'MEET THE CHAIRMAN' : ev && ev.mid && !ev.missed ? 'BACK TO THE CLUBHOUSE' : ev && !ev.mid ? 'PRIZE GIVING' : 'CLUBHOUSE'}</button><button class="btn b" data-a="go" data-v="board">PLAYER CARD</button>${ev ? '<button class="btn" data-a="go" data-v="events">EVENTS</button>' : '<button class="btn" data-a="again">PLAY AGAIN</button>'}<button class="btn g" data-a="go" data-v="title">MAIN MENU</button></div></div>`;
 };
 const ordinal = n => (n % 100 >= 11 && n % 100 <= 13) ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th';
@@ -7067,9 +7367,13 @@ function showMoment() {
   showModal(`<div class="moment"><div class="row" style="gap:calc(var(--u)*4);align-items:center">${sprTag('caddie', cd.id, 26)}<div><div class="u1 dimtxt">${m.at} ROUNDS TOGETHER</div><div class="u2">${cd.name.toUpperCase()}</div></div></div><div class="mtext">${m.text}</div><div class="col" style="gap:calc(var(--u)*2)">${m.replies.map((r, i) => `<button class="btn ${i ? 'b' : 'y'}" data-m="mreply" data-v="${i}">"${r[0]}"</button>`).join('')}</div></div>`);
   G.momentOpen = { cd, m };
 }
+/* scene changes (into or out of the clubhouse, casino, pool, darts, lounge) open from a soft dip to dark instead of a hard cut */
+function sceneDip(ms) { let d = document.getElementById('dip'); if (!d) { d = document.createElement('div'); d.id = 'dip'; document.body.appendChild(d); }
+  d.style.transition = 'none'; d.style.opacity = '1'; void d.offsetWidth; d.style.transition = `opacity ${(ms || 420) / 1000}s ease-out`; d.style.opacity = '0'; }
 function showScreen(name) {
   const same = G.scr === name, sc = UI.querySelector('.scroll'), top = same && sc ? sc.scrollTop : 0;
   if (!same && name !== 'game') SFX.play('page');
+  if (!same && name !== 'game' && (SHARP_SCR[G.scr] || SHARP_SCR[name])) sceneDip();
   G.scr = name; HUD.classList.add('hidden');
   if (name === 'title' && G.bgCid) newBg(); /* back from the course picker: return to the scenic flythrough */
   UI.innerHTML = (SCR[name] || SCR.title)();
@@ -7156,7 +7460,7 @@ const ACT = {
   selBall: v => { save.ball = v; persist(); SFX.play('ui'); rerender(); },
   buyItem: v => { const [id, q] = v.split(':'), it = ITEMS.find(k => k.id === id), n = +q; spend(it.price * (n === 5 ? 4 : 1), () => { save.items[id] = (save.items[id] || 0) + n; }); },
   buyGear: v => { const g = GEAR.find(k => k.id === v); spend(g.price, () => { save.gear[v] = true; }); },
-  toggle: v => { save.settings[v] = !save.settings[v]; if (v === 'music' && save.settings.music) { SFX.init(); SFX.startMusic(); } persist(); rerender(); },
+  toggle: v => { save.settings[v] = !save.settings[v]; if (v === 'perf') { RES = 0; applyRes(); } if (v === 'music' && save.settings.music) { SFX.init(); SFX.startMusic(); } persist(); rerender(); },
   tracer: v => { save.settings.tracer = v; persist(); rerender(); },
   meter: v => { save.settings.meter = +v; persist(); rerender(); },
   lookName: () => { const el = $('lookName'), v = ((el && el.value) || '').replace(/[<>]/g, '').trim().slice(0, 16); if (!v) { toast('Type a name first'); return; } save.name = v; persist(); toast('Name saved: <b>' + esc(v) + '</b>'); if (modalOpen()) { const k = MODAL.querySelector('#lookName'); if (k) k.value = v; } else rerender(); },
@@ -7381,7 +7685,7 @@ function openClubhouse(cid, opt) {
   const home = [1010, 1074, 336, 640];
   G.ch.patrons = [0, 1, 2, 3].map(i => { const lk = look(), cc = col(); if (lk.old) cc.H = ['#9e9e9e', '#d6d6d6', '#bdbdbd'][i % 3]; return { id: 'p' + i, look: lk, c: cc, k: 1.38 + R() * .2, name: names[i].split(' ')[1] ? (['Bruce', 'Kiri', 'Sandra', 'Mike', 'Aroha', 'Dave', 'Linda', 'Tama', 'Jill', 'Pete'][Math.floor(R() * 10)]) : names[i], home: home[i], x: home[i] }; });
   for (const p of G.ch.patrons) if (p.name === 'Kiri') p.look = Object.assign({}, p.look, { hat: 'none', hair: p.look.hair === 'none' ? 'short' : p.look.hair }); /* Kiri goes bare-headed */
-  if (cid === 'ngahinapouri') Object.assign(G.ch.patrons[1], { name: 'Jacob', jacob: true, k: 1.42, look: { hat: 'cap', hair: 'curly', build: .92, sleeve: 'short', nobib: true, stripe: '#f4f4f0' }, c: { h: '#f4f4f0', H: '#9a7652', s: '#f6d4b8', S: '#1d3557', p: '#cfc6b2', k: '#f5f5f5' } }); /* a proper golfer: navy polo, stone trousers, white cap */
+  if (cid === 'ngahinapouri') Object.assign(G.ch.patrons[1], { name: 'Jacob', jacob: true, k: 1.42, look: { hat: 'cap', hair: 'curly', build: .92, sleeve: 'short', nobib: true, stripe: '#f4f4f0' }, c: { h: '#f4f4f0', H: '#9a7652', s: '#d29a6a', S: '#1d3557', p: '#cfc6b2', k: '#f5f5f5' } }); /* a proper golfer: navy polo, stone trousers, white cap */
   G.ch.barman = { id: 'barman', name: 'Barman', look: { hat: 'none', hair: 'short', build: 1.05 }, c: { h: '#111', H: '#3a2a1e', s: '#e0ac69', S: '#f4f1e8', p: '#1b1b1b', k: '#111' } };
   if (cid === 'augusta') G.ch.chair = { id: 'chair', look: { hat: 'none', hair: 'short', build: 1.08, nobib: true }, c: { h: '#111', H: '#c9c9c9', s: '#f1c9a5', S: '#1f6b3a', p: '#c9c3b0', k: '#3a2a1e' } };
   const start = opt && opt.meX !== undefined ? opt.meX : 230;
@@ -7420,6 +7724,7 @@ function chSnapStart(cid) {
 const chHoleCache = {};
 function chSnapStep() {
   const c = G.ch; if (!c || !c.tv || !c.tv.q.length) return;
+  G.mustDraw = true; /* this draws on the main canvas: the next render must paint over it (never skipped) */
   const [hi, kind, u] = c.tv.q.shift(), crs = courseById(c.cid), key = c.cid + '_' + hi;
   let h = chHoleCache[key]; if (!h) { h = genHole(crs, hi, 'champ'); renderHole(h); chHoleCache[key] = h; }
   const tee = h.tee, pin = h.pin, ay = Math.atan2(pin.y - tee.y, pin.x - tee.x);
@@ -7639,11 +7944,17 @@ function drawClubhouse() {
       x.save(); x.translate(gx, gy); x.rotate(-(tilt || 0) * .9);
       if (kind === 'coffee') { x.fillStyle = '#f4f1ea'; x.beginPath(); x.ellipse(0, 1.5, 6, 1.6, 0, 0, 6.29); x.fill(); x.fillRect(-3.4, -6, 6.8, 7); x.fillStyle = '#6b4428'; x.fillRect(-3, -5.8, 6, 1.5); x.strokeStyle = '#f4f1ea'; x.lineWidth = 1.1; x.beginPath(); x.arc(4, -3, 1.8, -1.4, 1.4); x.stroke(); }
       else if (kind === 'wine') { x.fillStyle = 'rgba(230,240,245,.55)'; x.beginPath(); x.ellipse(0, -6, 3.2, 4, 0, 0, 6.29); x.fill(); x.fillStyle = sv && sv.m[0].match(/gris|blanc|chard/i) ? '#e8d27a' : '#7a1f2a'; x.beginPath(); x.ellipse(0, -5, 2.8, 2.6 * fill, 0, 0, 6.29); x.fill(); x.fillStyle = 'rgba(230,240,245,.8)'; x.fillRect(-.4, -2, .8, 3.5); x.fillRect(-2.2, 1.2, 4.4, .8); }
-      else { const col = kind === 'beer' ? (sv && sv.m[0].match(/stout/i) ? '#1d0f08' : '#d9a531') : kind === 'spirit' ? '#c9822a' : kind === 'soft' ? '#e8eef0' : '#d9a531', hgt = kind === 'spirit' ? 5 : 10;
-        x.fillStyle = 'rgba(225,238,244,.45)'; x.beginPath(); x.moveTo(-3.6, -hgt); x.lineTo(3.6, -hgt); x.lineTo(3, 1); x.lineTo(-3, 1); x.closePath(); x.fill();
-        const fh = (hgt + 1) * fill; x.fillStyle = col; x.beginPath(); x.moveTo(-3.2 + (1 - fill) * .4, 1 - fh); x.lineTo(3.2 - (1 - fill) * .4, 1 - fh); x.lineTo(2.8, .6); x.lineTo(-2.8, .6); x.closePath(); x.fill();
-        if (kind === 'beer' && fill > .6) { x.fillStyle = '#fbf6e8'; x.fillRect(-3.4, 1 - fh - 1.6, 6.8, 1.8); }
-        x.fillStyle = 'rgba(255,255,255,.55)'; x.fillRect(-2.6, -hgt + 1, .7, hgt - 1); }
+      else { const col = kind === 'beer' ? (sv && sv.m[0].match(/stout/i) ? '#1d0f08' : '#d9a531') : kind === 'spirit' ? '#c9822a' : kind === 'soft' ? '#cfe3ea' : '#d9a531', hgt = kind === 'spirit' ? 5 : 10, th = -(tilt || 0) * .9;
+        const shape = () => { x.beginPath(); x.moveTo(-3.6, -hgt); x.lineTo(3.6, -hgt); x.lineTo(3, 1); x.lineTo(-3, 1); x.closePath(); };
+        x.fillStyle = 'rgba(225,238,244,.38)'; shape(); x.fill();
+        if (fill > .01) { /* the liquid stays level however the glass is tilted */
+          const fh = (hgt + .4) * fill, ly = (1 - fh) * Math.cos(th); x.save(); shape(); x.clip(); x.rotate(-th);
+          const g = x.createLinearGradient(0, ly, 0, ly + 12); g.addColorStop(0, shadeHex(col, 1.12)); g.addColorStop(1, shadeHex(col, .82)); x.fillStyle = g; x.fillRect(-12, ly, 24, 24);
+          if (kind === 'beer') { x.fillStyle = /stout/i.test((sv && sv.m[0]) || '') ? '#e9dcc4' : '#fbf6e8'; x.fillRect(-12, ly - 1.7 * Math.min(1, fill * 1.4), 24, 1.7 * Math.min(1, fill * 1.4)); }
+          if (kind === 'beer' || kind === 'soft') { x.fillStyle = 'rgba(255,255,255,.55)'; for (let b = 0; b < 3; b++) { const by = ly + 2 + ((G.t * 6 + b * 3.3) % Math.max(1, fh - 2)); if (by < 1) x.fillRect(-1.5 + b * 1.3, by, .45, .45); } }
+          x.restore(); }
+        x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = .4; shape(); x.stroke();
+        x.fillStyle = 'rgba(255,255,255,.6)'; x.fillRect(-2.7, -hgt + 1, .6, hgt - 1.5); }
       x.restore(); };
     const plateAt = (px2, py2, name, bites) => { x.save(); x.translate(px2, py2);
       x.fillStyle = '#f6f3ec'; x.beginPath(); x.ellipse(0, 0, 8, 2.4, 0, 0, 6.29); x.fill(); x.fillStyle = 'rgba(0,0,0,.1)'; x.beginPath(); x.ellipse(0, .4, 6, 1.6, 0, 0, 6.29); x.fill();
@@ -7697,8 +8008,17 @@ function drawClubhouse() {
     x.fillStyle = I.accent; x.fillRect(bx0 + 130, 184, 100, 14); x.fillStyle = '#f4efe2'; x.font = '700 8px "Barlow Condensed", sans-serif'; x.textAlign = 'center'; x.fillText(st.bar.toUpperCase(), bx0 + 180, 194); x.textAlign = 'left';
     /* service props: bottle, pour, the glass or plate on its way to you */
     if (sv) { const t2 = sv.t, bp = hand(BX, BY, BK, bP, 'r'), kind = sv.m[2], gl = [522, 166];
-      if (!food && t2 >= .55 && t2 < 2.3) { const pour = t2 > 1.05 ? Math.min(1, (t2 - 1.05) / .3) : 0, tilt = -pour * 1.9; bottleAt(bp[0], bp[1], tilt, kind === 'wine' ? '#3a2a1a' : kind === 'beer' ? '#5a3a14' : kind === 'spirit' ? '#7a4a1a' : kind === 'coffee' ? '#2b2b2b' : '#2f6a5a');
-        if (t2 > 1.25 && t2 < 2.2) { x.strokeStyle = kind === 'wine' ? 'rgba(120,30,40,.85)' : kind === 'beer' || kind === 'spirit' ? 'rgba(217,165,49,.85)' : kind === 'coffee' ? 'rgba(107,68,40,.9)' : 'rgba(220,235,240,.8)'; x.lineWidth = 1; x.beginPath(); x.moveTo(bp[0] - 6, bp[1] - 2); x.lineTo(gl[0], gl[1] - 6); x.stroke(); } }
+      /* the glass is set down right under where the bottle's neck will be, so the pour lands in it */
+      const pourHand = hand(BX, BY, BK, chPose('cpour', 1), 'l'), FT = -1.75, bh2 = hand(BX, BY, BK, bP, 'l');
+      const MO = [14 * Math.sin(FT), -14 * Math.cos(FT)]; gl[0] = Math.round(pourHand[0] + MO[0]);
+      if (!food && t2 >= .55 && t2 < 2.3) { const pour = t2 > 1.05 ? Math.min(1, (t2 - 1.05) / .3) * (t2 > 2.05 ? 1 - (t2 - 2.05) / .25 * .6 : 1) : 0, tilt = pour * FT - (t2 > 1.35 && t2 < 2.05 ? (t2 - 1.35) * .12 : 0);
+        bottleAt(bh2[0], bh2[1], tilt, kind === 'wine' ? '#3a2a1a' : kind === 'beer' ? '#5a3a14' : kind === 'spirit' ? '#7a4a1a' : kind === 'coffee' ? '#2b2b2b' : '#2f6a5a');
+        if (t2 > 1.25 && t2 < 2.2) { const mx = bh2[0] + 14 * Math.sin(tilt), my = bh2[1] - 14 * Math.cos(tilt), lv = clamp((t2 - 1.25) / .95, 0, 1), surf = gl[1] + 1 - ((kind === 'spirit' ? 5 : 10) + .4) * lv, ex = gl[0];
+          const cS = kind === 'wine' ? 'rgba(120,30,40,.9)' : kind === 'beer' || kind === 'spirit' ? 'rgba(222,170,58,.92)' : kind === 'coffee' ? 'rgba(107,68,40,.95)' : 'rgba(215,235,242,.85)';
+          const head = Math.min(1, (t2 - 1.25) / .12), tail = t2 > 2.08 ? Math.min(1, (t2 - 2.08) / .12) : 0, y0 = lerp(my, surf, tail), y1 = lerp(my, surf, head);
+          x.strokeStyle = cS; x.lineCap = 'round'; x.lineWidth = 1.25; x.beginPath(); x.moveTo(lerp(mx, ex, tail), y0); x.quadraticCurveTo(lerp(mx, ex, .15), lerp(my, y1, .5), lerp(mx, ex, head), y1); x.stroke();
+          x.strokeStyle = 'rgba(255,255,255,.45)'; x.lineWidth = .4; x.beginPath(); x.moveTo(lerp(mx, ex, tail) + .3, y0); x.lineTo(lerp(mx, ex, head) + .3, y1); x.stroke(); x.lineCap = 'butt';
+          if (head >= 1 && tail < 1) { x.fillStyle = cS; for (let d = 0; d < 3; d++) { const a2 = G.t * 9 + d * 2.1; x.fillRect(ex + Math.cos(a2) * 2.2 - .3, surf - 1 - Math.abs(Math.sin(a2)) * 1.6, .6, .6); } } } }
       const fillv = food ? 1 : clamp((t2 - 1.25) / .95, 0, 1), giveT = sv.give, myP = c.meP || chPose('idle', 0), mh = hand(c.me.x, CH_FLOOR, 1.55, myP, 'r');
       if (food) { if (t2 >= .55 && t2 < giveT) { const p0 = hand(BX, BY, BK, bP, 'r'); plateAt(p0[0], p0[1] + 1, sv.m[0], 0); } }
       else if (t2 >= 1.05 && t2 < giveT) glassAt(t2 < 2.3 ? gl[0] : hand(BX, BY, BK, bP, 'r')[0], t2 < 2.3 ? gl[1] : hand(BX, BY, BK, bP, 'r')[1], kind, fillv, 0);
@@ -7774,7 +8094,7 @@ function honourRows(cid) {
 SCR.clubhouse = () => {
   const c = G.ch; if (!c) return SCR.title();
   const st = chStyle(c.cid), sh = save.shout && save.shout.cid === c.cid;
-  return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="chLeave">&lt; LEAVE</button><h2>${st.name.toUpperCase()}</h2>${coinsHTML()}</div>
+  return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="chLeave">&lt; LEAVE</button><h2>${st.name.toUpperCase()}</h2>${isMember(c.cid) ? '<span class="chmem">MEMBER</span>' : `<button class="btn y sm chjoin" data-a="chJoin">JOIN THE CLUB · ${priceHTML(courseById(c.cid).member)}</button>`}${coinsHTML()}</div>
     <div class="grow chpan"></div>
     ${c.msg ? `<div class="chmsg">${c.msg}</div>` : ''}
     ${chDeskHTML()}
@@ -7782,6 +8102,10 @@ SCR.clubhouse = () => {
       ${chZones(c.cid).map(z => `<button class="btn sm ${z.id === 'bar' && sh ? 'y' : 'g'}" data-a="chGo" data-v="${z.id}">${z.id === 'bar' ? (sh ? 'SHOUT THE BAR' : st.bar.toUpperCase()) : z.label}</button>`).join('')}
       <button class="btn sm g chwalk" data-walk="1">WALK ▶</button></div></div>`;
 };
+/* membership can be bought right here, from the secretary's desk */
+ACT.chJoin = () => { const c = G.ch; if (!c || isMember(c.cid)) return; const was = save.members.length; ACT.join(c.cid);
+  const chk = () => { if (!G.ch || G.scr !== 'clubhouse') return; if (save.members.length > was) { G.ch.msg = `<b>Welcome to the club!</b> No more green fees here.`; SFX.play('trophy'); rerender(); } else if (document.querySelector('#modal:not(.hidden), .modal:not(.hidden)')) setTimeout(chk, 300); };
+  setTimeout(chk, 300); };
 function chDeskHTML() { return typeof tournDeskHTML === 'function' ? tournDeskHTML() : ''; }
 /* clubs with a pool table split the lounge: the table in front of the window, the view beside it */
 function chZones(cid) { if (!hasPool(cid)) return CH_ZONES; return [{ id: 'window', x0: 20, x1: 135, label: 'VIEW', at: 120 }, { id: 'pool', x0: 136, x1: 318, label: 'POOL', at: 310 }, ...(hasDarts(cid) ? [{ id: 'darts', x0: 319, x1: 379, label: 'DARTS', at: 348 }] : []), ...CH_ZONES.slice(1)]; }
@@ -7897,18 +8221,32 @@ function drawJetCard(x, W, H) {
   x.fillStyle = gold; x.beginPath(); x.roundRect ? x.roundRect(W * .08, H * .3, W * .12, H * .16, 3 * s) : x.rect(W * .08, H * .3, W * .12, H * .16); x.fill(); x.strokeStyle = 'rgba(80,60,20,.5)'; x.lineWidth = s; x.strokeRect(W * .1, H * .33, W * .08, H * .1);
   x.restore(); x.strokeStyle = 'rgba(255,255,255,.18)'; x.lineWidth = 1; x.beginPath(); x.roundRect ? x.roundRect(1, 1, W - 2, H - 2, r) : x.rect(1, 1, W - 2, H - 2); x.stroke();
 }
-/* the Koru card: light pearl plastic, a simple silver spiral (a traditional Maori motif), no airline logo */
+/* the Koru card: midnight teal with fine guilloche lines, a silver koru spiral (a traditional Maori motif, not a logo),
+   a chip, an embossed name and a soft sheen */
 function drawKoruCard(x, W, H) {
-  const r = W * .06, s = W / 340; x.clearRect(0, 0, W, H);
+  const r = W * .055, s = W / 340; x.clearRect(0, 0, W, H);
   x.save(); x.beginPath(); x.roundRect ? x.roundRect(1, 1, W - 2, H - 2, r) : x.rect(1, 1, W - 2, H - 2); x.clip();
-  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#f4f7fa'); g.addColorStop(1, '#d3dde8'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-  x.fillStyle = '#1d3b5c'; x.fillRect(0, H * .78, W, H * .22);
-  x.strokeStyle = '#3d6f9c'; x.lineWidth = Math.max(1.2, 5 * s); x.lineCap = 'round'; x.beginPath();
-  const cx = W * .72, cy = H * .42; for (let a = 0; a < 4.8 * Math.PI; a += .15) { const rr = (1.5 + a * .5) * 3.4 * s; const px = cx + Math.cos(a) * rr, py = cy + Math.sin(a) * rr; a === 0 ? x.moveTo(px, py) : x.lineTo(px, py); } x.stroke();
-  x.fillStyle = '#1d3b5c'; x.textAlign = 'left'; x.font = `700 ${Math.round(24 * s)}px "Barlow Condensed"`; x.fillText('KORU', W * .08, H * .45);
-  x.font = `600 ${Math.max(5, Math.round(9 * s))}px "Barlow"`; x.fillStyle = '#4f6a84'; x.fillText('AIR NZ  ·  CARDHOLDER', W * .08, H * .56);
-  x.fillStyle = '#e8eef5'; x.font = `600 ${Math.max(5, Math.round(10 * s))}px "Barlow"`; x.fillText((save.name || 'MEMBER').toUpperCase(), W * .08, H * .9);
-  x.restore(); x.strokeStyle = 'rgba(0,0,0,.12)'; x.lineWidth = 1; x.beginPath(); x.roundRect ? x.roundRect(1, 1, W - 2, H - 2, r) : x.rect(1, 1, W - 2, H - 2); x.stroke();
+  let g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#123a44'); g.addColorStop(.55, '#0a2129'); g.addColorStop(1, '#06161c'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  /* guilloche: interlaced fine waves */
+  x.lineWidth = Math.max(.4, .7 * s); for (let k = 0; k < 14; k++) { x.strokeStyle = `rgba(150,205,215,${.05 + (k % 3) * .02})`; x.beginPath(); for (let i = 0; i <= 60; i++) { const px = i / 60 * W, py = H * (.18 + k * .05) + Math.sin(i / 60 * Math.PI * 4 + k * .7) * H * .05; i ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); }
+  /* the koru: an unfurling frond in brushed silver */
+  const cx = W * .72, cy = H * .47, sil = x.createLinearGradient(cx - 60 * s, cy - 60 * s, cx + 60 * s, cy + 60 * s); sil.addColorStop(0, '#f4f7f8'); sil.addColorStop(.5, '#9fb2b8'); sil.addColorStop(1, '#e3eaec');
+  x.strokeStyle = sil; x.lineCap = 'round';
+  const spiral = (w0, w1) => { x.beginPath(); let first = true; for (let a = 0; a <= Math.PI * 3.3; a += .05) { const rr = (7 + a * 7.2) * s, px = cx + Math.cos(-a + 1.2) * rr, py = cy + Math.sin(-a + 1.2) * rr; first ? x.moveTo(px, py) : x.lineTo(px, py); first = false; } x.lineWidth = w0; x.stroke(); };
+  spiral(Math.max(2, 9 * s)); x.strokeStyle = 'rgba(6,22,28,.9)'; spiral(Math.max(.8, 3 * s));
+  x.fillStyle = sil; x.beginPath(); x.arc(cx + Math.cos(1.2) * 7 * s, cy + Math.sin(1.2) * 7 * s, 6.5 * s, 0, 6.29); x.fill();
+  x.strokeStyle = sil; x.lineWidth = Math.max(2, 9 * s); x.beginPath(); { const A = Math.PI * 3.3, R = (7 + A * 7.2) * s, ex = cx + Math.cos(-A + 1.2) * R, ey = cy + Math.sin(-A + 1.2) * R; x.moveTo(ex, ey); x.quadraticCurveTo(ex - 10 * s, cy + 70 * s, cx - 4 * s, H * .96); } x.stroke();
+  /* chip */
+  const cg = x.createLinearGradient(0, H * .36, 0, H * .52); cg.addColorStop(0, '#e8e3d2'); cg.addColorStop(1, '#a8a294'); x.fillStyle = cg; x.beginPath(); x.roundRect ? x.roundRect(W * .08, H * .36, W * .12, H * .16, 4 * s) : x.rect(W * .08, H * .36, W * .12, H * .16); x.fill();
+  x.strokeStyle = 'rgba(60,55,45,.45)'; x.lineWidth = Math.max(.5, s); x.strokeRect(W * .1, H * .39, W * .08, H * .1); x.beginPath(); x.moveTo(W * .14, H * .36); x.lineTo(W * .14, H * .52); x.stroke();
+  /* wordmark and name */
+  x.textAlign = 'left'; x.fillStyle = '#eef4f5'; x.font = `600 ${Math.round(28 * s)}px "Barlow Condensed"`; x.fillText('K O R U', W * .08, H * .25);
+  x.fillStyle = 'rgba(200,225,230,.7)'; x.font = `600 ${Math.max(5, Math.round(8.5 * s))}px "Barlow"`; x.fillText('AIR NZ  ·  MEMBER', W * .08, H * .32);
+  x.fillStyle = 'rgba(238,244,245,.92)'; x.font = `600 ${Math.max(5, Math.round(12 * s))}px "Barlow Condensed"`; x.fillText((save.name || 'MEMBER').toUpperCase().split('').join(' '), W * .08, H * .86);
+  x.fillStyle = 'rgba(200,225,230,.55)'; x.font = `500 ${Math.max(4, Math.round(8 * s))}px "Barlow"`; x.fillText('MEMBER SINCE ' + new Date((save.koru && save.koru.since) || Date.now()).getFullYear(), W * .08, H * .93);
+  /* sheen */
+  g = x.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.08)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.beginPath(); x.moveTo(W * .25, 0); x.lineTo(W * .5, 0); x.lineTo(W * .32, H); x.lineTo(W * .07, H); x.fill();
+  x.restore(); x.strokeStyle = 'rgba(180,220,228,.3)'; x.lineWidth = Math.max(1, s); x.beginPath(); x.roundRect ? x.roundRect(1, 1, W - 2, H - 2, r) : x.rect(1, 1, W - 2, H - 2); x.stroke();
 }
 /* ---------- the lounge ---------- */
 function openJetOffice() {
@@ -7935,7 +8273,7 @@ Object.assign(ACT, {
   koruBuy: () => { if (hasKoru() || hasJet()) return; if (save.coins < KORU.price) { SFX.play('err'); toast(`Need ${priceHTML(KORU.price - save.coins)} more`); return; }
     confirmBox(`Buy the <b>${KORU.name}</b> for ${priceHTML(KORU.price)}?<br><span class="u1">Half price on every flight. Nothing else.</span>`, () => { closeModal(); save.coins -= KORU.price; save.koru = { since: Date.now() }; persist(); updCoins(); SFX.play('register'); toast(`<b>${KORU.name}</b> added. Flights are half price.`); rerender(); }); }
 });
-function updateTravelScene(dt) { if (G.of) G.of.t += dt;
+function updateTravelScene(dt) { if (G.of) G.of.t += dt; if (G.sp) G.sp.t += dt;
   /* a cardholder gets the founder talking now and then, the odd time with a call from Mckenna */
   if (G.of && G.scr === 'office' && hasJet() && G.of.step === 'member') { G.of.nextTalk = (G.of.nextTalk === undefined ? 4 : G.of.nextTalk) - dt; if (G.of.nextTalk <= 0) { G.of.nextTalk = 12 + Math.random() * 6; const line = OWNER_LINES[Math.floor(Math.random() * OWNER_LINES.length)]; G.of.msg = `<b>${JET.founder}:</b> "${line}"`; rerender(); } }
   if (G.fl) { G.fl.t += dt; if (G.fl.t > G.fl.dur) { const f = G.fl.then; G.fl = null; f(); } } }
@@ -8008,6 +8346,116 @@ function drawFlight() {
   { const gx = W * .74; x.fillStyle = 'rgba(230,240,245,.6)'; x.beginPath(); x.moveTo(gx - 3, 188); x.lineTo(gx + 3, 188); x.lineTo(gx + 2, 204); x.lineTo(gx - 2, 204); x.fill(); x.fillStyle = '#f2dc8a'; x.fillRect(gx - 2.4, 193, 4.8, 10); x.fillStyle = 'rgba(255,255,255,.8)'; for (let i = 0; i < 4; i++) x.fillRect(gx - 1 + (i % 2), 202 - ((t * 9 + i * 3) % 9), .8, .8); x.fillRect(gx - .4, 204, .8, 9); x.fillRect(gx - 3, 213, 6, 1); }
   const fade = Math.min(1, t / .4, (F.dur - t) / .4); if (fade < 1) { x.fillStyle = `rgba(0,0,0,${1 - fade})`; x.fillRect(0, 0, W, 270); }
   PXR = 1; x.imageSmoothingEnabled = false;
+}
+
+/* ---------- sponsorship: the brand's office (an invented showroom; the brand name appears only as plain text) ---------- */
+function openSponsorOffice(which) {
+  const id = which || (save.sponsorOffer && save.sponsorOffer.id) || (save.sponsor && save.sponsor.id); if (!id) return; const sp = sponsorDef(id), mine = save.sponsor && save.sponsor.id === id;
+  G.sp = { t: 0, sp, step: mine ? 'signed' : 'arrive', shake: -1, bagT: -1, back: G.scr || 'title',
+    msg: mine ? spGreet(sp) : save.sponsor ? `<b>${sp.rep.name}:</b> "We know you're with ${mySponsor().name}. Hear us out."` : `Welcome to <b>${sp.name}</b>. ${sp.rep.name} (${sp.rep.role.toLowerCase()}) is waiting for you.` };
+  showScreen('spoffice');
+}
+SCR.spoffice = () => { const S = G.sp; if (!S) return SCR.title(); const sp = S.sp;
+  return `<div class="scr chscr"><div class="hdr"><button class="btn g sm" data-a="spLeave">&lt; LEAVE</button><h2>${sp.name.toUpperCase()}</h2>${coinsHTML()}</div><div class="grow"></div>
+    ${S.msg ? `<div class="chmsg">${S.msg}</div>` : ''}
+    <div class="row chbar"><button class="btn sm g" data-a="spDeal">THE DEAL</button>${S.step === 'signed' ? '' : `<button class="btn sm ${S.step === 'arrive' ? 'y' : 'g'}" data-a="spMeet" ${S.step === 'arrive' ? '' : 'disabled'}>MEET ${sp.rep.name.split(' ')[0].toUpperCase()}</button><button class="btn sm ${S.step === 'met' ? 'y' : 'g'}" data-a="spSign" ${S.step === 'met' ? '' : 'disabled'}>SIGN THE DEAL</button>`}</div></div>`; };
+function spDealHTML(sp) {
+  const cartUp = !save.sponsor && ['walk', 'classic', 'lifted'].includes(save.cart);
+  return `<div class="col" style="max-width:calc(var(--u)*240);gap:calc(var(--u)*3)"><div class="u2">${sp.name.toUpperCase()} · PLAYER DEAL</div><div class="u1">
+    • <b>${priceHTML(sp.bonus)}</b> signing bonus<br>• Unlimited ${sp.balls.map(b => BALLS.find(x => x.id === b).name).join(', ')} balls<br>• Every club in your bag upgraded one level<br>
+    • ${sp.name} clothing on your player<br>• <b>+20%</b> coins a hole while you play their ball<br>• <b>${priceHTML(sp.retainer)}</b> retainer every round${cartUp || (save.sponsor && save.sponsor.cart) ? '<br>• A Yamaha Drive2 Sport cart' : ''}</div>
+    ${save.sponsor && save.sponsor.id === sp.id ? (() => { const k = spContract(save.sponsor); return `<div class="u1"><b>THIS TERM:</b> ${k.goal} (${k.prog}) · ends at the Tour Championship or in ${k.left} rounds${save.sponsor.warn ? ' · <b class="red">final warning</b>' : ''}</div>`; })() : `<div class="u1 dimtxt">Contracts run one season (to the Tour Championship, or ${SP_TERM} rounds if you skip the tour) with one goal. Meet it and you are renewed with a bonus. Miss two in a row and they drop you. Play their ball to earn the retainer.</div>`}
+    <div class="u1 dimtxt">Your name shows as "${esc(save.name)} - ${sp.name}" on leaderboards.</div><button class="btn g sm" data-m="close">CLOSE</button></div>`;
+}
+function spGreet(sp) { const C = save.sponsor, k = spContract(C);
+  return `<b>${sp.rep.name}:</b> "${k.done ? 'Goal done. Keep this up and the renewal is a formality.' : C.warn ? 'We need to see that goal this term. No pressure.' : 'Good to see you. How is the game?'}" · <span class="dimtxt">${k.goal}: <b>${k.prog}</b> · this season</span>`; }
+Object.assign(ACT, {
+  spOpen: v => openSponsorOffice(v),
+  spLeave: () => { const b = G.sp ? G.sp.back : 'title'; G.sp = null; showScreen(b === 'spoffice' ? 'title' : b); },
+  spDeal: () => { if (G.sp) showModal(spDealHTML(G.sp.sp)); },
+  spMeet: () => { const S = G.sp; if (!S || S.step !== 'arrive') return; S.step = 'shaking'; S.shake = S.t; SFX.play('chat'); S.msg = `<b>${S.sp.rep.name}:</b> "${S.sp.pitch}"`; rerender();
+    setTimeout(() => { if (G.sp !== S) return; S.step = 'met'; S.msg = `<b>${S.sp.rep.name}:</b> "Here is what we are offering. Have a read, then sign whenever you are ready."`; rerender(); }, 2600); },
+  spSign: () => { const S = G.sp; if (!S || S.step !== 'met') return; const sp = S.sp;
+    confirmBox(`Sign with <b>${sp.name}</b>?<br><span class="u1">You will play their ball and wear their clothing. One sponsor at a time.</span>`, () => { closeModal(); signSponsor(sp);
+      S.step = 'signed'; S.shake = S.t; S.bagT = S.t + 1.8; S.msg = `<b>${S.sp.rep.name}:</b> "Welcome to the team. Your staff bag is ready."`; SFX.play('register'); setTimeout(() => SFX.play('trophy'), 500); rerender(); }); } });
+function signSponsor(sp) {
+  const prev = save.sponsor; save.sponsor = { id: sp.id, since: Date.now(), rounds: 0, goal: spNewGoal(), left: SP_TERM, season: save.season ? save.season.no : 1, warn: 0, renewals: 0, switched: prev ? prev.id : null }; save.sponsorOffer = null; save.everSponsored = true;
+  save.coins += sp.bonus; save.stats.coinsEarned += sp.bonus;
+  for (const b of sp.balls) { save.ballStock[b] = 9999; if (!save.balls.includes(b)) save.balls.push(b); } save.ball = sp.ball;
+  let ups = 0; for (const id in save.clubs) if (save.clubs[id] < CLUB_MAX) { save.clubs[id]++; ups++; }
+  if (['walk', 'classic', 'lifted'].includes(save.cart)) { if (!save.carts.includes('sport')) save.carts.push('sport'); save.cart = 'sport'; save.sponsor.cart = true; }
+  persist(); updCoins(); LOOK_CACHE_CLEAR();
+  setTimeout(() => toast(`<b>${sp.name}</b>: +${fmt(sp.bonus)} coins, ${ups} club upgrades${save.sponsor.cart ? ', a new cart' : ''} and unlimited balls`), 400);
+}
+function LOOK_CACHE_CLEAR() { for (const k in LOOK_CACHE) delete LOOK_CACHE[k]; }
+function drawSponsorOffice() {
+  const S = G.sp, sp = S.sp, x = ctx, W = VW; x.setTransform(RES, 0, 0, RES, 0, 0); DC = x; PXR = RES; HD = true; x.imageSmoothingEnabled = true;
+  const vg = (y0, y1, a, b) => { const g = x.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
+  /* bright showroom: white walls, a dark brand feature wall, polished concrete */
+  x.fillStyle = vg(0, 210, '#f4f4f2', '#e2e2de'); x.fillRect(0, 0, W, 212);
+  x.fillStyle = vg(0, 26, '#d9d9d5', '#ecece8'); x.fillRect(0, 0, W, 22); for (let i = 0; i < 6; i++) { const lx = 40 + i * (W - 80) / 5; x.fillStyle = '#fffdf6'; x.fillRect(lx - 14, 20, 28, 2); const g = x.createRadialGradient(lx, 24, 1, lx, 60, 70); g.addColorStop(0, 'rgba(255,250,235,.5)'); g.addColorStop(1, 'rgba(255,250,235,0)'); x.fillStyle = g; x.fillRect(lx - 70, 22, 140, 90); }
+  const fw0 = W * .22, fw1 = W * .78; x.fillStyle = vg(30, 172, shadeHex(sp.wall, 1.25), sp.wall); x.fillRect(fw0, 30, fw1 - fw0, 142);
+  x.fillStyle = 'rgba(255,255,255,.04)'; for (let i = 0; i < 12; i++) x.fillRect(fw0 + i * (fw1 - fw0) / 12, 30, 1, 142);
+  x.fillStyle = sp.acc; x.fillRect(fw0, 30, fw1 - fw0, 2);
+  x.textAlign = 'center'; x.fillStyle = '#f6f6f4'; x.font = '700 30px "Barlow Condensed"'; x.fillText(sp.name.toUpperCase(), W / 2, 74); x.font = '600 6px "Barlow"'; x.fillStyle = 'rgba(246,246,244,.6)'; x.fillText('T O U R   D E P A R T M E N T', W / 2, 86); x.textAlign = 'left';
+  /* display: a pyramid of balls on a plinth, a rack of drivers and a staff bag */
+  { const px = fw0 + 26; x.fillStyle = '#f2f2ef'; x.fillRect(px - 16, 138, 32, 34); x.fillStyle = 'rgba(0,0,0,.08)'; x.fillRect(px - 16, 138, 32, 2);
+    const bdef = BALLS.find(b => b.id === sp.ball) || BALLS[0]; for (let row = 0; row < 4; row++) for (let i = 0; i <= 3 - row; i++) { const bx = px - (3 - row) * 3.3 + i * 6.6, by = 134 - row * 5.6; x.fillStyle = 'rgba(0,0,0,.18)'; x.beginPath(); x.arc(bx + .6, by + .6, 3, 0, 6.29); x.fill(); const g = x.createRadialGradient(bx - 1, by - 1, .4, bx, by, 3.2); g.addColorStop(0, '#fff'); g.addColorStop(1, '#cfcfcb'); x.fillStyle = g; x.beginPath(); x.arc(bx, by, 3, 0, 6.29); x.fill(); x.strokeStyle = bdef.mark || bdef.band || '#111'; x.lineWidth = .5; x.beginPath(); x.arc(bx, by, 2, .3, 1.6); x.stroke(); } }
+  { const rx = fw1 - 70; x.fillStyle = '#2b2d31'; x.fillRect(rx, 100, 52, 2); for (let i = 0; i < 6; i++) { const cx2 = rx + 5 + i * 8.4; x.strokeStyle = '#b9bfc4'; x.lineWidth = .8; x.beginPath(); x.moveTo(cx2, 101); x.lineTo(cx2 + 1, 150); x.stroke(); x.fillStyle = '#16181b'; x.fillRect(cx2 - 1.2, 98, 2.4, 5); x.fillStyle = '#1e2024'; x.beginPath(); x.ellipse(cx2 + 3, 151, 4.6, 3, 0, 0, 6.29); x.fill(); x.fillStyle = sp.acc; x.fillRect(cx2 + 1, 150.4, 3, .8); } }
+  { const bx = W * .86, by = 210; x.fillStyle = 'rgba(0,0,0,.15)'; x.beginPath(); x.ellipse(bx, by, 14, 3, 0, 0, 6.29); x.fill(); x.fillStyle = vg(150, 210, '#fafafa', '#dcdcd8'); x.beginPath(); x.roundRect ? x.roundRect(bx - 11, 150, 22, 58, 6) : x.rect(bx - 11, 150, 22, 58); x.fill(); x.fillStyle = sp.wall; x.fillRect(bx - 11, 166, 22, 16); x.fillStyle = sp.acc; x.fillRect(bx - 11, 182, 22, 2); x.fillStyle = '#fff'; x.font = '700 4.5px "Barlow Condensed"'; x.textAlign = 'center'; x.fillText(sp.name.toUpperCase(), bx, 176.5); x.textAlign = 'left';
+    for (let i = 0; i < 4; i++) { x.fillStyle = ['#16181b', sp.acc, '#16181b', '#9aa0a6'][i]; x.fillRect(bx - 8 + i * 4.5, 140 - (i % 2) * 3, 3.4, 8); } }
+  /* floor and a putting strip */
+  x.fillStyle = vg(212, 270, '#cfcfcb', '#b5b5b0'); x.fillRect(0, 210, W, 60); x.fillStyle = 'rgba(255,255,255,.12)'; x.fillRect(0, 212, W, 12); x.fillStyle = 'rgba(0,0,0,.2)'; x.fillRect(0, 210, W, 2);
+  x.fillStyle = '#3f7d3a'; x.beginPath(); x.moveTo(W * .08, 258); x.lineTo(W * .3, 258); x.lineTo(W * .27, 232); x.lineTo(W * .11, 232); x.fill(); x.fillStyle = '#1b1b1b'; x.beginPath(); x.ellipse(W * .25, 238, 2.2, .9, 0, 0, 6.29); x.fill();
+  /* a low white desk with the contract */
+  { const dx = W * .63, dw = 74; x.fillStyle = 'rgba(0,0,0,.14)'; x.beginPath(); x.ellipse(dx + dw / 2, 232, dw * .6, 5, 0, 0, 6.29); x.fill(); x.fillStyle = vg(196, 230, '#fbfbf9', '#e1e1dc'); x.fillRect(dx, 196, dw, 34); x.fillStyle = sp.acc; x.fillRect(dx, 200, dw, 1.2); x.fillStyle = '#f1f0ea'; x.fillRect(dx - 3, 192, dw + 6, 4);
+    if (S.step !== 'signed') { x.fillStyle = '#fff'; x.fillRect(dx + 30, 189, 14, 3.5); x.fillStyle = 'rgba(0,0,0,.3)'; for (let i = 0; i < 3; i++) x.fillRect(dx + 32, 189.8 + i, 9 - i * 2, .4); x.fillStyle = '#1a1a1a'; x.fillRect(dx + 46, 190.5, 7, .9); } }
+  /* the rep and you; a step in for the handshake */
+  const sh = S.shake >= 0 ? S.t - S.shake : -1, stepIn = sh >= 0 ? clamp(sh / .4, 0, 1) - clamp((sh - 1.6) / .4, 0, 1) : 0, si = stepIn * stepIn * (3 - 2 * stepIn) * 13;
+  const rx = W * .5 + 44 - si, me = W * .5 - 48 + si;
+  if (S.msg !== S.lastMsg) { S.lastMsg = S.msg; S.msgAt = S.t; }
+  const rP = sh >= 0 && sh < 2 ? chPose('shake_c', sh) : S.bagT >= 0 && S.t > S.bagT && S.t - S.bagT < 3 ? chPose('coffer', Math.min(.35, S.t - S.bagT)) : chPose(S.step === 'arrive' ? 'idle' : 'ctalk', S.t - (S.msgAt || 0));
+  const mP = sh >= 0 && sh < 2 ? chPose('shake_g', sh) : S.bagT >= 0 && S.t > S.bagT + .6 && S.t - S.bagT < 3 ? chPose('creach', Math.min(.35, S.t - S.bagT - .6)) : chPose('idle', S.t + 1);
+  drawGolferFront(sp.rep, rx, 252, 1.6, rP);
+  drawGolferFront(golferById(save.golfer), me, 252, 1.55, mP);
+  if (S.bagT >= 0 && S.t > S.bagT && S.t - S.bagT < 3) { const u = clamp((S.t - S.bagT - .2) / .9, 0, 1), cx2 = lerp(rx - 22, me + 22, u), cy2 = 196 - Math.sin(u * Math.PI) * 5; x.fillStyle = '#fafafa'; x.beginPath(); x.roundRect ? x.roundRect(cx2 - 5, cy2 - 22, 10, 30, 3) : x.rect(cx2 - 5, cy2 - 22, 10, 30); x.fill(); x.fillStyle = sp.wall; x.fillRect(cx2 - 5, cy2 - 14, 10, 7); x.fillStyle = sp.acc; x.fillRect(cx2 - 5, cy2 - 7, 10, 1); }
+  const vgr = x.createRadialGradient(W / 2, VH / 2, VH * .5, W / 2, VH / 2, W * .75); vgr.addColorStop(0, 'rgba(0,0,0,0)'); vgr.addColorStop(1, 'rgba(0,0,0,.22)'); x.fillStyle = vgr; x.fillRect(0, 0, W, VH);
+  PXR = 1;
+}
+
+/* ---------- sponsor contracts: a term of rounds, one goal per term, renewals, warnings and rival offers ---------- */
+/* a contract runs for one tour season (it ends when the Tour Championship is played). If you are not playing the tour,
+   it ends after SP_TERM rounds instead, so it never stalls */
+const SP_TERM = 14;
+const SP_GOALS = {
+  top10: { need: 3, txt: n => `${n} top-10 finishes in events`, short: 'Top-10s' },
+  par: { need: 3, txt: n => `${n} rounds at par or better`, short: 'Par rounds' },
+  win: { need: 1, txt: () => 'Win an event', short: 'Wins' },
+  rounds: { need: 8, txt: n => `Play ${n} rounds with our ball`, short: 'Rounds with our ball' } };
+function spNewGoal(prev) { const ks = Object.keys(SP_GOALS).filter(k => k !== prev), k = ks[Math.floor(Math.random() * ks.length)]; return { k, need: SP_GOALS[k].need, have: 0 }; }
+function spContract(C) { const g = C.goal, G0 = SP_GOALS[g.k]; return { goal: G0.txt(g.need), prog: `${Math.min(g.have, g.need)}/${g.need}`, left: C.left, done: g.have >= g.need }; }
+function sponsorAfterRound(r, ev, toPar, st) {
+  const C = save.sponsor, sp = mySponsor(); if (!sp) return null;
+  if (!C.goal) { C.goal = spNewGoal(); C.left = SP_TERM; C.warn = 0; C.renewals = 0; }
+  if (C.season === undefined) C.season = save.season ? save.season.no : 1;
+  const usedBall = sp.balls.includes(save.ball), done = ev && !ev.mid, news = [];
+  /* retainer only when you play their ball */
+  if (usedBall) { const ret = Math.round(sp.retainer * (r.n >= 18 ? 1 : .5)); save.coins += ret; st.coinsEarned += ret; r.coins += ret; r.coinLog.sponsor = ret; }
+  else news.push(`No retainer this round: you didn't play a ${sp.name} ball.`);
+  const g = C.goal; if (g.k === 'top10' && done && ev.pos <= 10) g.have++; if (g.k === 'par' && toPar <= 0) g.have++; if (g.k === 'win' && done && ev.pos === 1) g.have++; if (g.k === 'rounds' && usedBall) g.have++;
+  C.rounds = (C.rounds || 0) + 1; C.left--; if (done && ev.pos === 1) C.termWins = (C.termWins || 0) + 1;
+  const seasonOver = save.season && save.season.no !== C.season;
+  if (C.left > 0 && !seasonOver) { news.unshift(`Contract: ${SP_GOALS[g.k].short} ${Math.min(g.have, g.need)}/${g.need} this season · ends at the Tour Championship or in ${C.left} round${C.left > 1 ? 's' : ''}`); return { kind: 'tick', txt: news.join(' ') }; }
+  C.season = save.season ? save.season.no : 1;
+  /* end of the term */
+  if (g.have >= g.need) { C.renewals++; const bonus = Math.round(sp.bonus * .3 * (1 + C.renewals * .25) / 100) * 100; save.coins += bonus; st.coinsEarned += bonus; r.coins += bonus; r.coinLog.sponsor = (r.coinLog.sponsor || 0) + bonus;
+    C.warn = 0; C.goal = spNewGoal(g.k); C.left = SP_TERM; C.season = save.season ? save.season.no : 1;
+    /* a strong term can get a rival brand interested */
+    if ((C.termWins || 0) >= 1 && Math.random() < .35) { const others = SPONSORS.filter(b => b.id !== sp.id), o = others[Math.floor(Math.random() * others.length)]; save.sponsorOffer = { id: o.id, at: Date.now(), poach: true }; }
+    C.termWins = 0; return { kind: 'renew', txt: `${sp.name} renewed your deal: +${fmt(bonus)} coins. New goal: ${SP_GOALS[C.goal.k].txt(C.goal.need)}.`, poach: save.sponsorOffer && save.sponsorOffer.poach ? save.sponsorOffer.id : null }; }
+  C.warn = (C.warn || 0) + 1; C.termWins = 0;
+  if (C.warn >= 2) { save.sponsor = null; LOOK_CACHE_CLEAR(); return { kind: 'drop', txt: `${sp.name} has ended your sponsorship after two missed goals. You keep the balls and upgrades.` }; }
+  C.goal = { k: g.k, need: g.need, have: 0 }; C.left = SP_TERM; C.season = save.season ? save.season.no : 1; return { kind: 'warn', txt: `${sp.name} is not happy: goal missed. Final warning. Same goal next season.` };
 }
 
 /* =====================================================================
@@ -8114,7 +8562,7 @@ function poolJudge(P) {
 function poolClearSpot(P, c) { for (let k = 0; k < 30; k++) { if (!P.balls.some(b => b !== c && b.on && Math.hypot(b.x - c.x, b.y - c.y) < BR * 2.1)) return; c.x -= BR * 1.2; if (c.x < BR * 2) { c.x = PW * .22; c.y += BR * 2.3; } } }
 function poolEnd(P, winner, why) {
   P.phase = 'over'; P.over = { winner, why }; P.shot = null;
-  if (winner === 'me') { save.coins += P.bet * 2; save.stats.poolW = (save.stats.poolW || 0) + 1; SFX.play('register'); setTimeout(() => SFX.play('trophy'), 300); }
+  if (winner === 'me') { save.coins += P.bet * 2; save.stats.poolW = (save.stats.poolW || 0) + 1; setTimeout(checkAch, 600); SFX.play('register'); setTimeout(() => SFX.play('trophy'), 300); }
   else { save.stats.poolL = (save.stats.poolL || 0) + 1; SFX.play('err'); }
   persist(); updCoins(); poolHUD();
 }
@@ -8360,7 +8808,7 @@ function dartsEndVisit(D, bust) {
 }
 function dartsWin(D, who) {
   D.phase = 'over'; D.over = who;
-  if (who === 'me') { save.coins += D.bet * 2; save.stats.dartsW = (save.stats.dartsW || 0) + 1; SFX.play('register'); setTimeout(() => SFX.play('trophy'), 300); }
+  if (who === 'me') { save.coins += D.bet * 2; save.stats.dartsW = (save.stats.dartsW || 0) + 1; setTimeout(checkAch, 600); SFX.play('register'); setTimeout(() => SFX.play('trophy'), 300); }
   else { save.stats.dartsL = (save.stats.dartsL || 0) + 1; SFX.play('err'); }
   persist(); updCoins(); dartsHUD();
 }
@@ -8475,7 +8923,7 @@ const bcCard = c => c.r === 'A' ? 1 : (c.r === '10' || 'JQK'.includes(c.r)) ? 0 
 
 function openCasino() { G.cas = G.cas || { view: 'lobby', chip: 100, bj: null, rl: null, bc: null, hist: [] }; G.cas.view = 'lobby'; G.cas.t = 0; showScreen('casino'); SFX.play('good'); }
 function casRe() { if (G.scr === 'casino') { const sc = UI.querySelector('.scroll'), top = sc ? sc.scrollTop : 0; showScreen('casino'); const s2 = UI.querySelector('.scroll'); if (s2) s2.scrollTop = top; } }
-function casWin(n) { save.stats.casinoNet = (save.stats.casinoNet || 0) + n; }
+function casWin(n) { save.stats.casinoNet = (save.stats.casinoNet || 0) + n; if (n > (save.stats.casBig || 0)) save.stats.casBig = n; if (n > 0) setTimeout(checkAch, 400); }
 function casChips(cur) { const vals = [10, 50, 100, 500, 1000, 5000, 25000]; return `<div class="cchips">${vals.map(v => `<button class="cchip c${v} ${cur === v ? 'on' : ''}" data-a="casChip" data-v="${v}" ${v > save.coins ? 'disabled' : ''}><span>${v >= 1000 ? v / 1000 + 'K' : v}</span></button>`).join('')}</div>`; }
 function cardHTML(c, i) { if (!c) return ''; const red = c.s === '♥' || c.s === '♦'; const h = c.down ? `<div class="cd bk ${c.nw ? 'nw' : ''}" style="--d:${i}"></div>` : `<div class="cd ${red ? 'rd' : ''} ${c.nw ? 'nw' : ''}" style="--d:${i}"><span class="tl">${c.r}<i>${c.s}</i></span><span class="ct">${c.s}</span><span class="br">${c.r}<i>${c.s}</i></span></div>`; c.nw = false; return h; }
 
@@ -8520,6 +8968,12 @@ function bjDealer() {
   const sim = B.dealer.map(c => Object.assign({}, c, { down: false })); if (!allBust) while (bjVal(sim).t < 17) { const c = casDraw(C); sim.push(c); steps.push([() => { B.dealer.push(c); B.msg = `Dealer draws: ${bjVal(B.dealer).t}.`; SFX.play('ui'); }, 650]); }
   casRun(steps, bjSettle);
 }
+/* after a result has had time to sink in, the dealer sweeps the table: cards slide away and the felt is clear for the next hand */
+function casSweep(test, clear, wait) {
+  setTimeout(() => { const C = G.cas; if (!C || G.scr !== 'casino' || C.busy || !test(C)) return;
+    UI.querySelectorAll('.cards .cd, .cres, .rlgrid .win, .cpill').forEach(e => e.classList.add('csweep'));
+    setTimeout(() => { const C2 = G.cas; if (!C2 || !test(C2) || C2.busy) return; clear(C2); casRe(); }, 380); }, wait || 3600);
+}
 function bjSettle() {
   const C = G.cas, B = C.bj; B.phase = 'done'; const dv = bjVal(B.dealer).t, dBJ = dv === 21 && B.dealer.length === 2; let back = 0, staked = 0;
   for (const H of B.hands) { const v = bjVal(H.cards).t, nat = v === 21 && H.cards.length === 2 && B.hands.length === 1; staked += H.bet;
@@ -8529,6 +8983,7 @@ function bjSettle() {
   if (B.hands.every(h => h.res === 'BUST')) B.msg = 'Bust. The dealer wins this one.'; else if (!B.msg || /Dealer (turns|draws)/.test(B.msg)) B.msg = dv > 21 ? `Dealer busts with ${dv}.` : `Dealer stands on ${dv}.`;
   B.msg += ` Same bet again? Tap DEAL${(C.bjBet || 0) > save.coins ? ' (bet will drop to what you have)' : ''}.`;
   C.lock = Date.now() + 700; casRe();
+  casSweep(C2 => C2.bj === B && B.phase === 'done' && C2.view === 'bj', C2 => { C2.bj = null; });
 }
 function bjView() {
   const C = G.cas, B = C.bj, play = B && B.phase === 'play' && !C.busy, H = B && B.hands[B.cur], dv = B ? bjVal(B.dealer) : null;
@@ -8570,6 +9025,7 @@ function bcSettle(B) {
   back = Math.floor(back); save.coins += back; casWin(back - B.tot); updCoins(); persist(); B.win = w; B.net = back - B.tot; B.phase = 'done';
   B.msg = `${w === 'p' ? 'Player wins' : w === 'b' ? 'Banker wins' : 'Tie'}, ${Math.max(pv, bv)}${w === 't' ? ' all' : ' to ' + Math.min(pv, bv)}.${w === 't' && (bt.p || bt.b) ? ' Player and Banker bets are returned.' : ''}`;
   C.bcLast = bt; C.hist.unshift(w); C.hist.length = Math.min(C.hist.length, 18); SFX.play(B.net > 0 ? 'register' : B.net < 0 ? 'err' : 'ui'); casRe();
+  casSweep(C2 => C2.bc === B && C2.view === 'bc', C2 => { C2.bc = null; });
 }
 function bcView() {
   const C = G.cas, B = C.bc, bets = C.bcBets || {}, busy = C.busy || (B && B.phase === 'deal'), tot = (bets.p || 0) + (bets.b || 0) + (bets.t || 0), shown = B && B.phase === 'deal' ? B.bets : bets;
@@ -8603,6 +9059,7 @@ function rlSettle() {
   const C = G.cas, R = C.rl, S = R.spin, n = S.n; let back = 0; for (const k in R.bets) back += R.bets[k] * rlPays(k, n);
   save.coins += back; casWin(back - S.tot); updCoins(); persist(); R.res = { n, net: back - S.tot, back }; R.hist = R.hist || []; R.hist.unshift(n); R.hist.length = Math.min(R.hist.length, 14);
   R.spin = null; R.last = R.bets; R.bets = {}; SFX.play(back > 0 ? 'register' : 'err'); if (back >= S.tot * 5 && back > 0) setTimeout(() => SFX.play('trophy'), 250); casRe();
+  const res = R.res; casSweep(C2 => C2.rl === R && R.res === res && !R.spin && C2.view === 'rl', () => { R.res = null; }, 4200);
 }
 function rlView() {
   const C = G.cas, R = C.rl = C.rl || { bets: {}, wa: 0, ba: 0 }, spin = !!R.spin, chip = k => R.bets[k] ? `<b class="stack">${R.bets[k] >= 1000 ? (R.bets[k] / 1000).toFixed(R.bets[k] % 1000 ? 1 : 0) + 'K' : R.bets[k]}</b>` : '', win = k => R.res && rlPays(k, R.res.n) ? 'win' : '';
@@ -8667,26 +9124,84 @@ function drawCasinoBg() {
 }
 
 /* ---------- screens ---------- */
+
+/* ---------- three card poker: ante (and optional Pair Plus), see your cards, then play or fold. The dealer needs
+   queen high to qualify. Standard paytables ---------- */
+const PK_RV = c => c.r === 'A' ? 14 : c.r === 'K' ? 13 : c.r === 'Q' ? 12 : c.r === 'J' ? 11 : +c.r;
+const PK_NAMES = ['High card', 'Pair', 'Flush', 'Straight', 'Three of a kind', 'Straight flush'];
+function pkEval(cards) {
+  const v = cards.map(PK_RV).sort((a, b) => b - a), fl = cards.every(c => c.s === cards[0].s);
+  let st = v[0] - v[1] === 1 && v[1] - v[2] === 1, top = v[0]; if (!st && v[0] === 14 && v[1] === 3 && v[2] === 2) { st = true; top = 3; }
+  if (st && fl) return { cat: 5, k: [top] }; if (v[0] === v[2]) return { cat: 4, k: [v[0]] }; if (st) return { cat: 3, k: [top] }; if (fl) return { cat: 2, k: v };
+  if (v[0] === v[1] || v[1] === v[2]) { const pr = v[1], kick = v[0] === v[1] ? v[2] : v[0]; return { cat: 1, k: [pr, kick] }; } return { cat: 0, k: v };
+}
+const pkCmp = (a, b) => { if (a.cat !== b.cat) return a.cat - b.cat; for (let i = 0; i < a.k.length; i++) if (a.k[i] !== b.k[i]) return a.k[i] - b.k[i]; return 0; };
+const PK_ANTE_BONUS = { 3: 1, 4: 4, 5: 5 }, PK_PP = { 1: 1, 2: 3, 3: 6, 4: 30, 5: 40 };
+function pkDeal() {
+  const C = G.cas; if (C.busy || (C.pk && C.pk.phase !== 'done')) return; const ante = C.pkAnte || 0, pp = C.pkPP || 0;
+  if (ante < CAS.min) { toast(`Place an ante first: tap a chip (minimum ${CAS.min})`); SFX.play('err'); return; }
+  if (ante + pp > save.coins) { toast('Not enough coins for that bet'); SFX.play('err'); return; }
+  save.coins -= ante + pp; updCoins(); persist();
+  const deck = casShoe(1), K = C.pk = { you: [], dealer: [], ante, pp, play: 0, phase: 'deal', msg: 'Dealing…' };
+  const steps = []; for (let i = 0; i < 3; i++) { steps.push([() => { K.you.push(Object.assign(deck.pop(), { nw: true })); SFX.play('ui'); }, 230]); steps.push([() => { K.dealer.push(Object.assign(deck.pop(), { nw: true, down: true })); SFX.play('ui'); }, 230]); }
+  casRun(steps, () => { const e = pkEval(K.you); K.phase = 'decide'; K.msg = `You have ${PK_NAMES[e.cat].toLowerCase()}${e.cat === 0 ? ', ' + cardName({ r: ['', '', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'][e.k[0]], s: '' }).replace(/ of.*/, '') + ' high' : ''}. Play (${fmt(ante)} more) or fold?`; casRe(); });
+}
+function pkAct(a) {
+  const C = G.cas, K = C.pk; if (!K || K.phase !== 'decide' || C.busy) return;
+  if (a === 'play') { if (save.coins < K.ante) { toast('Not enough coins to play: you can fold'); SFX.play('err'); return; } save.coins -= K.ante; K.play = K.ante; updCoins(); SFX.play('register'); }
+  K.phase = 'reveal'; K.folded = a === 'fold';
+  casRun([[() => { for (const c of K.dealer) { c.down = false; c.nw = true; } SFX.play('ui'); K.msg = 'The dealer turns over…'; }, 700]], pkSettle);
+}
+function pkSettle() {
+  const C = G.cas, K = C.pk, me = pkEval(K.you), dl = pkEval(K.dealer), qual = dl.cat > 0 || dl.k[0] >= 12; let back = 0; const staked = K.ante + K.pp + K.play, notes = [];
+  if (K.pp) { const m = PK_PP[me.cat]; if (m) { back += K.pp * (m + 1); notes.push(`Pair Plus pays ${m} to 1`); } else notes.push('Pair Plus loses'); }
+  if (K.folded) { K.res = 'FOLD'; K.msg = `You folded. Dealer had ${PK_NAMES[dl.cat].toLowerCase()}.`; }
+  else { const bonus = PK_ANTE_BONUS[me.cat]; if (bonus) { back += K.ante * bonus; notes.push(`Ante bonus ${bonus} to 1`); }
+    if (!qual) { back += K.ante * 2 + K.play; K.res = 'WIN'; K.msg = `Dealer does not qualify (needs queen high). Ante wins, play is returned.`; }
+    else { const c = pkCmp(me, dl); if (c > 0) { back += K.ante * 2 + K.play * 2; K.res = 'WIN'; K.msg = `Your ${PK_NAMES[me.cat].toLowerCase()} beats the dealer's ${PK_NAMES[dl.cat].toLowerCase()}.`; if (me.cat >= 3) save.stats.pokerBig = (save.stats.pokerBig || 0) + 1; }
+      else if (c < 0) { K.res = 'LOSE'; K.msg = `Dealer's ${PK_NAMES[dl.cat].toLowerCase()} beats your ${PK_NAMES[me.cat].toLowerCase()}.`; }
+      else { back += K.ante + K.play; K.res = 'PUSH'; K.msg = 'Exactly the same hand. Push.'; } } }
+  if (notes.length) K.msg += ' ' + notes.join(' · ') + '.';
+  save.coins += back; K.net = back - staked; casWin(K.net); updCoins(); persist(); K.phase = 'done'; K.dl = dl; K.me = me;
+  SFX.play(K.net > 0 ? 'register' : K.net < 0 ? 'err' : 'ui'); if (K.net > staked) setTimeout(() => SFX.play('trophy'), 250);
+  C.lock = Date.now() + 600; casRe(); casSweep(C2 => C2.pk === K && C2.view === 'pk', C2 => { C2.pk = null; });
+}
+function pkView() {
+  const C = G.cas, K = C.pk, ante = C.pkAnte || 0, pp = C.pkPP || 0, idle = !K || K.phase === 'done', dec = K && K.phase === 'decide' && !C.busy;
+  const ghost = '<div class="cd ghost"></div><div class="cd ghost"></div><div class="cd ghost"></div>';
+  return `<div class="ctable pk"><div class="crule">DEALER NEEDS QUEEN HIGH · ANTE BONUS UP TO 5:1 · PAIR PLUS UP TO 40:1</div>
+    <div class="cseat dealer"><div class="clab">DEALER</div><div class="cards">${K ? K.dealer.map(cardHTML).join('') : ghost}</div>${K && K.dl ? `<div class="cpill">${PK_NAMES[K.dl.cat]}</div>` : ''}</div>
+    <div class="cmsg">${K ? K.msg : ante ? 'Add Pair Plus if you like, then DEAL.' : 'Tap a chip to place your ante.'}</div>
+    <div class="cseat you"><div class="chand"><div class="cards">${K ? K.you.map(cardHTML).join('') : ghost}</div>${K && K.you.length === 3 ? `<div class="cpill">${PK_NAMES[pkEval(K.you).cat]}${K.res ? ` · <b class="${K.res === 'WIN' ? 'grn' : K.res === 'PUSH' ? '' : 'red'}">${K.res}</b>` : ''}</div>` : ''}</div></div>
+    ${!K ? `<div class="row" style="gap:calc(var(--u)*6);justify-content:center"><div class="cbetspot ${ante ? 'on' : ''}">${ante ? `<b class="stack">${fmt(ante)}</b>` : ''}<i>ANTE</i></div><button class="cbetspot pp ${pp ? 'on' : ''}" data-a="pkPP">${pp ? `<b class="stack">${fmt(pp)}</b>` : ''}<i>PAIR PLUS</i></button></div>` : ''}
+    ${K && K.phase === 'done' ? `<div class="cres ${K.net > 0 ? 'w' : K.net < 0 ? 'l' : ''}">${K.net > 0 ? 'YOU WIN ' + priceHTML(K.net) : K.net < 0 ? 'YOU LOSE ' + priceHTML(-K.net) : K.res === 'PUSH' ? 'PUSH · BETS RETURNED' : 'BREAK EVEN'}</div>` : ''}</div>
+    <div class="cctrl">${dec ? `<button class="btn cbtn gold" data-a="pkAct" data-v="play">PLAY ${priceHTML(K.ante)} <u>P</u></button><button class="btn cbtn" data-a="pkAct" data-v="fold">FOLD <u>F</u></button>`
+      : !idle ? '<div class="cwait">Dealer\'s turn…</div>' : `${casChips(C.chip)}<div class="cbetbox"><i>ANTE${pp ? ' + PP' : ''}</i><b>${priceHTML(ante + pp)}</b><button class="sbtn" data-a="casClear" data-v="pk">Clear</button></div><button class="btn cbtn gold" data-a="pkDeal" ${ante >= CAS.min ? '' : 'disabled'}>DEAL</button>`}</div>`;
+}
 SCR.casino = () => { const C = G.cas; if (!C) return SCR.title();
   const head = `<div class="hdr"><button class="btn g sm" data-a="${C.view === 'lobby' ? 'casLeave' : 'casLobby'}">&lt; ${C.view === 'lobby' ? 'LEAVE' : 'TABLES'}</button><h2 class="cas">${CAS.name}</h2>${coinsHTML()}</div>`;
   if (C.view === 'lobby') { const card = (v, name, sub, art) => `<button class="clob" data-a="casGo" data-v="${v}"><div class="clart ${v}">${art}</div><b>${name}</b><i>${sub}</i></button>`;
     return `<div class="scr chscr casscr">${head}<div class="grow col" style="justify-content:center;align-items:center;gap:calc(var(--u)*6)"><div class="ctag">PRIVATE GAMING ROOM · ${save.stats.casinoNet ? (save.stats.casinoNet > 0 ? 'UP ' : 'DOWN ') + fmt(Math.abs(save.stats.casinoNet)) + ' ALL TIME' : 'TABLE LIMITS 10 TO 50,000'}</div>
-      <div class="row" style="gap:calc(var(--u)*8)">${card('bj', 'BLACKJACK', 'Beat the dealer to 21', '<span class="cd mini">A<i>♠</i></span><span class="cd mini rd">K<i>♥</i></span>')}${card('rl', 'ROULETTE', 'European single zero', '<span class="rlmini"></span>')}${card('bc', 'BACCARAT', 'Player, Banker or Tie', '<span class="cd mini">9<i>♦</i></span><span class="cd mini">8<i>♣</i></span>')}</div>
+      <div class="row" style="gap:calc(var(--u)*8)">${card('bj', 'BLACKJACK', 'Beat the dealer to 21', '<span class="cd mini">A<i>♠</i></span><span class="cd mini rd">K<i>♥</i></span>')}${card('rl', 'ROULETTE', 'European single zero', '<span class="rlmini"></span>')}${card('bc', 'BACCARAT', 'Player, Banker or Tie', '<span class="cd mini">9<i>♦</i></span><span class="cd mini">8<i>♣</i></span>')}${card('pk', 'THREE CARD POKER', 'Play or fold against the dealer', '<span class="cd mini rd">Q<i>♦</i></span><span class="cd mini">Q<i>♣</i></span>')}</div>
       <div class="u1 dimtxt">You can only bet what you have. Play responsibly, even with golf coins.</div></div></div>`; }
-  const body = C.view === 'bj' ? bjView() : C.view === 'bc' ? bcView() : rlView();
+  const body = C.view === 'bj' ? bjView() : C.view === 'bc' ? bcView() : C.view === 'pk' ? pkView() : rlView();
   return `<div class="scr chscr casscr">${head}<div class="grow scroll col" style="align-items:center">${body}</div></div>`; };
 Object.assign(ACT, {
-  casGo: v => { G.cas.view = v; casRe(); },
+  casGo: v => { G.cas.view = v; sceneDip(320); casRe(); },
   casLobby: () => { const C = G.cas; if (C.busy || (C.bj && C.bj.phase === 'dealer') || (C.bc && C.bc.phase === 'deal') || (C.rl && C.rl.spin)) { toast('Let the hand finish first'); return; }
-    if (C.bj && C.bj.phase === 'play') { toast('Finish the hand first'); return; } C.view = 'lobby'; casRe(); },
+    if ((C.bj && C.bj.phase === 'play') || (C.pk && (C.pk.phase === 'decide' || C.pk.phase === 'reveal'))) { toast('Finish the hand first'); return; } C.view = 'lobby'; sceneDip(320); casRe(); },
   casLeave: () => { const C = G.cas; if (C && C.rl && Object.keys(C.rl.bets || {}).length && !C.rl.spin) { for (const k in C.rl.bets) save.coins += C.rl.bets[k]; C.rl.bets = {}; updCoins(); persist(); } showScreen('title'); },
   casChip: v => { const C = G.cas; if (C.busy) return; C.chip = +v;
     /* blackjack: a chip goes straight into the bet circle (the bet stays for the next hand until you clear it) */
+    if (C.view === 'pk' && !(C.pk && C.pk.phase !== 'done')) { const nb = (C.pkAnte || 0) + +v; if (nb * 2 + (C.pkPP || 0) > save.coins) { toast('Keep enough to cover the play bet too'); SFX.play('err'); } else if (nb > CAS.max) toast('Table limit is ' + fmt(CAS.max)); else C.pkAnte = nb; }
     if (C.view === 'bj' && !(C.bj && C.bj.phase !== 'done')) { const nb = (C.bjBet || 0) + +v; if (nb > save.coins) { toast('Not enough coins'); SFX.play('err'); } else if (nb > CAS.max) toast('Table limit is ' + fmt(CAS.max)); else C.bjBet = nb; }
     SFX.tone(2200, .03, 'sine', .05); casRe(); },
-  casClear: v => { const C = G.cas; if (v === 'bj') C.bjBet = 0; if (v === 'bc') C.bcBets = {}; if (v === 'rl' && C.rl) { for (const k in C.rl.bets) save.coins += C.rl.bets[k]; C.rl.bets = {}; updCoins(); persist(); } casRe(); },
+  casClear: v => { const C = G.cas; if (v === 'pk') { C.pkAnte = 0; C.pkPP = 0; } if (v === 'bj') C.bjBet = 0; if (v === 'bc') C.bcBets = {}; if (v === 'rl' && C.rl) { for (const k in C.rl.bets) save.coins += C.rl.bets[k]; C.rl.bets = {}; updCoins(); persist(); } casRe(); },
   bjDeal: () => { const C = G.cas; if (C.busy || (C.lock && Date.now() < C.lock) || (C.bj && C.bj.phase !== 'done')) return; C.bj = null; bjDeal(); },
   bjAct: v => bjAct(v),
+  pkDeal: () => { const C = G.cas; if (C.lock && Date.now() < C.lock) return; if (C.pk && C.pk.phase === 'done') C.pk = null; pkDeal(); },
+  pkAct: v => pkAct(v),
+  pkPP: () => { const C = G.cas, c = C.chip || 10; if (C.pk && C.pk.phase !== 'done') return; const nb = (C.pkPP || 0) + c; if ((C.pkAnte || 0) * 2 + nb > save.coins) { toast('Not enough coins'); SFX.play('err'); return; } if (nb > 5000) { toast('Pair Plus limit is 5,000'); return; } C.pkPP = nb; SFX.tone(2200, .03, 'sine', .05); casRe(); },
   bcRebet: () => { const C = G.cas, L = C.bcLast || {}, need = (L.p || 0) + (L.b || 0) + (L.t || 0); if (need > save.coins) { toast('Not enough coins to rebet'); return; } C.bcBets = Object.assign({}, L); casRe(); },
   bcBet: v => { const C = G.cas, c = C.chip || 10; if (C.busy) return; if (C.bc && C.bc.phase === 'done') { C.bc = null; } C.bcBets = C.bcBets || {}; const tot = (C.bcBets.p || 0) + (C.bcBets.b || 0) + (C.bcBets.t || 0) + c; if (tot > save.coins) { toast('Not enough coins'); SFX.play('err'); return; } C.bcBets[v] = (C.bcBets[v] || 0) + c; SFX.tone(2200, .03, 'sine', .05); casRe(); },
   bcDeal: () => bcDeal(),
@@ -8697,8 +9212,120 @@ Object.assign(ACT, {
 
 /* keyboard at the tables: H hit, S stand, D double, P split, Space or Enter deals / spins */
 addEventListener('keydown', e => { const C = G.cas; if (G.scr !== 'casino' || !C || modalOpen() || e.target.tagName === 'INPUT') return; const k = e.key.toLowerCase();
+  if (C.view === 'pk') { const K = C.pk; if (K && K.phase === 'decide') { const m = { p: 'play', f: 'fold' }[k]; if (m) { e.preventDefault(); pkAct(m); } } else if (k === ' ' || k === 'enter') { e.preventDefault(); ACT.pkDeal(); } return; }
   if (C.view === 'bj') { const B = C.bj; if (B && B.phase === 'play') { const m = { h: 'hit', s: 'stand', d: 'double', p: 'split' }[k]; if (m) { e.preventDefault(); bjAct(m); } } else if (k === ' ' || k === 'enter') { e.preventDefault(); ACT.bjDeal(); } }
   else if (C.view === 'bc' && (k === ' ' || k === 'enter')) { e.preventDefault(); bcDeal(); } else if (C.view === 'rl' && (k === ' ' || k === 'enter')) { e.preventDefault(); rlSpin(); } });
+
+/* ---------- online leaderboards (Supabase) ----------
+   Talks to Supabase over plain HTTPS (its REST and Auth endpoints), so the game stays one file with no libraries.
+   Nothing here runs until a project URL and key are set, either baked in at build time (see build.py and
+   docs/ONLINE-LEADERBOARDS.md) or typed into the ONLINE screen. Sign-in details live in this browser only,
+   never in the save code. */
+const ONLINE_BUILD = { url: '__SUPABASE_URL__', key: '__SUPABASE_PUBLISHABLE_KEY__' }; /* build.py fills these from env vars */
+const ON_LS = 'plg_online_v1';
+const ON = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem(ON_LS) || '{}') || {}; } catch (e) {} return Object.assign({ url: '', key: '', email: '', session: null, post: true, pending: [], view: { course: 'ngahinapouri', holes: 9, mode: 'best' }, rows: null, err: null, busy: false }, o, { rows: null, err: null, busy: false }); })();
+function onSaveLocal() { try { const { rows, err, busy, ...keep } = ON; localStorage.setItem(ON_LS, JSON.stringify(keep)); } catch (e) {} }
+const onBuilt = v => v && !/^__/.test(v);
+const onUrl = () => (ON.url || (onBuilt(ONLINE_BUILD.url) ? ONLINE_BUILD.url : '')).replace(/\/+$/, '');
+const onKey = () => ON.key || (onBuilt(ONLINE_BUILD.key) ? ONLINE_BUILD.key : '');
+const onReady = () => !!(onUrl() && onKey());
+const onSignedIn = () => !!(ON.session && ON.session.access_token);
+
+async function onAuth(body, grant) {
+  const r = await fetch(`${onUrl()}/auth/v1/token?grant_type=${grant}`, { method: 'POST', headers: { apikey: onKey(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error_description || j.msg || j.message || `Sign-in failed (${r.status})`);
+  ON.session = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in || 3600) * 1000, user: j.user && j.user.id, email: j.user && j.user.email };
+  onSaveLocal(); return ON.session;
+}
+async function onToken() {
+  if (!onSignedIn()) throw new Error('Not signed in');
+  if (Date.now() > ON.session.expires_at - 60000) { try { await onAuth({ refresh_token: ON.session.refresh_token }, 'refresh_token'); } catch (e) { ON.session = null; onSaveLocal(); throw new Error('Signed out: please sign in again'); } }
+  return ON.session.access_token;
+}
+async function onApi(path, opts) {
+  const tok = await onToken(), o = opts || {};
+  const r = await fetch(`${onUrl()}/rest/v1/${path}`, { method: o.method || 'GET', headers: Object.assign({ apikey: onKey(), Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, o.headers || {}), body: o.body ? JSON.stringify(o.body) : undefined });
+  if (!r.ok) { const j = await r.json().catch(() => ({})); const m = j.message || `Server said ${r.status}`; throw new Error(/row-level security|permission denied/i.test(m) ? `${(ON.session && ON.session.email) || 'This account'} isn't on the allowed players list yet (see the setup guide)` : m); }
+  return r.status === 204 || r.status === 201 ? null : r.json();
+}
+
+/* Google sign-in: Supabase sends the browser to Google, then back here with the session in the address (#access_token=...).
+   Only works on a real web address (GitHub Pages), not a file opened from disk */
+const onWeb = () => /^https?:$/.test(location.protocol) && !/claude|anthropic|usercontent/.test(location.hostname);
+function onGoogle() { const back = location.origin + location.pathname; location.href = `${onUrl()}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(back)}`; }
+(function onFromRedirect() {
+  const h = /access_token=|error_description=/.test(location.hash) ? location.hash : /error_description=/.test(location.search) ? location.search : ''; if (!h) return;
+  const q = new URLSearchParams(h.slice(1)); history.replaceState(null, '', location.pathname);
+  if (q.get('error_description')) { ON.err = 'Google sign-in: ' + q.get('error_description').replace(/\+/g, ' '); return; }
+  let claims = {}; try { claims = JSON.parse(atob(q.get('access_token').split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } catch (e) {}
+  ON.session = { access_token: q.get('access_token'), refresh_token: q.get('refresh_token'), expires_at: Date.now() + (+q.get('expires_in') || 3600) * 1000, user: claims.sub, email: claims.email };
+  ON.email = claims.email || ON.email; onSaveLocal(); setTimeout(() => { if (typeof ACT !== 'undefined' && ACT.openOnline) ACT.openOnline(); }, 900);
+})();
+/* called by finishRound: queue the round and try to send it (a round played offline is sent next time) */
+function onlinePost(e) {
+  if (!onReady() || !ON.post) return;
+  ON.pending.push(Object.assign({ client_round_id: (ON.session && ON.session.user ? ON.session.user.slice(0, 8) : 'x') + '-' + Date.now().toString(36) + '-' + Math.floor(Math.random() * 1e6).toString(36) }, e));
+  if (ON.pending.length > 50) ON.pending.splice(0, ON.pending.length - 50);
+  onSaveLocal(); onFlush();
+}
+async function onFlush() {
+  if (!onReady() || !onSignedIn() || !ON.pending.length || onFlush.busy) return; onFlush.busy = true;
+  try { while (ON.pending.length) { await onApi('scores?on_conflict=client_round_id', { method: 'POST', body: ON.pending[0], headers: { Prefer: 'return=minimal,resolution=ignore-duplicates' } }); ON.pending.shift(); onSaveLocal(); }
+    toast('<b>ONLINE</b><br>Round posted to the leaderboard'); }
+  catch (e) { ON.err = e.message; }
+  finally { onFlush.busy = false; if (G.scr === 'online') rerender(); }
+}
+async function onLoadBoard() {
+  if (!onReady() || !onSignedIn()) return; const v = ON.view; ON.busy = true; ON.err = null; if (G.scr === 'online') rerender();
+  try { const q = `select=player_name,strokes,to_par,net,golfer,sponsor,tee,difficulty,start_hole,played_at,user_id&course_id=eq.${encodeURIComponent(v.course)}&holes=eq.${v.holes}&order=${v.mode === 'recent' ? 'played_at.desc' : 'to_par.asc,strokes.asc,played_at.asc'}&limit=50`;
+    ON.rows = await onApi((v.mode === 'best' ? 'best_scores?' : 'scores?') + q); }
+  catch (e) { ON.err = e.message; ON.rows = null; }
+  finally { ON.busy = false; if (G.scr === 'online') rerender(); }
+}
+
+SCR.online = () => {
+  const head = hdr('ONLINE LEADERBOARDS');
+  if (!onReady()) return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap"><div class="panel col" style="gap:calc(var(--u)*3)">
+    <div class="u2">CONNECT YOUR SUPABASE PROJECT</div><div class="u1 dimtxt">Paste these from Supabase: Project Settings → API Keys (and Data API for the URL). The publishable key is meant to be public; your scores stay private because only signed-in accounts can read them.</div>
+    <label class="onf"><i>Project URL</i><input class="sin" id="onUrl" placeholder="https://xxxx.supabase.co" value="${esc(ON.url)}" spellcheck="false" autocomplete="off"></label>
+    <label class="onf"><i>Publishable key (or legacy anon key)</i><input class="sin" id="onKey" placeholder="sb_publishable_..." value="${esc(ON.key)}" spellcheck="false" autocomplete="off"></label>
+    <button class="btn y" data-a="onSetup" style="align-self:flex-start">SAVE</button></div></div></div></div>`;
+  if (!onSignedIn()) return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap"><div class="panel col" style="gap:calc(var(--u)*3)">
+    <div class="u2">SIGN IN</div><div class="u1 dimtxt">Use an email and password account you made in Supabase, or your Google account.</div>
+    <label class="onf"><i>Email</i><input class="sin" id="onEmail" type="email" value="${esc(ON.email)}" autocomplete="username"></label>
+    <label class="onf"><i>Password</i><input class="sin" id="onPass" type="password" autocomplete="current-password"></label>
+    ${ON.err ? `<div class="u1 red">${esc(ON.err)}</div>` : ''}
+    <div class="row" style="gap:calc(var(--u)*3)"><button class="btn y" data-a="onSignIn">${ON.busy ? 'SIGNING IN…' : 'SIGN IN'}</button><button class="btn g sm" data-a="onReset">CHANGE PROJECT</button></div>
+    ${onWeb() ? `<div class="onor"><span>or</span></div><button class="btn gbtn" data-a="onGoogle"><b class="gg">G</b> SIGN IN WITH GOOGLE</button>` : `<div class="u1 dimtxt">Google sign-in works on your GitHub Pages link, not on a file opened from your computer.</div>`}</div></div></div></div>`;
+  const v = ON.view, crs = COURSES.map(c => `<button class="${v.course === c.id ? 'on' : ''}" data-a="onView" data-v="course|${c.id}">${c.short}</button>`).join('');
+  const nine = nHoles(courseById(v.course)) === 9; if (nine && v.holes === 18) v.holes = 9;
+  const me = ON.session.user, fp = n => n === 0 ? 'E' : n > 0 ? '+' + n : String(n);
+  const rows = (ON.rows || []).map((x, i, arr) => { const pos = arr.findIndex(y => y.to_par === x.to_par && y.strokes === x.strokes) + 1, tie = arr.filter(y => y.to_par === x.to_par && y.strokes === x.strokes).length > 1, g = GOLFERS.find(q => q.id === x.golfer);
+    return `<tr class="${x.user_id === me ? 'me' : ''}"><td>${v.mode === 'best' ? (tie ? 'T' : '') + pos : i + 1}</td><td>${esc(x.player_name)}${x.sponsor ? ` <span class="dimtxt">- ${esc(x.sponsor)}</span>` : ''}</td><td class="${x.to_par < 0 ? 'grn' : x.to_par > 0 ? '' : ''}"><b>${fp(x.to_par)}</b></td><td>${x.strokes}</td><td class="dimtxt">${g ? esc(g.id === 'you' ? 'Own player' : g.name) : ''}</td><td class="dimtxt">${esc((TEES[x.tee] || {}).name || x.tee || '')}</td><td class="dimtxt">${new Date(x.played_at).toLocaleDateString('en-NZ')}</td></tr>`; }).join('');
+  return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap">
+    <div class="row onbar"><div class="u1 dimtxt">Signed in as <b>${esc(ON.session.email || '')}</b>${ON.pending.length ? ` · ${ON.pending.length} round${ON.pending.length > 1 ? 's' : ''} waiting to post` : ''}</div>
+      <div class="row" style="gap:calc(var(--u)*2)"><button class="sbtn ${ON.post ? 'acc' : ''}" data-a="onPostToggle">${ON.post ? 'POSTING MY ROUNDS' : 'NOT POSTING ROUNDS'}</button><button class="sbtn" data-a="onSignOut">SIGN OUT</button></div></div>
+    <div class="seg onseg">${crs}</div>
+    <div class="row" style="gap:calc(var(--u)*3)"><div class="seg">${nine ? '<button class="on">9 HOLES</button>' : `<button class="${v.holes === 9 ? 'on' : ''}" data-a="onView" data-v="holes|9">9 HOLES</button><button class="${v.holes === 18 ? 'on' : ''}" data-a="onView" data-v="holes|18">18 HOLES</button>`}</div>
+      <div class="seg"><button class="${v.mode === 'best' ? 'on' : ''}" data-a="onView" data-v="mode|best">BEST EACH</button><button class="${v.mode === 'recent' ? 'on' : ''}" data-a="onView" data-v="mode|recent">RECENT</button></div>
+      <button class="sbtn" data-a="onRefresh">${ON.busy ? 'LOADING…' : 'REFRESH'}</button></div>
+    ${ON.err ? `<div class="u1 red">${esc(ON.err)}</div>` : ''}
+    <div class="panel"><table class="lb onlb"><tr><th>#</th><th>PLAYER</th><th>TO PAR</th><th>SCORE</th><th>AS</th><th>TEES</th><th>DATE</th></tr>${rows || `<tr><td colspan="7" class="dimtxt">${ON.busy ? 'Loading…' : ON.rows ? 'No rounds posted here yet. Finish a round to post one.' : ''}</td></tr>`}</table></div></div></div></div>`;
+};
+Object.assign(ACT, {
+  openOnline: () => { showScreen('online'); if (onSignedIn()) { onFlush(); onLoadBoard(); } },
+  onSetup: () => { const u = ($('onUrl').value || '').trim(), k = ($('onKey').value || '').trim(); if (!/^https:\/\/.+/.test(u) || k.length < 20) { toast('Check the URL (starts with https://) and the key'); SFX.play('err'); return; } ON.url = u; ON.key = k; onSaveLocal(); rerender(); },
+  onGoogle: () => { if (!onReady()) return; onGoogle(); },
+  onReset: () => { ON.url = ''; ON.key = ''; ON.session = null; onSaveLocal(); rerender(); },
+  onSignIn: async () => { const em = ($('onEmail').value || '').trim(), pw = $('onPass').value || ''; if (!em || !pw) return; ON.email = em; ON.busy = true; ON.err = null; rerender();
+    try { await onAuth({ email: em, password: pw }, 'password'); ON.busy = false; SFX.play('good'); rerender(); onFlush(); onLoadBoard(); } catch (e) { ON.busy = false; ON.err = e.message + (/fetch/i.test(e.message) ? ' (no connection to Supabase: check the URL, or this page may block outside connections)' : ''); rerender(); } },
+  onSignOut: () => { ON.session = null; ON.rows = null; onSaveLocal(); rerender(); },
+  onPostToggle: () => { ON.post = !ON.post; onSaveLocal(); rerender(); },
+  onView: v => { const [k, val] = v.split('|'); ON.view[k] = k === 'holes' ? +val : val; onSaveLocal(); onLoadBoard(); },
+  onRefresh: () => { onFlush(); onLoadBoard(); } });
+/* anything left from an offline round goes up shortly after the game opens */
+setTimeout(() => { if (onReady() && onSignedIn()) onFlush(); }, 4000);
 
 </script>
 </body>
