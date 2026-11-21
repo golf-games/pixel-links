@@ -9217,95 +9217,59 @@ addEventListener('keydown', e => { const C = G.cas; if (G.scr !== 'casino' || !C
   else if (C.view === 'bc' && (k === ' ' || k === 'enter')) { e.preventDefault(); bcDeal(); } else if (C.view === 'rl' && (k === ' ' || k === 'enter')) { e.preventDefault(); rlSpin(); } });
 
 /* ---------- online leaderboards (Supabase) ----------
-   Talks to Supabase over plain HTTPS (its REST and Auth endpoints), so the game stays one file with no libraries.
-   Nothing here runs until a project URL and key are set, either baked in at build time (see build.py and
-   docs/ONLINE-LEADERBOARDS.md) or typed into the ONLINE screen. Sign-in details live in this browser only,
-   never in the save code. */
-const ONLINE_BUILD = { url: '__SUPABASE_URL__', key: '__SUPABASE_PUBLISHABLE_KEY__' }; /* build.py fills these from env vars */
-const ON_LS = 'plg_online_v1';
-const ON = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem(ON_LS) || '{}') || {}; } catch (e) {} return Object.assign({ url: '', key: '', email: '', session: null, post: true, pending: [], view: { course: 'ngahinapouri', holes: 9, mode: 'best' }, rows: null, err: null, busy: false }, o, { rows: null, err: null, busy: false }); })();
-function onSaveLocal() { try { const { rows, err, busy, ...keep } = ON; localStorage.setItem(ON_LS, JSON.stringify(keep)); } catch (e) {} }
+   No sign-in: the game posts each finished round under your player name, and the ONLINE screen shows the boards.
+   The Supabase project URL and publishable key are built into index.html (build.py), so nobody types anything.
+   Talks to Supabase over plain HTTPS, so the game stays one file with no libraries. */
+const ONLINE_BUILD = { url: 'https://opsdfoxewtlrxhxltpjt.supabase.co', key: 'sb_publishable_ZKt6hKUFZPB9iq4UwOREIQ_k5XBC15j' }; /* build.py fills these in */
+const ON_LS = 'plg_online_v2';
+const ON = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem(ON_LS) || '{}') || {}; } catch (e) {} return Object.assign({ post: true, pending: [], view: { course: 'ngahinapouri', holes: 9, mode: 'best' } }, o, { rows: null, err: null, busy: false }); })();
+function onSaveLocal() { try { localStorage.setItem(ON_LS, JSON.stringify({ post: ON.post, pending: ON.pending, view: ON.view })); } catch (e) {} }
 const onBuilt = v => v && !/^__/.test(v);
-const onUrl = () => (ON.url || (onBuilt(ONLINE_BUILD.url) ? ONLINE_BUILD.url : '')).replace(/\/+$/, '');
-const onKey = () => ON.key || (onBuilt(ONLINE_BUILD.key) ? ONLINE_BUILD.key : '');
+const onUrl = () => (onBuilt(ONLINE_BUILD.url) ? ONLINE_BUILD.url : '').replace(/\/+$/, '');
+const onKey = () => onBuilt(ONLINE_BUILD.key) ? ONLINE_BUILD.key : '';
 const onReady = () => !!(onUrl() && onKey());
-const onSignedIn = () => !!(ON.session && ON.session.access_token);
 
-async function onAuth(body, grant) {
-  const r = await fetch(`${onUrl()}/auth/v1/token?grant_type=${grant}`, { method: 'POST', headers: { apikey: onKey(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j.error_description || j.msg || j.message || `Sign-in failed (${r.status})`);
-  ON.session = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in || 3600) * 1000, user: j.user && j.user.id, email: j.user && j.user.email };
-  onSaveLocal(); return ON.session;
-}
-async function onToken() {
-  if (!onSignedIn()) throw new Error('Not signed in');
-  if (Date.now() > ON.session.expires_at - 60000) { try { await onAuth({ refresh_token: ON.session.refresh_token }, 'refresh_token'); } catch (e) { ON.session = null; onSaveLocal(); throw new Error('Signed out: please sign in again'); } }
-  return ON.session.access_token;
-}
 async function onApi(path, opts) {
-  const tok = await onToken(), o = opts || {};
-  const r = await fetch(`${onUrl()}/rest/v1/${path}`, { method: o.method || 'GET', headers: Object.assign({ apikey: onKey(), Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, o.headers || {}), body: o.body ? JSON.stringify(o.body) : undefined });
-  if (!r.ok) { const j = await r.json().catch(() => ({})); const m = j.message || `Server said ${r.status}`; throw new Error(/row-level security|permission denied/i.test(m) ? `${(ON.session && ON.session.email) || 'This account'} isn't on the allowed players list yet (see the setup guide)` : m); }
+  const o = opts || {};
+  const r = await fetch(`${onUrl()}/rest/v1/${path}`, { method: o.method || 'GET', headers: Object.assign({ apikey: onKey(), Authorization: 'Bearer ' + onKey(), 'Content-Type': 'application/json' }, o.headers || {}), body: o.body ? JSON.stringify(o.body) : undefined });
+  if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.message || `Server said ${r.status}`); }
   return r.status === 204 || r.status === 201 ? null : r.json();
 }
 
-/* Google sign-in: Supabase sends the browser to Google, then back here with the session in the address (#access_token=...).
-   Only works on a real web address (GitHub Pages), not a file opened from disk */
-const onWeb = () => /^https?:$/.test(location.protocol) && !/claude|anthropic|usercontent/.test(location.hostname);
-function onGoogle() { const back = location.origin + location.pathname; location.href = `${onUrl()}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(back)}`; }
-(function onFromRedirect() {
-  const h = /access_token=|error_description=/.test(location.hash) ? location.hash : /error_description=/.test(location.search) ? location.search : ''; if (!h) return;
-  const q = new URLSearchParams(h.slice(1)); history.replaceState(null, '', location.pathname);
-  if (q.get('error_description')) { ON.err = 'Google sign-in: ' + q.get('error_description').replace(/\+/g, ' '); return; }
-  let claims = {}; try { claims = JSON.parse(atob(q.get('access_token').split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } catch (e) {}
-  ON.session = { access_token: q.get('access_token'), refresh_token: q.get('refresh_token'), expires_at: Date.now() + (+q.get('expires_in') || 3600) * 1000, user: claims.sub, email: claims.email };
-  ON.email = claims.email || ON.email; onSaveLocal(); setTimeout(() => { if (typeof ACT !== 'undefined' && ACT.openOnline) ACT.openOnline(); }, 900);
-})();
-/* called by finishRound: queue the round and try to send it (a round played offline is sent next time) */
+/* called by finishRound: queue the round and send it (a round played offline goes up next time the game opens) */
 function onlinePost(e) {
   if (!onReady() || !ON.post) return;
-  ON.pending.push(Object.assign({ client_round_id: (ON.session && ON.session.user ? ON.session.user.slice(0, 8) : 'x') + '-' + Date.now().toString(36) + '-' + Math.floor(Math.random() * 1e6).toString(36) }, e));
+  ON.pending.push(Object.assign({ client_round_id: Date.now().toString(36) + '-' + Math.floor(Math.random() * 1e9).toString(36) }, e));
   if (ON.pending.length > 50) ON.pending.splice(0, ON.pending.length - 50);
   onSaveLocal(); onFlush();
 }
 async function onFlush() {
-  if (!onReady() || !onSignedIn() || !ON.pending.length || onFlush.busy) return; onFlush.busy = true;
+  if (!onReady() || !ON.pending.length || onFlush.busy) return; onFlush.busy = true;
   try { while (ON.pending.length) { await onApi('scores?on_conflict=client_round_id', { method: 'POST', body: ON.pending[0], headers: { Prefer: 'return=minimal,resolution=ignore-duplicates' } }); ON.pending.shift(); onSaveLocal(); }
     toast('<b>ONLINE</b><br>Round posted to the leaderboard'); }
   catch (e) { ON.err = e.message; }
   finally { onFlush.busy = false; if (G.scr === 'online') rerender(); }
 }
 async function onLoadBoard() {
-  if (!onReady() || !onSignedIn()) return; const v = ON.view; ON.busy = true; ON.err = null; if (G.scr === 'online') rerender();
-  try { const q = `select=player_name,strokes,to_par,net,golfer,sponsor,tee,difficulty,start_hole,played_at,user_id&course_id=eq.${encodeURIComponent(v.course)}&holes=eq.${v.holes}&order=${v.mode === 'recent' ? 'played_at.desc' : 'to_par.asc,strokes.asc,played_at.asc'}&limit=50`;
+  if (!onReady()) return; const v = ON.view; ON.busy = true; ON.err = null; if (G.scr === 'online') rerender();
+  try { const q = `select=player_name,strokes,to_par,net,golfer,sponsor,tee,difficulty,start_hole,played_at&course_id=eq.${encodeURIComponent(v.course)}&holes=eq.${v.holes}&order=${v.mode === 'recent' ? 'played_at.desc' : 'to_par.asc,strokes.asc,played_at.asc'}&limit=50`;
     ON.rows = await onApi((v.mode === 'best' ? 'best_scores?' : 'scores?') + q); }
-  catch (e) { ON.err = e.message; ON.rows = null; }
+  catch (e) { ON.err = /fetch/i.test(e.message) ? 'Can\'t reach the leaderboard (offline, or this page blocks outside connections).' : e.message; ON.rows = null; }
   finally { ON.busy = false; if (G.scr === 'online') rerender(); }
 }
 
 SCR.online = () => {
   const head = hdr('ONLINE LEADERBOARDS');
   if (!onReady()) return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap"><div class="panel col" style="gap:calc(var(--u)*3)">
-    <div class="u2">CONNECT YOUR SUPABASE PROJECT</div><div class="u1 dimtxt">Paste these from Supabase: Project Settings → API Keys (and Data API for the URL). The publishable key is meant to be public; your scores stay private because only signed-in accounts can read them.</div>
-    <label class="onf"><i>Project URL</i><input class="sin" id="onUrl" placeholder="https://xxxx.supabase.co" value="${esc(ON.url)}" spellcheck="false" autocomplete="off"></label>
-    <label class="onf"><i>Publishable key (or legacy anon key)</i><input class="sin" id="onKey" placeholder="sb_publishable_..." value="${esc(ON.key)}" spellcheck="false" autocomplete="off"></label>
-    <button class="btn y" data-a="onSetup" style="align-self:flex-start">SAVE</button></div></div></div></div>`;
-  if (!onSignedIn()) return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap"><div class="panel col" style="gap:calc(var(--u)*3)">
-    <div class="u2">SIGN IN</div><div class="u1 dimtxt">Use an email and password account you made in Supabase, or your Google account.</div>
-    <label class="onf"><i>Email</i><input class="sin" id="onEmail" type="email" value="${esc(ON.email)}" autocomplete="username"></label>
-    <label class="onf"><i>Password</i><input class="sin" id="onPass" type="password" autocomplete="current-password"></label>
-    ${ON.err ? `<div class="u1 red">${esc(ON.err)}</div>` : ''}
-    <div class="row" style="gap:calc(var(--u)*3)"><button class="btn y" data-a="onSignIn">${ON.busy ? 'SIGNING IN…' : 'SIGN IN'}</button><button class="btn g sm" data-a="onReset">CHANGE PROJECT</button></div>
-    ${onWeb() ? `<div class="onor"><span>or</span></div><button class="btn gbtn" data-a="onGoogle"><b class="gg">G</b> SIGN IN WITH GOOGLE</button>` : `<div class="u1 dimtxt">Google sign-in works on your GitHub Pages link, not on a file opened from your computer.</div>`}</div></div></div></div>`;
+    <div class="u2">NOT CONNECTED</div><div class="u1 dimtxt">This copy of the game was built without a leaderboard. Use the index.html with your Supabase details built in.</div></div></div></div></div>`;
   const v = ON.view, crs = COURSES.map(c => `<button class="${v.course === c.id ? 'on' : ''}" data-a="onView" data-v="course|${c.id}">${c.short}</button>`).join('');
   const nine = nHoles(courseById(v.course)) === 9; if (nine && v.holes === 18) v.holes = 9;
-  const me = ON.session.user, fp = n => n === 0 ? 'E' : n > 0 ? '+' + n : String(n);
+  const fp = n => n === 0 ? 'E' : n > 0 ? '+' + n : String(n);
   const rows = (ON.rows || []).map((x, i, arr) => { const pos = arr.findIndex(y => y.to_par === x.to_par && y.strokes === x.strokes) + 1, tie = arr.filter(y => y.to_par === x.to_par && y.strokes === x.strokes).length > 1, g = GOLFERS.find(q => q.id === x.golfer);
-    return `<tr class="${x.user_id === me ? 'me' : ''}"><td>${v.mode === 'best' ? (tie ? 'T' : '') + pos : i + 1}</td><td>${esc(x.player_name)}${x.sponsor ? ` <span class="dimtxt">- ${esc(x.sponsor)}</span>` : ''}</td><td class="${x.to_par < 0 ? 'grn' : x.to_par > 0 ? '' : ''}"><b>${fp(x.to_par)}</b></td><td>${x.strokes}</td><td class="dimtxt">${g ? esc(g.id === 'you' ? 'Own player' : g.name) : ''}</td><td class="dimtxt">${esc((TEES[x.tee] || {}).name || x.tee || '')}</td><td class="dimtxt">${new Date(x.played_at).toLocaleDateString('en-NZ')}</td></tr>`; }).join('');
+    return `<tr class="${x.player_name === save.name ? 'me' : ''}"><td>${v.mode === 'best' ? (tie ? 'T' : '') + pos : i + 1}</td><td>${esc(x.player_name)}${x.sponsor ? ` <span class="dimtxt">- ${esc(x.sponsor)}</span>` : ''}</td><td><b>${fp(x.to_par)}</b></td><td>${x.strokes}</td><td class="dimtxt">${g ? esc(g.id === 'you' ? 'Own player' : g.name) : ''}</td><td class="dimtxt">${esc((TEES[x.tee] || {}).name || x.tee || '')}</td><td class="dimtxt">${new Date(x.played_at).toLocaleDateString('en-NZ')}</td></tr>`; }).join('');
   return `<div class="scr solid">${head}<div class="grow scroll"><div class="onwrap">
-    <div class="row onbar"><div class="u1 dimtxt">Signed in as <b>${esc(ON.session.email || '')}</b>${ON.pending.length ? ` · ${ON.pending.length} round${ON.pending.length > 1 ? 's' : ''} waiting to post` : ''}</div>
-      <div class="row" style="gap:calc(var(--u)*2)"><button class="sbtn ${ON.post ? 'acc' : ''}" data-a="onPostToggle">${ON.post ? 'POSTING MY ROUNDS' : 'NOT POSTING ROUNDS'}</button><button class="sbtn" data-a="onSignOut">SIGN OUT</button></div></div>
+    <div class="row onbar"><div class="u1 dimtxt">Your rounds post as <b>${esc(save.name)}</b> (change it in Settings)${ON.pending.length ? ` · ${ON.pending.length} waiting to post` : ''}</div>
+      <button class="sbtn ${ON.post ? 'acc' : ''}" data-a="onPostToggle">${ON.post ? 'POSTING MY ROUNDS' : 'NOT POSTING ROUNDS'}</button></div>
     <div class="seg onseg">${crs}</div>
     <div class="row" style="gap:calc(var(--u)*3)"><div class="seg">${nine ? '<button class="on">9 HOLES</button>' : `<button class="${v.holes === 9 ? 'on' : ''}" data-a="onView" data-v="holes|9">9 HOLES</button><button class="${v.holes === 18 ? 'on' : ''}" data-a="onView" data-v="holes|18">18 HOLES</button>`}</div>
       <div class="seg"><button class="${v.mode === 'best' ? 'on' : ''}" data-a="onView" data-v="mode|best">BEST EACH</button><button class="${v.mode === 'recent' ? 'on' : ''}" data-a="onView" data-v="mode|recent">RECENT</button></div>
@@ -9314,18 +9278,12 @@ SCR.online = () => {
     <div class="panel"><table class="lb onlb"><tr><th>#</th><th>PLAYER</th><th>TO PAR</th><th>SCORE</th><th>AS</th><th>TEES</th><th>DATE</th></tr>${rows || `<tr><td colspan="7" class="dimtxt">${ON.busy ? 'Loading…' : ON.rows ? 'No rounds posted here yet. Finish a round to post one.' : ''}</td></tr>`}</table></div></div></div></div>`;
 };
 Object.assign(ACT, {
-  openOnline: () => { showScreen('online'); if (onSignedIn()) { onFlush(); onLoadBoard(); } },
-  onSetup: () => { const u = ($('onUrl').value || '').trim(), k = ($('onKey').value || '').trim(); if (!/^https:\/\/.+/.test(u) || k.length < 20) { toast('Check the URL (starts with https://) and the key'); SFX.play('err'); return; } ON.url = u; ON.key = k; onSaveLocal(); rerender(); },
-  onGoogle: () => { if (!onReady()) return; onGoogle(); },
-  onReset: () => { ON.url = ''; ON.key = ''; ON.session = null; onSaveLocal(); rerender(); },
-  onSignIn: async () => { const em = ($('onEmail').value || '').trim(), pw = $('onPass').value || ''; if (!em || !pw) return; ON.email = em; ON.busy = true; ON.err = null; rerender();
-    try { await onAuth({ email: em, password: pw }, 'password'); ON.busy = false; SFX.play('good'); rerender(); onFlush(); onLoadBoard(); } catch (e) { ON.busy = false; ON.err = e.message + (/fetch/i.test(e.message) ? ' (no connection to Supabase: check the URL, or this page may block outside connections)' : ''); rerender(); } },
-  onSignOut: () => { ON.session = null; ON.rows = null; onSaveLocal(); rerender(); },
+  openOnline: () => { showScreen('online'); onFlush(); onLoadBoard(); },
   onPostToggle: () => { ON.post = !ON.post; onSaveLocal(); rerender(); },
   onView: v => { const [k, val] = v.split('|'); ON.view[k] = k === 'holes' ? +val : val; onSaveLocal(); onLoadBoard(); },
   onRefresh: () => { onFlush(); onLoadBoard(); } });
 /* anything left from an offline round goes up shortly after the game opens */
-setTimeout(() => { if (onReady() && onSignedIn()) onFlush(); }, 4000);
+setTimeout(() => { if (onReady()) onFlush(); }, 4000);
 
 </script>
 </body>
