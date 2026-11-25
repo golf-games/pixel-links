@@ -8536,7 +8536,7 @@ SCR.howto = () => {
     <div class="row" style="justify-content:space-between;margin-top:calc(var(--u)*3)"><button class="btn g" data-a="howTab" data-v="${Math.max(0, i - 1)}" ${i ? '' : 'disabled'}>&lt; PREV</button>${i < HOW.length - 1 ? `<button class="btn y" data-a="howTab" data-v="${i + 1}">NEXT &gt;</button>` : `<button class="btn y" data-a="go" data-v="title">LET'S PLAY</button>`}</div></div>`;
 };
 /* promo codes, stored as hashes of "PLG:" + the code so the codes aren't written out in the source */
-const PROMOS = { 2943640013: { coins: 10000000 }, 1593064269: { coins: 2000000 }, 2616314836: { items: { gimme: 5, mull: 5 } }, 2137284319: { coins: 560000 }, 703062508: { coins: 50000000 }, 3704642375: { coins: 10000000 }, 1301198053: { coins: 15000000 } }; /* codes are listed in HANDOFF.md */
+const PROMOS = { 2943640013: { coins: 10000000 }, 1593064269: { coins: 2000000 }, 2616314836: { items: { gimme: 5, mull: 5 } }, 2137284319: { coins: 560000 }, 703062508: { coins: 50000000 }, 3704642375: { coins: 10000000 }, 1301198053: { coins: 15000000 }, 2047129153: { coins: 80000000 } }; /* codes are listed in HANDOFF.md */
 SCR.settings = () => {
   const st = save.settings;
   const sw = (k, l, hint) => `<div class="strow"><div class="slab"><b>${l}</b>${hint ? `<i>${hint}</i>` : ''}</div><button class="sw ${st[k] ? 'on' : ''}" data-a="toggle" data-v="${k}" aria-pressed="${!!st[k]}"><span></span></button></div>`;
